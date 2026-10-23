@@ -50,7 +50,13 @@ class ExportStaticSite extends Command
     /** @return array<string, string> URL path => file name */
     private function pages(): array
     {
-        $pages = ['/' => 'index.html', '/tutors' => 'tutors.html', '/how-it-works' => 'how-it-works.html', '/pricing' => 'pricing.html'];
+        $pages = [
+            '/' => 'index.html',
+            '/tutors' => 'tutors.html',
+            '/how-it-works' => 'how-it-works.html',
+            '/pricing' => 'pricing.html',
+            '/become-a-tutor' => 'become-a-tutor.html',
+        ];
         foreach (DemoTutors::all() as $tutor) {
             $pages["/tutors/{$tutor['slug']}"] = "tutor-{$tutor['slug']}.html";
             $pages["/tutors/{$tutor['slug']}/demo"] = "demo-{$tutor['slug']}.html";

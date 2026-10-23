@@ -207,7 +207,7 @@
             </div>
             <div class="cta-band__actions">
                 <a href="{{ url('/tutors') }}" class="btn btn-accent cta-band__btn">Find a Tutor</a>
-                <a href="#" class="btn cta-band__btn cta-band__btn--outline">Become a tutor</a>
+                <a href="{{ route('become-a-tutor') }}" class="btn cta-band__btn cta-band__btn--outline">Become a tutor</a>
             </div>
         </div>
     </div>

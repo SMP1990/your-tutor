@@ -19,7 +19,19 @@ class ContentPagesTest extends TestCase
     {
         $this->get('/')
             ->assertSee(route('how-it-works'))
-            ->assertSee(route('pricing'));
+            ->assertSee(route('pricing'))
+            ->assertSee(route('become-a-tutor'));
+    }
+
+    public function test_become_a_tutor_page_loads_with_earnings_example(): void
+    {
+        config(['pricing.tutor_example' => ['rate' => 2000, 'classes_per_day' => 2, 'days_per_week' => 5]]);
+
+        $this->get('/become-a-tutor')
+            ->assertOk()
+            ->assertSee('Teach online. Earn from home.')
+            ->assertSee('PKR 80,000')       // 2,000 x 2 a day x 5 days x 4 weeks
+            ->assertSee('Four steps to your first student');
     }
 
     public function test_pricing_page_uses_configured_figures(): void

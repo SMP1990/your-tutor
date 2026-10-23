@@ -4,6 +4,7 @@
         ['label' => 'Subjects', 'href' => url('/#subjects')],
         ['label' => 'Pricing', 'href' => route('pricing')],
         ['label' => 'How it works', 'href' => route('how-it-works')],
+        ['label' => 'Become a Tutor', 'href' => route('become-a-tutor')],
     ];
 @endphp
 

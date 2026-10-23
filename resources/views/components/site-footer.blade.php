@@ -21,6 +21,7 @@
                 <a href="#">About Us</a>
                 <a href="#">Contact</a>
                 <a href="#">FAQs</a>
+                <a href="{{ route('become-a-tutor') }}">Become a Tutor</a>
             </nav>
 
             <nav class="footer-col" aria-label="Legal">

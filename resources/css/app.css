@@ -189,7 +189,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .mobile-nav__list { padding: 8px var(--gutter); }
 .mobile-nav .nav-link { padding-inline: 0; font-size: 17px; }
 
-@media (min-width: 900px) {
+/* The header needs more room than the page layout: 5 links + Log In + Register. */
+@media (min-width: 1080px) {
   .site-nav, .site-header__login { display: flex; }
   .menu-toggle { display: none; }
   .mobile-nav { display: none !important; }
@@ -1343,4 +1344,56 @@ textarea.input { min-height: 110px; padding-block: 10px; resize: vertical; }
   .included { flex-direction: row; align-items: flex-start; }
   .included__list { flex: 1 1 0; }
   .included__pay { flex: 0 0 380px; }
+}
+
+/* ==========================================================================
+   Become a tutor page
+   ========================================================================== */
+.tutor-hero__inner { display: flex; flex-direction: column; gap: 40px; }
+.tutor-hero__text { min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+.tutor-hero__text p { max-width: 560px; color: var(--muted); font-size: clamp(17px, 1.6vw, 19px); }
+.tutor-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.earn-card {
+  align-self: center;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 24px;
+  background: var(--dark);
+  color: var(--ground);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 48px rgba(19, 32, 28, 0.2);
+}
+.earn-card__label, .earn-card__sub { color: var(--on-dark-muted); font-size: 14px; }
+.earn-card__amount { font-family: var(--font-heading); font-size: 36px; color: var(--accent); }
+.earn-card__rows { list-style: none; margin: 10px 0; padding: 12px 0 0; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #2C3D38; font-size: 14px; }
+.earn-card__rows li { display: flex; justify-content: space-between; gap: 12px; }
+.earn-card__rows span { color: var(--on-dark-muted); }
+.earn-card__btn { padding: 12px; background: var(--accent); color: var(--ink); border-radius: var(--radius); text-align: center; font-weight: 700; }
+
+.earnings { display: flex; flex-direction: column; gap: 28px; }
+.earnings__text { display: flex; flex-direction: column; gap: 12px; }
+.earnings__text p { color: var(--muted); }
+.earnings__note { font-size: 14px; }
+.earnings__figures { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 0; }
+.earnings__figures div { padding: 20px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); }
+.earnings__figures dt { color: var(--muted); font-size: 14px; }
+.earnings__figures dd { margin: 0; font-family: var(--font-heading); font-size: 26px; font-weight: 700; }
+.earnings__figures .earnings__month { background: var(--primary); border-color: var(--primary); }
+.earnings__month dt { color: #D3E8E2; }
+.earnings__month dd { color: #fff; }
+
+@media (min-width: 600px) {
+  .earnings__figures { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 900px) {
+  .tutor-hero__inner { flex-direction: row; align-items: center; }
+  .tutor-hero__text { flex: 1 1 0; }
+  .earn-card { flex: 0 0 360px; }
+  .earnings { flex-direction: row; align-items: center; }
+  .earnings__text { flex: 1 1 0; }
+  .earnings__figures { flex: 1.3 1 0; }
 }

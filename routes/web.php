@@ -21,3 +21,4 @@ Route::get('/tutors/{tutor}/demo/sent', [DemoBookingController::class, 'sent'])-
 
 Route::view('/how-it-works', 'pages.how-it-works')->name('how-it-works');
 Route::view('/pricing', 'pages.pricing')->name('pricing');
+Route::view('/become-a-tutor', 'pages.become-a-tutor')->name('become-a-tutor');

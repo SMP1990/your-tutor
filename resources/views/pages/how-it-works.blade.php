@@ -16,13 +16,6 @@
          'points' => ['Reminders before every class', 'Session notes after every class']],
     ];
 
-    $tutorSteps = [
-        ['title' => 'Apply online', 'body' => 'Create a tutor account, add your subjects and upload your degree and ID.'],
-        ['title' => 'Subject test and interview', 'body' => 'A short test in your subject and a live interview with our team.'],
-        ['title' => 'Your profile goes live', 'body' => 'Set your rate and available times. Students can now find you and book demos.'],
-        ['title' => 'Teach and get paid', 'body' => 'Teach from home. Your earnings are released after each completed class and you withdraw them from your dashboard.'],
-    ];
-
     $classroom = [
         ['title' => 'Live video class', 'body' => 'One-to-one video in the browser on phone or laptop. Nothing to install.', 'icon' => '<rect x="2" y="5" width="14" height="14" rx="2"/><path d="m16 10 6-3v10l-6-3"/>'],
         ['title' => 'Screen share and whiteboard', 'body' => 'Tutors explain on screen, solve numericals step by step and share files.', 'icon' => '<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>'],
@@ -146,17 +139,9 @@
             <span class="eyebrow eyebrow--accent">For tutors</span>
             <h2>Teach online and earn from home</h2>
         </div>
-        <ol class="grid grid--four tutor-steps">
-            @foreach ($tutorSteps as $step)
-                <li class="feature-card">
-                    <span class="tutor-steps__num" aria-hidden="true">{{ $loop->iteration }}</span>
-                    <strong>{{ $step['title'] }}</strong>
-                    <span>{{ $step['body'] }}</span>
-                </li>
-            @endforeach
-        </ol>
+        @include('partials.tutor-steps')
         <div>
-            <a href="#" class="btn btn-accent">Become a tutor</a>
+            <a href="{{ route('become-a-tutor') }}" class="btn btn-accent">Become a tutor</a>
         </div>
     </div>
 </section>

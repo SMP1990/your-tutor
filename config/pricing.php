@@ -11,4 +11,8 @@ return [
     'sibling_discount_percent' => 10,      // second child onwards
     'package_sizes' => [8, 12, 20],        // classes per month
     'example_rate' => 1800,                // used in the worked example
+
+    // Become a Tutor earnings example (before the platform fee, which is not decided yet)
+    'tutor_example' => ['rate' => 1800, 'classes_per_day' => 3, 'days_per_week' => 5],
+    'payout_methods' => ['Bank account', 'JazzCash', 'Easypaisa'],
 ];
