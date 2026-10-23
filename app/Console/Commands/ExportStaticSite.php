@@ -71,6 +71,10 @@ class ExportStaticSite extends Command
             '/privacy' => 'privacy.html',
             '/refund-policy' => 'refund-policy.html',
             '/subjects' => 'subjects.html',
+            '/login' => 'login.html',
+            '/register' => 'register.html',
+            '/verify-phone' => 'verify-phone.html',
+            '/forgot-password' => 'forgot-password.html',
         ];
         foreach (DemoSubjects::all() as $subject) {
             $pages["/subjects/{$subject['slug']}"] = "subject-{$subject['slug']}.html";
@@ -89,17 +93,29 @@ class ExportStaticSite extends Command
         $pages = $this->pages();
         $root = preg_quote(self::ROOT, '#');
 
+        $html = preg_replace('#<input type="hidden" name="_token"[^>]*>#', '', $html);
+
+        // Login forms: drop every field name so no email, phone or password ever lands in a URL,
+        // and only move on to the next page (register -> verify phone).
+        $html = preg_replace_callback("#<form class=\"auth-form\" method=\"post\" action=\"{$root}([^\"]*)\">(.*?)</form>#s", function ($m) {
+            $next = $m[1] === '/register' ? '/verify-phone' : $m[1];
+            // Keep names on radios/checkboxes (role, consent): they hold no personal data.
+            $body = preg_replace_callback('#<input(?![^>]*type="(?:radio|checkbox)")[^>]*>#', fn ($i) => preg_replace('# name="[^"]*"#', '', $i[0]), $m[2]);
+
+            return '<form class="auth-form" method="get" action="'.self::ROOT.$next.'">'.$body.'</form>';
+        }, $html);
+
         // A static host cannot process POST forms: send them to their "sent" page instead.
         $html = preg_replace("#method=\"post\" action=\"({$root}[^\"]*)\"#", 'method="get" action="$1/sent"', $html);
         $html = preg_replace('#<input type="hidden" name="_token"[^>]*>#', '', $html);
         $html = str_replace(' novalidate>', '>', $html); // let the browser check required fields
 
         return preg_replace_callback("#(href|src|action)=\"{$root}([^\"]*)\"#", function ($m) use ($pages, $prefix) {
-            [$path, $hash] = array_pad(explode('#', $m[2], 2), 2, null);
-            $path = strtok($path, '?') ?: '/';
-            $file = $pages[$path] ?? ltrim($path, '/');
+            [$url, $hash] = array_pad(explode('#', $m[2], 2), 2, null);
+            [$path, $query] = array_pad(explode('?', $url, 2), 2, null);
+            $file = $pages[$path ?: '/'] ?? ltrim($path, '/');
 
-            return $m[1].'="'.$prefix.$file.($hash !== null ? '#'.$hash : '').'"';
+            return $m[1].'="'.$prefix.$file.($query !== null ? '?'.$query : '').($hash !== null ? '#'.$hash : '').'"';
         }, $html);
     }
 }

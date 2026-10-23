@@ -140,7 +140,7 @@
         </div>
         @include('partials.tutor-steps')
         <div>
-            <a href="#" class="btn btn-accent">Start your application</a>
+            <a href="{{ route('register', ['role' => 'tutor']) }}" class="btn btn-accent">Start your application</a>
         </div>
     </div>
 </section>
