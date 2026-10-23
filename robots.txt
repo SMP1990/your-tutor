@@ -1,0 +1,3 @@
+# Preview site with sample data: keep it out of search engines until launch.
+User-agent: *
+Disallow: /
