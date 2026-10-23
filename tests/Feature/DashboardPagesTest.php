@@ -24,6 +24,15 @@ class DashboardPagesTest extends TestCase
         }
     }
 
+    public function test_login_page_has_temporary_links_to_dashboards(): void
+    {
+        $response = $this->get('/login')->assertSee('Preview only');
+
+        foreach (['student', 'parent', 'tutor', 'admin'] as $dashboard) {
+            $response->assertSee(route("dashboard.{$dashboard}"));
+        }
+    }
+
     public function test_admin_shows_site_figures_from_config(): void
     {
         config(['pricing.package_discount_percent' => 15]);

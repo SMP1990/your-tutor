@@ -27,4 +27,6 @@
 <a href="{{ route('verify-phone') }}" class="btn btn-outline">Log in with a code on your phone</a>
 
 <p class="auth-switch">New here? <a href="{{ route('register') }}">Create an account</a></p>
+
+@include('partials.dashboard-preview-links')
 @endsection

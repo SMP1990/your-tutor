@@ -25,6 +25,12 @@ Links between pages are relative, so the files work on any domain. Export again 
 The export writes `.htaccess` with HTTPS redirect, security headers (same as
 `App\Http\Middleware\SecurityHeaders`) and the custom 404 page.
 
+## Remove before launch (temporary preview helpers)
+- `resources/views/partials/dashboard-preview-links.blade.php`, its `@include` in `auth/login.blade.php`
+  and the `.preview-links` CSS: quick links to the sample dashboards.
+- `DashboardPreviewController` / `AuthPreviewController` and their routes: replace with real login and dashboards.
+- `site:export` command and the `static-site` branch, once the Laravel app itself is deployed.
+
 ## Launch switches
 - `SITE_INDEXABLE=true`: lets search engines index the site (robots.txt allows, noindex tag removed).
   Keep `false` while the site shows dummy data.
