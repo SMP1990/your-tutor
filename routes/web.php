@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthPreviewController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DashboardPreviewController;
 use App\Http\Controllers\DemoBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SubjectController;
@@ -52,3 +53,10 @@ Route::controller(AuthPreviewController::class)->group(function () {
         Route::post('/forgot-password', 'notYet')->name('password.email');
     });
 });
+
+// Dashboards: design only with sample data, see DashboardPreviewController.
+foreach (['student', 'parent', 'tutor', 'admin'] as $dashboard) {
+    Route::get("/{$dashboard}", [DashboardPreviewController::class, 'show'])
+        ->defaults('dashboard', $dashboard)
+        ->name("dashboard.{$dashboard}");
+}

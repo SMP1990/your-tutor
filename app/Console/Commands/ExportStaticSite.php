@@ -75,6 +75,10 @@ class ExportStaticSite extends Command
             '/register' => 'register.html',
             '/verify-phone' => 'verify-phone.html',
             '/forgot-password' => 'forgot-password.html',
+            '/student' => 'dashboard-student.html',
+            '/parent' => 'dashboard-parent.html',
+            '/tutor' => 'dashboard-tutor.html',
+            '/admin' => 'dashboard-admin.html',
         ];
         foreach (DemoSubjects::all() as $subject) {
             $pages["/subjects/{$subject['slug']}"] = "subject-{$subject['slug']}.html";
