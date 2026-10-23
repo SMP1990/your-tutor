@@ -18,3 +18,5 @@ Route::post('/tutors/{tutor}/demo', [DemoBookingController::class, 'store'])
     ->middleware('throttle:10,1')
     ->name('tutors.demo.store');
 Route::get('/tutors/{tutor}/demo/sent', [DemoBookingController::class, 'sent'])->name('tutors.demo.sent');
+
+Route::view('/how-it-works', 'pages.how-it-works')->name('how-it-works');

@@ -3,7 +3,7 @@
         ['label' => 'Find a Tutor', 'href' => url('/tutors')],
         ['label' => 'Subjects', 'href' => url('/#subjects')],
         ['label' => 'Pricing', 'href' => '#'],
-        ['label' => 'How it works', 'href' => url('/#how-it-works')],
+        ['label' => 'How it works', 'href' => route('how-it-works')],
     ];
 @endphp
 
