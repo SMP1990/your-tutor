@@ -1,5 +1,8 @@
 # your tutor: Online Tutoring Platform
 
+> **New chat? Read `docs/HANDOFF.md` first.** It has the current status, where everything is,
+> how the owner likes to work, and what comes next. Update it at the end of every step.
+
 Online-only tutoring marketplace. Pakistan first (PKR), KSA later (SAR). Students/parents book
 tutors, attend live classes, pay securely. Plan lives in `docs/PLAN.md`.
 Brand name: "your tutor" (set in `APP_NAME`, never hard-coded in views).
