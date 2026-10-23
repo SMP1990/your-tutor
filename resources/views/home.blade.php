@@ -11,15 +11,6 @@
         ['n' => '4', 'time' => 'Ongoing', 'title' => 'Start regular classes', 'body' => 'Pay per session through your dashboard. No contracts.'],
     ];
 
-    $subjects = [
-        ['name' => 'Mathematics', 'levels' => 'Grade 1 – A Level'], ['name' => 'Physics', 'levels' => 'Matric · FSc · O/A'],
-        ['name' => 'Chemistry', 'levels' => 'Matric · FSc · O/A'], ['name' => 'Biology', 'levels' => 'Matric · FSc · MDCAT'],
-        ['name' => 'English', 'levels' => 'All grades · IELTS'], ['name' => 'Urdu', 'levels' => 'All grades'],
-        ['name' => 'Computer Science', 'levels' => 'Matric · O/A Level'], ['name' => 'Quran & Islamiat', 'levels' => 'All ages'],
-        ['name' => 'Accounting', 'levels' => 'ICS · I.Com · A Level'], ['name' => 'Coding for Kids', 'levels' => 'Ages 7–14'],
-        ['name' => 'Entry Tests', 'levels' => 'MDCAT · ECAT · NTS'], ['name' => 'Economics', 'levels' => 'O/A Level'],
-    ];
-
     $reviews = [
         ['quote' => 'The free demo helped us pick the right teacher. Our son finally enjoys Maths.', 'name' => 'Sadia Malik', 'role' => 'Parent · Grade 8 Maths', 'initials' => 'SM', 'rating' => 5],
         ['quote' => 'Classes fit around my college timings and I get notes after every session.', 'name' => 'Hassan Raza', 'role' => 'Student · FSc Chemistry', 'initials' => 'HR', 'rating' => 5],
@@ -158,14 +149,7 @@
             <span class="eyebrow">Subjects</span>
             <h2>Browse by subject</h2>
         </div>
-        <div class="grid grid--subjects">
-            @foreach ($subjects as $subject)
-                <a href="{{ url('/tutors?subject[]=' . \Illuminate\Support\Str::slug($subject['name'])) }}" class="subject-tile">
-                    <strong>{{ $subject['name'] }}</strong>
-                    <span>{{ $subject['levels'] }}</span>
-                </a>
-            @endforeach
-        </div>
+        @include('partials.subject-grid', ['subjects' => $subjects])
     </div>
 </section>
 

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Support\DemoSubjects;
 use App\Support\DemoTutors;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Http\Kernel;
@@ -69,7 +70,11 @@ class ExportStaticSite extends Command
             '/terms' => 'terms.html',
             '/privacy' => 'privacy.html',
             '/refund-policy' => 'refund-policy.html',
+            '/subjects' => 'subjects.html',
         ];
+        foreach (DemoSubjects::all() as $subject) {
+            $pages["/subjects/{$subject['slug']}"] = "subject-{$subject['slug']}.html";
+        }
         foreach (DemoTutors::all() as $tutor) {
             $pages["/tutors/{$tutor['slug']}"] = "tutor-{$tutor['slug']}.html";
             $pages["/tutors/{$tutor['slug']}/demo"] = "demo-{$tutor['slug']}.html";
