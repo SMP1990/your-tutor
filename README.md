@@ -1,5 +1,6 @@
-# your tutor
+# your tutor: static preview
 
-Website for the "your tutor" online tutoring platform.
+Plain HTML preview of the "your tutor" website, exported from the Laravel app on branch `main`
+(`php artisan site:export`). Upload the contents of this branch to Hostinger `public_html`.
 
-Hostinger deploys this repository to `public_html` from the `main` branch.
+Do not edit these files by hand: change the Laravel app and export again.

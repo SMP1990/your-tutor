@@ -10,14 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
     
-
-    <link rel="stylesheet" href="app.css">
-    
-</head>
+    <link rel="preload" as="style" href="build/assets/app-B5M9EDLL.css" /><link rel="stylesheet" href="build/assets/app-B5M9EDLL.css" />    </head>
 <body>
-    
-
-<header class="site-header">
+    <header class="site-header">
     <div class="container site-header__bar">
         <a href="index.html" class="brand">
             <span class="brand__mark">
@@ -28,21 +23,17 @@
 
         <nav class="site-nav" aria-label="Main">
             <ul class="site-nav__list">
-                
-                    <li><a class="nav-link" href="tutors.html">Find a Tutor</a></li>
-                
-                    <li><a class="nav-link" href="index.html#subjects">Subjects</a></li>
-                
-                    <li><a class="nav-link" href="#">Pricing</a></li>
-                
-                    <li><a class="nav-link" href="index.html#how-it-works">How it works</a></li>
-                
-            </ul>
+                                    <li><a class="nav-link" href="tutors.html">Find a Tutor</a></li>
+                                    <li><a class="nav-link" href="subjects.html">Subjects</a></li>
+                                    <li><a class="nav-link" href="pricing.html">Pricing</a></li>
+                                    <li><a class="nav-link" href="how-it-works.html">How it works</a></li>
+                                    <li><a class="nav-link" href="become-a-tutor.html">Become a Tutor</a></li>
+                            </ul>
         </nav>
 
         <div class="site-header__actions">
-            <a href="#" class="nav-link site-header__login">Log In</a>
-            <a href="#" class="btn btn-primary site-header__register">Register</a>
+            <a href="login.html" class="nav-link site-header__login">Log In</a>
+            <a href="register.html" class="btn btn-primary site-header__register">Register</a>
             <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
             </button>
@@ -51,28 +42,19 @@
 
     <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile" hidden data-mobile-nav>
         <ul class="container mobile-nav__list">
-            
-                <li><a class="nav-link" href="tutors.html">Find a Tutor</a></li>
-            
-                <li><a class="nav-link" href="index.html#subjects">Subjects</a></li>
-            
-                <li><a class="nav-link" href="#">Pricing</a></li>
-            
-                <li><a class="nav-link" href="index.html#how-it-works">How it works</a></li>
-            
-            <li><a class="nav-link" href="#"><strong>Log In</strong></a></li>
+                            <li><a class="nav-link" href="tutors.html">Find a Tutor</a></li>
+                            <li><a class="nav-link" href="subjects.html">Subjects</a></li>
+                            <li><a class="nav-link" href="pricing.html">Pricing</a></li>
+                            <li><a class="nav-link" href="how-it-works.html">How it works</a></li>
+                            <li><a class="nav-link" href="become-a-tutor.html">Become a Tutor</a></li>
+                        <li><a class="nav-link" href="login.html"><strong>Log In</strong></a></li>
         </ul>
     </nav>
 </header>
 
-
     
-
-
-
     <main class="page-main">
         
-
 
 <section class="page-title">
     <div class="container page-title__inner">
@@ -116,75 +98,61 @@
 
             <fieldset class="filter-group">
                 <legend>Subject</legend>
-                
-                    <label class="check">
+                                    <label class="check">
                         <input type="checkbox" name="subject[]" value="mathematics" >
                         Mathematics
                     </label>
-                
-                    <label class="check">
+                                    <label class="check">
                         <input type="checkbox" name="subject[]" value="physics" checked>
                         Physics
                     </label>
-                
-                    <label class="check">
+                                    <label class="check">
                         <input type="checkbox" name="subject[]" value="chemistry" >
                         Chemistry
                     </label>
-                
-                    <label class="check">
+                                    <label class="check">
                         <input type="checkbox" name="subject[]" value="biology" >
                         Biology
                     </label>
-                
-                    <label class="check">
+                                    <label class="check">
                         <input type="checkbox" name="subject[]" value="english" >
                         English
                     </label>
-                
-                    <label class="check">
+                                    <label class="check">
                         <input type="checkbox" name="subject[]" value="computer-science" >
                         Computer Science
                     </label>
-                
-                <a href="#" class="filter-group__more">Show all subjects</a>
+                                <a href="#" class="filter-group__more">Show all subjects</a>
             </fieldset>
 
             <fieldset class="filter-group filter-group--gap">
                 <legend>Grade / level</legend>
                 <div class="pills">
-                    
-                        <label class="pill">
+                                            <label class="pill">
                             <input type="radio" name="grade" value="grade-1-5" >
                             <span>Grade 1–5</span>
                         </label>
-                    
-                        <label class="pill">
+                                            <label class="pill">
                             <input type="radio" name="grade" value="grade-6-8" >
                             <span>Grade 6–8</span>
                         </label>
-                    
-                        <label class="pill">
+                                            <label class="pill">
                             <input type="radio" name="grade" value="matric" >
                             <span>Matric</span>
                         </label>
-                    
-                        <label class="pill">
+                                            <label class="pill">
                             <input type="radio" name="grade" value="fsc" checked>
                             <span>FSc / A Level</span>
                         </label>
-                    
-                        <label class="pill">
+                                            <label class="pill">
                             <input type="radio" name="grade" value="o-level" >
                             <span>O Level</span>
                         </label>
-                    
-                        <label class="pill">
+                                            <label class="pill">
                             <input type="radio" name="grade" value="entry-tests" >
                             <span>Entry tests</span>
                         </label>
-                    
-                </div>
+                                    </div>
             </fieldset>
 
             <fieldset class="filter-group filter-group--gap">
@@ -208,28 +176,23 @@
 
             <fieldset class="filter-group">
                 <legend>Rating</legend>
-                
-                    <label class="check">
+                                    <label class="check">
                         <input type="radio" name="rating" value="4.5" checked>
                         4.5 and above
                     </label>
-                
-                    <label class="check">
+                                    <label class="check">
                         <input type="radio" name="rating" value="4.0" >
                         4.0 and above
                     </label>
-                
-                    <label class="check">
+                                    <label class="check">
                         <input type="radio" name="rating" value="3.5" >
                         3.5 and above
                     </label>
-                
-                    <label class="check">
+                                    <label class="check">
                         <input type="radio" name="rating" value="" >
                         Any rating
                     </label>
-                
-            </fieldset>
+                            </fieldset>
 
             <button type="submit" class="btn btn-primary">Show results</button>
         </form>
@@ -242,46 +205,32 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
                     Filters · 3
                 </button>
-                
-                    <a href="#" class="chip" aria-label="Remove filter Physics">
+                                    <a href="#" class="chip" aria-label="Remove filter Physics">
                         Physics
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
                     </a>
-                
-                    <a href="#" class="chip" aria-label="Remove filter FSc / A Level">
+                                    <a href="#" class="chip" aria-label="Remove filter FSc / A Level">
                         FSc / A Level
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
                     </a>
-                
-                    <a href="#" class="chip" aria-label="Remove filter PKR 1,000–3,000">
+                                    <a href="#" class="chip" aria-label="Remove filter PKR 1,000–3,000">
                         PKR 1,000–3,000
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
                     </a>
-                
-            </div>
+                            </div>
             <label class="sort">Sort by
                 <select name="sort" form="sort-form" class="sort__select" onchange="this.form.submit()">
-                    
-                        <option value="recommended">Recommended</option>
-                    
-                        <option value="highest-rated">Highest rated</option>
-                    
-                        <option value="price-low-to-high">Price: low to high</option>
-                    
-                        <option value="price-high-to-low">Price: high to low</option>
-                    
-                </select>
+                                            <option value="recommended">Recommended</option>
+                                            <option value="highest-rated">Highest rated</option>
+                                            <option value="price-low-to-high">Price: low to high</option>
+                                            <option value="price-high-to-low">Price: high to low</option>
+                                    </select>
             </label>
             <form id="sort-form" action="tutors.html" method="get"></form>
         </div>
 
         <div class="grid grid--tutors">
-            
-                
-
-
-
-<article class="tutor-card">
+                            <article class="tutor-card">
     <div class="tutor-card__head">
         <img class="tutor-card__photo" src="images/avatars/ayesha.svg" alt="Photo of Ayesha R." width="72" height="72">
         <div class="tutor-card__id">
@@ -299,12 +248,9 @@
     </div>
 
     <ul class="tutor-card__subjects">
-        
-            <li>Physics</li>
-        
-            <li>Mathematics</li>
-        
-    </ul>
+                    <li>Physics</li>
+                    <li>Mathematics</li>
+            </ul>
 
     <p class="tutor-card__bio">MSc Physics. Makes numericals simple with step-by-step practice and past papers.</p>
 
@@ -320,17 +266,11 @@
     </dl>
 
     <div class="tutor-card__actions">
-        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
-        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+        <a href="tutor-ayesha-r.html" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="demo-ayesha-r.html" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
     </div>
 </article>
-
-            
-                
-
-
-
-<article class="tutor-card">
+                            <article class="tutor-card">
     <div class="tutor-card__head">
         <img class="tutor-card__photo" src="images/avatars/usman.svg" alt="Photo of Usman F." width="72" height="72">
         <div class="tutor-card__id">
@@ -348,12 +288,9 @@
     </div>
 
     <ul class="tutor-card__subjects">
-        
-            <li>Physics</li>
-        
-            <li>Chemistry</li>
-        
-    </ul>
+                    <li>Physics</li>
+                    <li>Chemistry</li>
+            </ul>
 
     <p class="tutor-card__bio">Engineer and A Level examiner-style marking. Focus on exam technique and timing.</p>
 
@@ -369,17 +306,11 @@
     </dl>
 
     <div class="tutor-card__actions">
-        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
-        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+        <a href="tutor-usman-f.html" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="demo-usman-f.html" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
     </div>
 </article>
-
-            
-                
-
-
-
-<article class="tutor-card">
+                            <article class="tutor-card">
     <div class="tutor-card__head">
         <img class="tutor-card__photo" src="images/avatars/sana.svg" alt="Photo of Sana N." width="72" height="72">
         <div class="tutor-card__id">
@@ -397,12 +328,9 @@
     </div>
 
     <ul class="tutor-card__subjects">
-        
-            <li>Physics</li>
-        
-            <li>Biology</li>
-        
-    </ul>
+                    <li>Physics</li>
+                    <li>Biology</li>
+            </ul>
 
     <p class="tutor-card__bio">MBBS student. Short concept videos plus weekly MCQ tests for medical aspirants.</p>
 
@@ -418,17 +346,11 @@
     </dl>
 
     <div class="tutor-card__actions">
-        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
-        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+        <a href="tutor-sana-n.html" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="demo-sana-n.html" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
     </div>
 </article>
-
-            
-                
-
-
-
-<article class="tutor-card">
+                            <article class="tutor-card">
     <div class="tutor-card__head">
         <img class="tutor-card__photo" src="images/avatars/bilal.svg" alt="Photo of Bilal K." width="72" height="72">
         <div class="tutor-card__id">
@@ -446,12 +368,9 @@
     </div>
 
     <ul class="tutor-card__subjects">
-        
-            <li>Physics</li>
-        
-            <li>Mathematics</li>
-        
-    </ul>
+                    <li>Physics</li>
+                    <li>Mathematics</li>
+            </ul>
 
     <p class="tutor-card__bio">Ten years teaching Punjab Board. Clear notes and chapter-wise practice tests.</p>
 
@@ -467,17 +386,11 @@
     </dl>
 
     <div class="tutor-card__actions">
-        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
-        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+        <a href="tutor-bilal-k.html" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="demo-bilal-k.html" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
     </div>
 </article>
-
-            
-                
-
-
-
-<article class="tutor-card">
+                            <article class="tutor-card">
     <div class="tutor-card__head">
         <img class="tutor-card__photo" src="images/avatars/zainab.svg" alt="Photo of Zainab H." width="72" height="72">
         <div class="tutor-card__id">
@@ -495,10 +408,8 @@
     </div>
 
     <ul class="tutor-card__subjects">
-        
-            <li>Physics</li>
-        
-    </ul>
+                    <li>Physics</li>
+            </ul>
 
     <p class="tutor-card__bio">Cambridge-trained teacher. Practical-based learning with lab simulations.</p>
 
@@ -514,17 +425,11 @@
     </dl>
 
     <div class="tutor-card__actions">
-        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
-        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+        <a href="tutor-zainab-h.html" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="demo-zainab-h.html" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
     </div>
 </article>
-
-            
-                
-
-
-
-<article class="tutor-card">
+                            <article class="tutor-card">
     <div class="tutor-card__head">
         <img class="tutor-card__photo" src="images/avatars/omar.svg" alt="Photo of Omar A." width="72" height="72">
         <div class="tutor-card__id">
@@ -542,12 +447,9 @@
     </div>
 
     <ul class="tutor-card__subjects">
-        
-            <li>Physics</li>
-        
-            <li>Computer Science</li>
-        
-    </ul>
+                    <li>Physics</li>
+                    <li>Computer Science</li>
+            </ul>
 
     <p class="tutor-card__bio">ECAT preparation with shortcut methods and full-length timed mock papers.</p>
 
@@ -563,13 +465,11 @@
     </dl>
 
     <div class="tutor-card__actions">
-        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
-        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+        <a href="tutor-omar-a.html" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="demo-omar-a.html" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
     </div>
 </article>
-
-            
-        </div>
+                    </div>
 
         <nav aria-label="Pagination" class="pagination">
             <ul>
@@ -585,58 +485,46 @@
     </div>
 </div>
 
-
     </main>
 
-    
-
-<footer class="site-footer">
+    <footer class="site-footer">
     <div class="container site-footer__inner">
         <div class="site-footer__cols">
             <div class="site-footer__about">
                 <strong class="site-footer__brand">your tutor</strong>
                 <p>Online tutoring for students across Pakistan and overseas. Verified tutors, free demo classes, pay per session.</p>
                 <div class="site-footer__social">
-                    
-                        <a href="#" class="social-link" aria-label="Facebook">Fb</a>
-                    
-                        <a href="#" class="social-link" aria-label="Instagram">Ig</a>
-                    
-                        <a href="#" class="social-link" aria-label="YouTube">Yt</a>
-                    
-                        <a href="#" class="social-link" aria-label="WhatsApp">Wa</a>
-                    
-                </div>
+                                            <a href="#" class="social-link" aria-label="Facebook">Fb</a>
+                                            <a href="#" class="social-link" aria-label="Instagram">Ig</a>
+                                            <a href="#" class="social-link" aria-label="YouTube">Yt</a>
+                                            <a href="#" class="social-link" aria-label="WhatsApp">Wa</a>
+                                    </div>
             </div>
 
             <nav class="footer-col" aria-label="Company">
                 <strong class="footer-col__title">Company</strong>
-                <a href="#">About Us</a>
-                <a href="#">Contact</a>
-                <a href="#">FAQs</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact</a>
+                <a href="faqs.html">FAQs</a>
+                <a href="become-a-tutor.html">Become a Tutor</a>
             </nav>
 
             <nav class="footer-col" aria-label="Legal">
                 <strong class="footer-col__title">Legal</strong>
-                <a href="#">Terms &amp; Conditions</a>
-                <a href="#">Privacy Policy</a>
+                <a href="terms.html">Terms &amp; Conditions</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="refund-policy.html">Refund Policy</a>
             </nav>
 
             <div class="footer-pay">
                 <strong class="footer-col__title">We accept</strong>
                 <ul class="footer-pay__list">
-                    
-                        <li>JazzCash</li>
-                    
-                        <li>Easypaisa</li>
-                    
-                        <li>Visa</li>
-                    
-                        <li>Mastercard</li>
-                    
-                        <li>Bank transfer</li>
-                    
-                </ul>
+                                            <li>JazzCash</li>
+                                            <li>Easypaisa</li>
+                                            <li>Visa</li>
+                                            <li>Mastercard</li>
+                                            <li>Bank transfer</li>
+                                    </ul>
             </div>
         </div>
 
@@ -646,10 +534,12 @@
         </div>
     </div>
 </footer>
+    <a href="contact.html" class="wa-button" aria-label="Chat with us on WhatsApp" >
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/><path d="M9 10c0 3 2 5 5 5l1-1.5-2-1-1 .8c-.8-.4-1.4-1-1.8-1.8l.8-1-1-2z" fill="currentColor" stroke="none"/></svg>
+    <span class="wa-button__label">Need help?</span>
+</a>
 
-
-    
-<script>
+    <script>
     (function () {
         var panel = document.querySelector('[data-filters]');
         var backdrop = document.querySelector('.sheet-backdrop');
@@ -674,7 +564,6 @@
         });
     })();
 </script>
-
         <script>
             (function () {
                 var btn = document.querySelector('[data-menu-toggle]');
@@ -694,6 +583,5 @@
                 });
             })();
         </script>
-    
-</body>
+    </body>
 </html>
