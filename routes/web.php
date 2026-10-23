@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardPreviewController;
 use App\Http\Controllers\DemoBookingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TutorController;
 use App\Support\DemoTutors;
@@ -60,3 +61,6 @@ foreach (['student', 'parent', 'tutor', 'admin'] as $dashboard) {
         ->defaults('dashboard', $dashboard)
         ->name("dashboard.{$dashboard}");
 }
+
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');

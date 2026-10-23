@@ -44,26 +44,3 @@
     </nav>
 </header>
 
-@once
-    @push('scripts')
-        <script>
-            (function () {
-                var btn = document.querySelector('[data-menu-toggle]');
-                var nav = document.querySelector('[data-mobile-nav]');
-                if (!btn || !nav) return;
-                btn.addEventListener('click', function () {
-                    var opening = nav.hasAttribute('hidden');
-                    nav.toggleAttribute('hidden', !opening);
-                    btn.setAttribute('aria-expanded', opening ? 'true' : 'false');
-                    btn.setAttribute('aria-label', opening ? 'Close menu' : 'Open menu');
-                });
-                document.addEventListener('keydown', function (e) {
-                    if (e.key === 'Escape' && !nav.hasAttribute('hidden')) {
-                        btn.click();
-                        btn.focus();
-                    }
-                });
-            })();
-        </script>
-    @endpush
-@endonce

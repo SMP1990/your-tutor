@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Find a Tutor | ' . config('app.name'))
+@section('description', 'Search online tutors by subject, grade, price and rating. Compare profiles and reviews, then book a free demo class.')
 
 @php
     // Static sample data. Replace with real query results later.
@@ -179,30 +180,3 @@
 
 @endsection
 
-@push('scripts')
-<script>
-    (function () {
-        var panel = document.querySelector('[data-filters]');
-        var backdrop = document.querySelector('.sheet-backdrop');
-        var openBtn = document.querySelector('[data-filters-open]');
-        if (!panel || !openBtn) return;
-
-        function setOpen(open) {
-            panel.classList.toggle('is-open', open);
-            backdrop.hidden = !open;
-            document.body.classList.toggle('no-scroll', open);
-            openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-            if (open) panel.querySelector('input, button').focus();
-            else openBtn.focus();
-        }
-
-        openBtn.addEventListener('click', function () { setOpen(true); });
-        document.querySelectorAll('[data-filters-close]').forEach(function (el) {
-            el.addEventListener('click', function () { setOpen(false); });
-        });
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && panel.classList.contains('is-open')) setOpen(false);
-        });
-    })();
-</script>
-@endpush

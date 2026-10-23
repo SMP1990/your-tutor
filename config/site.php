@@ -9,4 +9,8 @@ return [
     'support_email' => env('SUPPORT_EMAIL') ?: '[support email]',
     'support_hours' => 'Monday to Saturday, 10 am to 8 pm (PKT)',
     'legal_updated' => '24 October 2026',
+
+    // Let search engines index the site. Keep false while the site shows dummy data;
+    // set SITE_INDEXABLE=true at launch (adds robots.txt "Allow" and removes the noindex tag).
+    'indexable' => (bool) env('SITE_INDEXABLE', false),
 ];

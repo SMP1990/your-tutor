@@ -58,13 +58,3 @@
 <p class="auth-switch">Already have an account? <a href="{{ route('login') }}">Log in</a></p>
 @endsection
 
-@push('scripts')
-<script>
-    // Pre-select the role from ?role=tutor (also works on the static preview).
-    (function () {
-        var role = new URLSearchParams(location.search).get('role');
-        var input = role && document.querySelector('[data-role][value="' + role + '"]');
-        if (input) input.checked = true;
-    })();
-</script>
-@endpush

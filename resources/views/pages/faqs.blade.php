@@ -28,6 +28,10 @@
     ];
 @endphp
 
+@push('schema')
+    @include('partials.schema', ['schema' => \App\Support\Schema::faq(array_merge(...array_column($groups, 'items')))])
+@endpush
+
 @section('content')
 
 <section class="page-hero">

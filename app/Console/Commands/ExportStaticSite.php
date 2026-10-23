@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Middleware\SecurityHeaders;
 use App\Support\DemoSubjects;
 use App\Support\DemoTutors;
 use Illuminate\Console\Command;
@@ -13,18 +14,26 @@ use Illuminate\Support\Facades\URL;
 /**
  * Renders the public pages to plain HTML for the static preview on shared hosting.
  * Temporary: remove once the Laravel app itself is deployed.
+ *
+ * Links between pages are relative, so the files work on any domain. --url is only used where
+ * search engines and link previews need a full address (canonical, og:image, sitemap.xml).
  */
 class ExportStaticSite extends Command
 {
-    protected $signature = 'site:export {--path= : Output folder (default: static-export)}';
+    protected $signature = 'site:export
+        {--path= : Output folder (default: static-export)}
+        {--url= : Public address of the site, e.g. https://example.com (for canonical, link previews and sitemap)}';
 
     protected $description = 'Export the public pages as a static HTML site with relative links';
 
     private const ROOT = 'http://export.local';
 
+    private ?string $site = null;
+
     public function handle(Kernel $kernel): int
     {
         $out = $this->option('path') ?: base_path('static-export');
+        $this->site = rtrim((string) $this->option('url'), '/') ?: null;
         File::deleteDirectory($out);
         File::ensureDirectoryExists($out);
 
@@ -37,18 +46,26 @@ class ExportStaticSite extends Command
 
                 return self::FAILURE;
             }
-            File::put("{$out}/{$file}", $this->relativeLinks($response->getContent()));
+            File::put("{$out}/{$file}", $this->convert($response->getContent()));
             $this->line("  {$path} -> {$file}");
         }
 
         // 404 page: shown for any missing URL, so its links start at the site root ("/").
         $missing = $kernel->handle(Request::create(self::ROOT.'/__missing__'));
-        File::put("{$out}/404.html", $this->relativeLinks($missing->getContent(), '/'));
-        File::put("{$out}/.htaccess", "ErrorDocument 404 /404.html\n");
-        $this->line('  404 page -> 404.html + .htaccess');
+        File::put("{$out}/404.html", $this->convert($missing->getContent(), '/'));
+        File::put("{$out}/.htaccess", $this->htaccess());
+
+        File::put("{$out}/robots.txt", $this->absolute($kernel->handle(Request::create(self::ROOT.'/robots.txt'))->getContent()));
+        if ($this->site) {
+            File::put("{$out}/sitemap.xml", $this->absolute($kernel->handle(Request::create(self::ROOT.'/sitemap.xml'))->getContent()));
+        } else {
+            $this->warn('  No --url given: sitemap.xml skipped, link previews use relative image paths.');
+        }
+        $this->line('  404.html, .htaccess, robots.txt'.($this->site ? ', sitemap.xml' : ''));
 
         File::copyDirectory(public_path('images'), "{$out}/images");
         File::copyDirectory(public_path('build'), "{$out}/build");
+        File::copy(public_path('favicon.svg'), "{$out}/favicon.svg");
         $this->info("Exported to {$out}");
 
         return self::SUCCESS;
@@ -92,9 +109,8 @@ class ExportStaticSite extends Command
         return $pages;
     }
 
-    private function relativeLinks(string $html, string $prefix = ''): string
+    private function convert(string $html, string $prefix = ''): string
     {
-        $pages = $this->pages();
         $root = preg_quote(self::ROOT, '#');
 
         $html = preg_replace('#<input type="hidden" name="_token"[^>]*>#', '', $html);
@@ -111,15 +127,54 @@ class ExportStaticSite extends Command
 
         // A static host cannot process POST forms: send them to their "sent" page instead.
         $html = preg_replace("#method=\"post\" action=\"({$root}[^\"]*)\"#", 'method="get" action="$1/sent"', $html);
-        $html = preg_replace('#<input type="hidden" name="_token"[^>]*>#', '', $html);
         $html = str_replace(' novalidate>', '>', $html); // let the browser check required fields
 
-        return preg_replace_callback("#(href|src|action)=\"{$root}([^\"]*)\"#", function ($m) use ($pages, $prefix) {
-            [$url, $hash] = array_pad(explode('#', $m[2], 2), 2, null);
-            [$path, $query] = array_pad(explode('?', $url, 2), 2, null);
-            $file = $pages[$path ?: '/'] ?? ltrim($path, '/');
+        // Canonical must be a full address when we know the domain.
+        $html = preg_replace_callback("#(rel=\"canonical\" href=\"){$root}([^\"]*)\"#", fn ($m) => $m[1].$this->file($m[2], $this->site ? $this->site.'/' : $prefix).'"', $html);
 
-            return $m[1].'="'.$prefix.$file.($query !== null ? '?'.$query : '').($hash !== null ? '#'.$hash : '').'"';
-        }, $html);
+        // Links between pages: relative, so the files work on any domain.
+        $html = preg_replace_callback("#(href|src|action)=\"{$root}([^\"]*)\"#", fn ($m) => $m[1].'="'.$this->file($m[2], $prefix).'"', $html);
+
+        // Everything else (og:url, og:image, structured data) needs a full address.
+        return $this->absolute($html, $prefix);
+    }
+
+    private function absolute(string $text, string $fallbackPrefix = ''): string
+    {
+        $root = preg_quote(self::ROOT, '#');
+
+        return preg_replace_callback("#{$root}(/[^\"'<\s]*)?#", fn ($m) => $this->file($m[1] ?? '/', $this->site ? $this->site.'/' : $fallbackPrefix), $text);
+    }
+
+    /** Turns a site path (with optional ?query and #hash) into the exported file name. */
+    private function file(string $url, string $prefix): string
+    {
+        [$url, $hash] = array_pad(explode('#', $url, 2), 2, null);
+        [$path, $query] = array_pad(explode('?', $url, 2), 2, null);
+        $pages = $this->pages();
+        $file = $pages[$path ?: '/'] ?? ltrim($path, '/');
+        if ($file === 'index.html' && $prefix !== '' && $prefix !== '/') {
+            $file = ''; // https://example.com/ rather than .../index.html
+        }
+
+        return $prefix.$file.($query !== null ? '?'.$query : '').($hash !== null ? '#'.$hash : '');
+    }
+
+    private function htaccess(): string
+    {
+        $headers = SecurityHeaders::HEADERS + [
+            'Content-Security-Policy' => SecurityHeaders::CSP,
+            'Strict-Transport-Security' => 'max-age=31536000; includeSubDomains',
+        ];
+        $lines = ['ErrorDocument 404 /404.html', '', '# Always use HTTPS', 'RewriteEngine On',
+            'RewriteCond %{HTTPS} !=on', 'RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]', '',
+            '# Block hidden files such as .git (but not .well-known, used for SSL certificates)',
+            'RewriteCond %{REQUEST_URI} !^/\.well-known/', 'RewriteRule (^|/)\. - [F]', '', '<IfModule mod_headers.c>'];
+        foreach ($headers as $name => $value) {
+            $lines[] = "    Header always set {$name} \"{$value}\"";
+        }
+        $lines[] = '</IfModule>';
+
+        return implode("\n", $lines)."\n";
     }
 }

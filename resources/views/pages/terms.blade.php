@@ -1,6 +1,7 @@
 @extends('layouts.legal')
 
 @section('title', 'Terms & Conditions | ' . config('app.name'))
+@section('description', 'The terms for parents, students and tutors using ' . config('app.name') . ': accounts, bookings, payments, recordings and behaviour.')
 @section('legal-title', 'Terms & Conditions')
 
 @section('legal-body')

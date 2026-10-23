@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', config('app.name') . ' | Find a trusted tutor online')
+@section('description', 'Find verified online tutors in Pakistan for Grade 1 to A Levels, Matric, FSc, MDCAT and ECAT. Compare tutors, book a free demo class, pay per session.')
 
 @php
     // Static sample data. Replace with real data later.
@@ -36,6 +37,10 @@
         ['10K+', 'Students taught'], ['100+', 'Verified tutors'], ['95+', 'Subjects'], ['4.8', 'Average rating'],
     ];
 @endphp
+
+@push('schema')
+    @include('partials.schema', ['schema' => \App\Support\Schema::organization()])
+@endpush
 
 @section('content')
 
@@ -229,25 +234,3 @@
 
 @endsection
 
-@push('scripts')
-<script>
-    (function () {
-        var track = document.querySelector('[data-slider]');
-        if (!track) return;
-        var items = track.children;
-        var dots = document.querySelectorAll('[data-slider-dots] .slider-dots__dot');
-        var step = function () { return items.length > 1 ? items[1].offsetLeft - items[0].offsetLeft : track.clientWidth; };
-
-        document.querySelector('[data-slider-prev]').addEventListener('click', function () {
-            track.scrollBy({ left: -step(), behavior: 'smooth' });
-        });
-        document.querySelector('[data-slider-next]').addEventListener('click', function () {
-            track.scrollBy({ left: step(), behavior: 'smooth' });
-        });
-        track.addEventListener('scroll', function () {
-            var i = Math.round(track.scrollLeft / step());
-            dots.forEach(function (d, n) { d.classList.toggle('is-active', n === i); });
-        }, { passive: true });
-    })();
-</script>
-@endpush

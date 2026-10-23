@@ -3,6 +3,12 @@
 @section('title', 'Online ' . $subject['name'] . ' tutors in Pakistan | ' . config('app.name'))
 @section('description', 'Find a verified online ' . $subject['name'] . ' tutor for ' . $subject['levels'] . '. ' . $subject['intro'] . ' Free demo class.')
 
+@push('schema')
+    @include('partials.schema', ['schema' => \App\Support\Schema::breadcrumbs([
+        'Home' => route('home'), 'Subjects' => route('subjects.index'), $subject['name'] => null,
+    ])])
+@endpush
+
 @section('content')
 
 <section class="page-hero">

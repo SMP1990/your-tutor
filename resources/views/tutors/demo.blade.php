@@ -155,18 +155,3 @@
 
 @endsection
 
-@push('scripts')
-<script>
-    (function () {
-        var field = document.querySelector('[data-student-field]');
-        var radios = document.querySelectorAll('[data-for-toggle]');
-        function sync() {
-            var child = document.querySelector('[data-for-toggle]:checked').value === 'child';
-            field.hidden = !child;
-            field.querySelector('input').required = child;
-        }
-        radios.forEach(function (r) { r.addEventListener('change', sync); });
-        sync();
-    })();
-</script>
-@endpush

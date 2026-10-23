@@ -1,6 +1,7 @@
 @extends('layouts.legal')
 
 @section('title', 'Privacy Policy | ' . config('app.name'))
+@section('description', 'How ' . config('app.name') . ' collects, uses and protects personal information, including data about children and class recordings.')
 @section('legal-title', 'Privacy Policy')
 
 @section('legal-body')

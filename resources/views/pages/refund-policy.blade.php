@@ -1,6 +1,7 @@
 @extends('layouts.legal')
 
 @section('title', 'Refund Policy | ' . config('app.name'))
+@section('description', 'When you get a refund: missed classes, cancellations, technical problems and monthly packages. Payments are held until the class happens.')
 @section('legal-title', 'Refund Policy')
 
 @section('legal-body')

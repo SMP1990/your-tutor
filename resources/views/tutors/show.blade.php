@@ -10,6 +10,13 @@
     $demoUrl = route('tutors.demo', $tutor['slug']);
 @endphp
 
+@push('schema')
+    @include('partials.schema', ['schema' => \App\Support\Schema::tutor($tutor)])
+    @include('partials.schema', ['schema' => \App\Support\Schema::breadcrumbs([
+        'Home' => route('home'), 'Find a Tutor' => route('tutors.index'), $tutor['name'] => null,
+    ])])
+@endpush
+
 @section('content')
 
 <div class="container profile-crumbs">
