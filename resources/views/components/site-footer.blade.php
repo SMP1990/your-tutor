@@ -18,16 +18,17 @@
 
             <nav class="footer-col" aria-label="Company">
                 <strong class="footer-col__title">Company</strong>
-                <a href="#">About Us</a>
-                <a href="#">Contact</a>
-                <a href="#">FAQs</a>
+                <a href="{{ route('about') }}">About Us</a>
+                <a href="{{ route('contact') }}">Contact</a>
+                <a href="{{ route('faqs') }}">FAQs</a>
                 <a href="{{ route('become-a-tutor') }}">Become a Tutor</a>
             </nav>
 
             <nav class="footer-col" aria-label="Legal">
                 <strong class="footer-col__title">Legal</strong>
-                <a href="#">Terms &amp; Conditions</a>
-                <a href="#">Privacy Policy</a>
+                <a href="{{ route('terms') }}">Terms &amp; Conditions</a>
+                <a href="{{ route('privacy') }}">Privacy Policy</a>
+                <a href="{{ route('refund-policy') }}">Refund Policy</a>
             </nav>
 
             <div class="footer-pay">

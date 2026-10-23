@@ -40,6 +40,12 @@ class ExportStaticSite extends Command
             $this->line("  {$path} -> {$file}");
         }
 
+        // 404 page: shown for any missing URL, so its links start at the site root ("/").
+        $missing = $kernel->handle(Request::create(self::ROOT.'/__missing__'));
+        File::put("{$out}/404.html", $this->relativeLinks($missing->getContent(), '/'));
+        File::put("{$out}/.htaccess", "ErrorDocument 404 /404.html\n");
+        $this->line('  404 page -> 404.html + .htaccess');
+
         File::copyDirectory(public_path('images'), "{$out}/images");
         File::copyDirectory(public_path('build'), "{$out}/build");
         $this->info("Exported to {$out}");
@@ -56,6 +62,13 @@ class ExportStaticSite extends Command
             '/how-it-works' => 'how-it-works.html',
             '/pricing' => 'pricing.html',
             '/become-a-tutor' => 'become-a-tutor.html',
+            '/about' => 'about.html',
+            '/faqs' => 'faqs.html',
+            '/contact' => 'contact.html',
+            '/contact/sent' => 'contact-sent.html',
+            '/terms' => 'terms.html',
+            '/privacy' => 'privacy.html',
+            '/refund-policy' => 'refund-policy.html',
         ];
         foreach (DemoTutors::all() as $tutor) {
             $pages["/tutors/{$tutor['slug']}"] = "tutor-{$tutor['slug']}.html";
@@ -66,7 +79,7 @@ class ExportStaticSite extends Command
         return $pages;
     }
 
-    private function relativeLinks(string $html): string
+    private function relativeLinks(string $html, string $prefix = ''): string
     {
         $pages = $this->pages();
         $root = preg_quote(self::ROOT, '#');
@@ -76,12 +89,12 @@ class ExportStaticSite extends Command
         $html = preg_replace('#<input type="hidden" name="_token"[^>]*>#', '', $html);
         $html = str_replace(' novalidate>', '>', $html); // let the browser check required fields
 
-        return preg_replace_callback("#(href|src|action)=\"{$root}([^\"]*)\"#", function ($m) use ($pages) {
+        return preg_replace_callback("#(href|src|action)=\"{$root}([^\"]*)\"#", function ($m) use ($pages, $prefix) {
             [$path, $hash] = array_pad(explode('#', $m[2], 2), 2, null);
             $path = strtok($path, '?') ?: '/';
             $file = $pages[$path] ?? ltrim($path, '/');
 
-            return $m[1].'="'.$file.($hash !== null ? '#'.$hash : '').'"';
+            return $m[1].'="'.$prefix.$file.($hash !== null ? '#'.$hash : '').'"';
         }, $html);
     }
 }

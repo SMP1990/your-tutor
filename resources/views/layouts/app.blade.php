@@ -24,6 +24,7 @@
     </main>
 
     <x-site-footer />
+    <x-whatsapp-button />
 
     @stack('scripts')
 </body>
