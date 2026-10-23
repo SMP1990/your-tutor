@@ -41,8 +41,11 @@ class DemoTutors
 
     private static function withDefaults(array $tutor): array
     {
+        $firstName = strtolower(strtok($tutor['name'], ' '));
+
         return $tutor + [
             'photo' => null,
+            'photo_url' => asset("images/avatars/{$firstName}.svg"),
             'city' => 'Lahore',
             'experience_years' => 5,
             'students_taught' => 60,

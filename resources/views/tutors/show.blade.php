@@ -6,7 +6,8 @@
 @php
     $slots = ['morning' => 'Morning', 'afternoon' => 'Afternoon', 'evening' => 'Evening'];
     $firstName = \Illuminate\Support\Str::before($tutor['name'], ' ');
-    $photo = asset('images/avatars/' . \Illuminate\Support\Str::slug($firstName) . '.svg');
+    $photo = $tutor['photo_url'];
+    $demoUrl = route('tutors.demo', $tutor['slug']);
 @endphp
 
 @section('content')
@@ -171,7 +172,7 @@
                 <strong>{{ $tutor['rate'] }} <small>/ hr</small></strong>
             </div>
             <p class="book-card__free">First demo class is <strong>free</strong></p>
-            <a href="#" class="btn btn-primary book-card__btn">Book free demo</a>
+            <a href="{{ $demoUrl }}" class="btn btn-primary book-card__btn">Book free demo</a>
             <a href="{{ route('tutors.index') }}" class="btn btn-outline book-card__btn">Compare other tutors</a>
             <ul class="book-card__trust">
                 <li>Pay per session, no contract</li>
@@ -205,7 +206,7 @@
         <strong>{{ $tutor['rate'] }} / hr</strong>
         <span>Free demo class</span>
     </div>
-    <a href="#" class="btn btn-primary">Book free demo</a>
+    <a href="{{ $demoUrl }}" class="btn btn-primary">Book free demo</a>
 </div>
 
 @endsection

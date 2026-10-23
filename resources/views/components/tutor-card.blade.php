@@ -56,6 +56,6 @@
 
     <div class="tutor-card__actions">
         <a href="{{ $profileUrl }}" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
-        <a href="{{ $slug ? $profileUrl . '#book' : '#' }}" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+        <a href="{{ $slug ? route('tutors.demo', $slug) : '#' }}" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
     </div>
 </article>

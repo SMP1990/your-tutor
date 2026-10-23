@@ -13,10 +13,8 @@ class TutorController extends Controller
         return view('tutors.index', compact('tutors'));
     }
 
-    public function show(string $slug)
+    public function show(array $tutor)
     {
-        $tutor = DemoTutors::find($slug) ?? abort(404);
-
         return view('tutors.show', [
             'tutor' => $tutor,
             'similar' => DemoTutors::similarTo($tutor),

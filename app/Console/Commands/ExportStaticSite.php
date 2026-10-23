@@ -53,6 +53,8 @@ class ExportStaticSite extends Command
         $pages = ['/' => 'index.html', '/tutors' => 'tutors.html'];
         foreach (DemoTutors::all() as $tutor) {
             $pages["/tutors/{$tutor['slug']}"] = "tutor-{$tutor['slug']}.html";
+            $pages["/tutors/{$tutor['slug']}/demo"] = "demo-{$tutor['slug']}.html";
+            $pages["/tutors/{$tutor['slug']}/demo/sent"] = "demo-{$tutor['slug']}-sent.html";
         }
 
         return $pages;
@@ -62,6 +64,11 @@ class ExportStaticSite extends Command
     {
         $pages = $this->pages();
         $root = preg_quote(self::ROOT, '#');
+
+        // A static host cannot process POST forms: send them to their "sent" page instead.
+        $html = preg_replace("#method=\"post\" action=\"({$root}[^\"]*)\"#", 'method="get" action="$1/sent"', $html);
+        $html = preg_replace('#<input type="hidden" name="_token"[^>]*>#', '', $html);
+        $html = str_replace(' novalidate>', '>', $html); // let the browser check required fields
 
         return preg_replace_callback("#(href|src|action)=\"{$root}([^\"]*)\"#", function ($m) use ($pages) {
             [$path, $hash] = array_pad(explode('#', $m[2], 2), 2, null);
