@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Find a Tutor | your tutor</title>
+    <meta name="description" content="Verified online tutors for Grade 1 to A Levels, Matric, FSc and entry tests.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+    
+
+    <link rel="stylesheet" href="app.css">
+    
+</head>
+<body>
+    
+
+<header class="site-header">
+    <div class="container site-header__bar">
+        <a href="index.html" class="brand">
+            <span class="brand__mark">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2zM22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/></svg>
+            </span>
+            <strong class="brand__name">your tutor</strong>
+        </a>
+
+        <nav class="site-nav" aria-label="Main">
+            <ul class="site-nav__list">
+                
+                    <li><a class="nav-link" href="tutors.html">Find a Tutor</a></li>
+                
+                    <li><a class="nav-link" href="index.html#subjects">Subjects</a></li>
+                
+                    <li><a class="nav-link" href="#">Pricing</a></li>
+                
+                    <li><a class="nav-link" href="index.html#how-it-works">How it works</a></li>
+                
+            </ul>
+        </nav>
+
+        <div class="site-header__actions">
+            <a href="#" class="nav-link site-header__login">Log In</a>
+            <a href="#" class="btn btn-primary site-header__register">Register</a>
+            <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile" hidden data-mobile-nav>
+        <ul class="container mobile-nav__list">
+            
+                <li><a class="nav-link" href="tutors.html">Find a Tutor</a></li>
+            
+                <li><a class="nav-link" href="index.html#subjects">Subjects</a></li>
+            
+                <li><a class="nav-link" href="#">Pricing</a></li>
+            
+                <li><a class="nav-link" href="index.html#how-it-works">How it works</a></li>
+            
+            <li><a class="nav-link" href="#"><strong>Log In</strong></a></li>
+        </ul>
+    </nav>
+</header>
+
+
+    
+
+
+
+    <main class="page-main">
+        
+
+
+<section class="page-title">
+    <div class="container page-title__inner">
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb">
+                <li><a href="index.html">Home</a></li>
+                <li aria-hidden="true">/</li>
+                <li aria-current="page">Find a Tutor</li>
+            </ol>
+        </nav>
+        <div class="page-title__row">
+            <div class="page-title__text">
+                <h1>Online tutors in Pakistan</h1>
+                <p>230 tutors match your search</p>
+            </div>
+            <form class="tutor-search" role="search" action="tutors.html" method="get">
+                <label for="q" class="sr-only">Search tutors</label>
+                <input id="q" name="q" type="search" class="input tutor-search__input" placeholder="Search by name, subject or keyword">
+                <button type="submit" class="tutor-search__btn" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+<div class="container listing">
+
+    <div class="sheet-backdrop" data-filters-close hidden></div>
+
+    <aside class="filters" id="filters" aria-label="Filters" data-filters>
+        <form class="filters__form" action="tutors.html" method="get">
+            <div class="filters__head">
+                <h2>Filters</h2>
+                <a href="tutors.html" class="filters__clear">Clear all</a>
+                <button type="button" class="filters__close" aria-label="Close filters" data-filters-close>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                </button>
+            </div>
+
+            <fieldset class="filter-group">
+                <legend>Subject</legend>
+                
+                    <label class="check">
+                        <input type="checkbox" name="subject[]" value="mathematics" >
+                        Mathematics
+                    </label>
+                
+                    <label class="check">
+                        <input type="checkbox" name="subject[]" value="physics" checked>
+                        Physics
+                    </label>
+                
+                    <label class="check">
+                        <input type="checkbox" name="subject[]" value="chemistry" >
+                        Chemistry
+                    </label>
+                
+                    <label class="check">
+                        <input type="checkbox" name="subject[]" value="biology" >
+                        Biology
+                    </label>
+                
+                    <label class="check">
+                        <input type="checkbox" name="subject[]" value="english" >
+                        English
+                    </label>
+                
+                    <label class="check">
+                        <input type="checkbox" name="subject[]" value="computer-science" >
+                        Computer Science
+                    </label>
+                
+                <a href="#" class="filter-group__more">Show all subjects</a>
+            </fieldset>
+
+            <fieldset class="filter-group filter-group--gap">
+                <legend>Grade / level</legend>
+                <div class="pills">
+                    
+                        <label class="pill">
+                            <input type="radio" name="grade" value="grade-1-5" >
+                            <span>Grade 1–5</span>
+                        </label>
+                    
+                        <label class="pill">
+                            <input type="radio" name="grade" value="grade-6-8" >
+                            <span>Grade 6–8</span>
+                        </label>
+                    
+                        <label class="pill">
+                            <input type="radio" name="grade" value="matric" >
+                            <span>Matric</span>
+                        </label>
+                    
+                        <label class="pill">
+                            <input type="radio" name="grade" value="fsc" checked>
+                            <span>FSc / A Level</span>
+                        </label>
+                    
+                        <label class="pill">
+                            <input type="radio" name="grade" value="o-level" >
+                            <span>O Level</span>
+                        </label>
+                    
+                        <label class="pill">
+                            <input type="radio" name="grade" value="entry-tests" >
+                            <span>Entry tests</span>
+                        </label>
+                    
+                </div>
+            </fieldset>
+
+            <fieldset class="filter-group filter-group--gap">
+                <legend>Price per hour (PKR)</legend>
+                <div class="range" aria-hidden="true">
+                    <div class="range__track"></div>
+                    <div class="range__fill"></div>
+                    <div class="range__thumb range__thumb--start"></div>
+                    <div class="range__thumb range__thumb--end"></div>
+                </div>
+                <div class="price-row">
+                    <label class="price-row__field">Min
+                        <input type="text" name="min" value="1,000" inputmode="numeric" class="price-row__input">
+                    </label>
+                    <span class="price-row__dash" aria-hidden="true">–</span>
+                    <label class="price-row__field">Max
+                        <input type="text" name="max" value="3,000" inputmode="numeric" class="price-row__input">
+                    </label>
+                </div>
+            </fieldset>
+
+            <fieldset class="filter-group">
+                <legend>Rating</legend>
+                
+                    <label class="check">
+                        <input type="radio" name="rating" value="4.5" checked>
+                        4.5 and above
+                    </label>
+                
+                    <label class="check">
+                        <input type="radio" name="rating" value="4.0" >
+                        4.0 and above
+                    </label>
+                
+                    <label class="check">
+                        <input type="radio" name="rating" value="3.5" >
+                        3.5 and above
+                    </label>
+                
+                    <label class="check">
+                        <input type="radio" name="rating" value="" >
+                        Any rating
+                    </label>
+                
+            </fieldset>
+
+            <button type="submit" class="btn btn-primary">Show results</button>
+        </form>
+    </aside>
+
+    <div class="results">
+        <div class="results__bar">
+            <div class="results__chips">
+                <button type="button" class="filters-btn" aria-controls="filters" aria-expanded="false" data-filters-open>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+                    Filters · 3
+                </button>
+                
+                    <a href="#" class="chip" aria-label="Remove filter Physics">
+                        Physics
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                    </a>
+                
+                    <a href="#" class="chip" aria-label="Remove filter FSc / A Level">
+                        FSc / A Level
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                    </a>
+                
+                    <a href="#" class="chip" aria-label="Remove filter PKR 1,000–3,000">
+                        PKR 1,000–3,000
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                    </a>
+                
+            </div>
+            <label class="sort">Sort by
+                <select name="sort" form="sort-form" class="sort__select" onchange="this.form.submit()">
+                    
+                        <option value="recommended">Recommended</option>
+                    
+                        <option value="highest-rated">Highest rated</option>
+                    
+                        <option value="price-low-to-high">Price: low to high</option>
+                    
+                        <option value="price-high-to-low">Price: high to low</option>
+                    
+                </select>
+            </label>
+            <form id="sort-form" action="tutors.html" method="get"></form>
+        </div>
+
+        <div class="grid grid--tutors">
+            
+                
+
+
+
+<article class="tutor-card">
+    <div class="tutor-card__head">
+        <img class="tutor-card__photo" src="images/avatars/ayesha.svg" alt="Photo of Ayesha R." width="72" height="72">
+        <div class="tutor-card__id">
+            <div class="tutor-card__name-row">
+                <h3 class="tutor-card__name">Ayesha R.</h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" role="img" aria-label="Verified tutor"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m8 12 3 3 5-6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+            </div>
+            <span class="tutor-card__levels">FSc · O Level</span>
+            <span class="tutor-card__rating">
+                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="currentColor"/></svg>
+                <strong>4.9</strong>
+                <span class="tutor-card__muted">(38 reviews)</span>
+            </span>
+        </div>
+    </div>
+
+    <ul class="tutor-card__subjects">
+        
+            <li>Physics</li>
+        
+            <li>Mathematics</li>
+        
+    </ul>
+
+    <p class="tutor-card__bio">MSc Physics. Makes numericals simple with step-by-step practice and past papers.</p>
+
+    <dl class="tutor-card__facts">
+        <div>
+            <dt>Rate from</dt>
+            <dd class="tutor-card__rate">PKR 1,800 / hr</dd>
+        </div>
+        <div>
+            <dt>Speaks</dt>
+            <dd>Urdu, English</dd>
+        </div>
+    </dl>
+
+    <div class="tutor-card__actions">
+        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+    </div>
+</article>
+
+            
+                
+
+
+
+<article class="tutor-card">
+    <div class="tutor-card__head">
+        <img class="tutor-card__photo" src="images/avatars/usman.svg" alt="Photo of Usman F." width="72" height="72">
+        <div class="tutor-card__id">
+            <div class="tutor-card__name-row">
+                <h3 class="tutor-card__name">Usman F.</h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" role="img" aria-label="Verified tutor"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m8 12 3 3 5-6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+            </div>
+            <span class="tutor-card__levels">FSc · A Level</span>
+            <span class="tutor-card__rating">
+                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="currentColor"/></svg>
+                <strong>4.8</strong>
+                <span class="tutor-card__muted">(52 reviews)</span>
+            </span>
+        </div>
+    </div>
+
+    <ul class="tutor-card__subjects">
+        
+            <li>Physics</li>
+        
+            <li>Chemistry</li>
+        
+    </ul>
+
+    <p class="tutor-card__bio">Engineer and A Level examiner-style marking. Focus on exam technique and timing.</p>
+
+    <dl class="tutor-card__facts">
+        <div>
+            <dt>Rate from</dt>
+            <dd class="tutor-card__rate">PKR 2,500 / hr</dd>
+        </div>
+        <div>
+            <dt>Speaks</dt>
+            <dd>English, Urdu</dd>
+        </div>
+    </dl>
+
+    <div class="tutor-card__actions">
+        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+    </div>
+</article>
+
+            
+                
+
+
+
+<article class="tutor-card">
+    <div class="tutor-card__head">
+        <img class="tutor-card__photo" src="images/avatars/sana.svg" alt="Photo of Sana N." width="72" height="72">
+        <div class="tutor-card__id">
+            <div class="tutor-card__name-row">
+                <h3 class="tutor-card__name">Sana N.</h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" role="img" aria-label="Verified tutor"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m8 12 3 3 5-6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+            </div>
+            <span class="tutor-card__levels">FSc · MDCAT</span>
+            <span class="tutor-card__rating">
+                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="currentColor"/></svg>
+                <strong>4.9</strong>
+                <span class="tutor-card__muted">(27 reviews)</span>
+            </span>
+        </div>
+    </div>
+
+    <ul class="tutor-card__subjects">
+        
+            <li>Physics</li>
+        
+            <li>Biology</li>
+        
+    </ul>
+
+    <p class="tutor-card__bio">MBBS student. Short concept videos plus weekly MCQ tests for medical aspirants.</p>
+
+    <dl class="tutor-card__facts">
+        <div>
+            <dt>Rate from</dt>
+            <dd class="tutor-card__rate">PKR 1,500 / hr</dd>
+        </div>
+        <div>
+            <dt>Speaks</dt>
+            <dd>Urdu, English</dd>
+        </div>
+    </dl>
+
+    <div class="tutor-card__actions">
+        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+    </div>
+</article>
+
+            
+                
+
+
+
+<article class="tutor-card">
+    <div class="tutor-card__head">
+        <img class="tutor-card__photo" src="images/avatars/bilal.svg" alt="Photo of Bilal K." width="72" height="72">
+        <div class="tutor-card__id">
+            <div class="tutor-card__name-row">
+                <h3 class="tutor-card__name">Bilal K.</h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" role="img" aria-label="Verified tutor"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m8 12 3 3 5-6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+            </div>
+            <span class="tutor-card__levels">Matric · FSc</span>
+            <span class="tutor-card__rating">
+                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="currentColor"/></svg>
+                <strong>4.7</strong>
+                <span class="tutor-card__muted">(19 reviews)</span>
+            </span>
+        </div>
+    </div>
+
+    <ul class="tutor-card__subjects">
+        
+            <li>Physics</li>
+        
+            <li>Mathematics</li>
+        
+    </ul>
+
+    <p class="tutor-card__bio">Ten years teaching Punjab Board. Clear notes and chapter-wise practice tests.</p>
+
+    <dl class="tutor-card__facts">
+        <div>
+            <dt>Rate from</dt>
+            <dd class="tutor-card__rate">PKR 1,200 / hr</dd>
+        </div>
+        <div>
+            <dt>Speaks</dt>
+            <dd>Urdu, Punjabi</dd>
+        </div>
+    </dl>
+
+    <div class="tutor-card__actions">
+        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+    </div>
+</article>
+
+            
+                
+
+
+
+<article class="tutor-card">
+    <div class="tutor-card__head">
+        <img class="tutor-card__photo" src="images/avatars/zainab.svg" alt="Photo of Zainab H." width="72" height="72">
+        <div class="tutor-card__id">
+            <div class="tutor-card__name-row">
+                <h3 class="tutor-card__name">Zainab H.</h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" role="img" aria-label="Verified tutor"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m8 12 3 3 5-6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+            </div>
+            <span class="tutor-card__levels">O Level · A Level</span>
+            <span class="tutor-card__rating">
+                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="currentColor"/></svg>
+                <strong>5.0</strong>
+                <span class="tutor-card__muted">(11 reviews)</span>
+            </span>
+        </div>
+    </div>
+
+    <ul class="tutor-card__subjects">
+        
+            <li>Physics</li>
+        
+    </ul>
+
+    <p class="tutor-card__bio">Cambridge-trained teacher. Practical-based learning with lab simulations.</p>
+
+    <dl class="tutor-card__facts">
+        <div>
+            <dt>Rate from</dt>
+            <dd class="tutor-card__rate">PKR 3,000 / hr</dd>
+        </div>
+        <div>
+            <dt>Speaks</dt>
+            <dd>English</dd>
+        </div>
+    </dl>
+
+    <div class="tutor-card__actions">
+        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+    </div>
+</article>
+
+            
+                
+
+
+
+<article class="tutor-card">
+    <div class="tutor-card__head">
+        <img class="tutor-card__photo" src="images/avatars/omar.svg" alt="Photo of Omar A." width="72" height="72">
+        <div class="tutor-card__id">
+            <div class="tutor-card__name-row">
+                <h3 class="tutor-card__name">Omar A.</h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" role="img" aria-label="Verified tutor"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m8 12 3 3 5-6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+            </div>
+            <span class="tutor-card__levels">FSc · ECAT</span>
+            <span class="tutor-card__rating">
+                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="currentColor"/></svg>
+                <strong>4.6</strong>
+                <span class="tutor-card__muted">(33 reviews)</span>
+            </span>
+        </div>
+    </div>
+
+    <ul class="tutor-card__subjects">
+        
+            <li>Physics</li>
+        
+            <li>Computer Science</li>
+        
+    </ul>
+
+    <p class="tutor-card__bio">ECAT preparation with shortcut methods and full-length timed mock papers.</p>
+
+    <dl class="tutor-card__facts">
+        <div>
+            <dt>Rate from</dt>
+            <dd class="tutor-card__rate">PKR 1,600 / hr</dd>
+        </div>
+        <div>
+            <dt>Speaks</dt>
+            <dd>Urdu, English</dd>
+        </div>
+    </dl>
+
+    <div class="tutor-card__actions">
+        <a href="#" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+    </div>
+</article>
+
+            
+        </div>
+
+        <nav aria-label="Pagination" class="pagination">
+            <ul>
+                <li><a href="#" class="pagination__link pagination__link--wide">‹ Prev</a></li>
+                <li><a href="#" class="pagination__link is-current" aria-current="page">1</a></li>
+                <li><a href="#" class="pagination__link">2</a></li>
+                <li><a href="#" class="pagination__link">3</a></li>
+                <li class="pagination__gap" aria-hidden="true">…</li>
+                <li><a href="#" class="pagination__link">39</a></li>
+                <li><a href="#" class="pagination__link pagination__link--wide">Next ›</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    </main>
+
+    
+
+<footer class="site-footer">
+    <div class="container site-footer__inner">
+        <div class="site-footer__cols">
+            <div class="site-footer__about">
+                <strong class="site-footer__brand">your tutor</strong>
+                <p>Online tutoring for students across Pakistan and overseas. Verified tutors, free demo classes, pay per session.</p>
+                <div class="site-footer__social">
+                    
+                        <a href="#" class="social-link" aria-label="Facebook">Fb</a>
+                    
+                        <a href="#" class="social-link" aria-label="Instagram">Ig</a>
+                    
+                        <a href="#" class="social-link" aria-label="YouTube">Yt</a>
+                    
+                        <a href="#" class="social-link" aria-label="WhatsApp">Wa</a>
+                    
+                </div>
+            </div>
+
+            <nav class="footer-col" aria-label="Company">
+                <strong class="footer-col__title">Company</strong>
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQs</a>
+            </nav>
+
+            <nav class="footer-col" aria-label="Legal">
+                <strong class="footer-col__title">Legal</strong>
+                <a href="#">Terms &amp; Conditions</a>
+                <a href="#">Privacy Policy</a>
+            </nav>
+
+            <div class="footer-pay">
+                <strong class="footer-col__title">We accept</strong>
+                <ul class="footer-pay__list">
+                    
+                        <li>JazzCash</li>
+                    
+                        <li>Easypaisa</li>
+                    
+                        <li>Visa</li>
+                    
+                        <li>Mastercard</li>
+                    
+                        <li>Bank transfer</li>
+                    
+                </ul>
+            </div>
+        </div>
+
+        <div class="site-footer__legal">
+            <span>&copy; 2026 your tutor. All rights reserved.</span>
+            <span>Made in Pakistan</span>
+        </div>
+    </div>
+</footer>
+
+
+    
+<script>
+    (function () {
+        var panel = document.querySelector('[data-filters]');
+        var backdrop = document.querySelector('.sheet-backdrop');
+        var openBtn = document.querySelector('[data-filters-open]');
+        if (!panel || !openBtn) return;
+
+        function setOpen(open) {
+            panel.classList.toggle('is-open', open);
+            backdrop.hidden = !open;
+            document.body.classList.toggle('no-scroll', open);
+            openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open) panel.querySelector('input, button').focus();
+            else openBtn.focus();
+        }
+
+        openBtn.addEventListener('click', function () { setOpen(true); });
+        document.querySelectorAll('[data-filters-close]').forEach(function (el) {
+            el.addEventListener('click', function () { setOpen(false); });
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && panel.classList.contains('is-open')) setOpen(false);
+        });
+    })();
+</script>
+
+        <script>
+            (function () {
+                var btn = document.querySelector('[data-menu-toggle]');
+                var nav = document.querySelector('[data-mobile-nav]');
+                if (!btn || !nav) return;
+                btn.addEventListener('click', function () {
+                    var opening = nav.hasAttribute('hidden');
+                    nav.toggleAttribute('hidden', !opening);
+                    btn.setAttribute('aria-expanded', opening ? 'true' : 'false');
+                    btn.setAttribute('aria-label', opening ? 'Close menu' : 'Open menu');
+                });
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && !nav.hasAttribute('hidden')) {
+                        btn.click();
+                        btn.focus();
+                    }
+                });
+            })();
+        </script>
+    
+</body>
+</html>
