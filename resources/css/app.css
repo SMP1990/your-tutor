@@ -1288,3 +1288,59 @@ textarea.input { min-height: 110px; padding-block: 10px; resize: vertical; }
   .grid--four { grid-template-columns: repeat(4, 1fr); }
 }
 .timeline .check-badges li { background: var(--surface); border: 1px solid var(--line); }
+
+/* ==========================================================================
+   Pricing page
+   ========================================================================== */
+.section-head__lead { color: var(--muted); }
+
+.plans { align-items: stretch; }
+.plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px 24px 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.plan--highlight { border: 2px solid var(--primary); box-shadow: 0 16px 40px rgba(14, 102, 85, 0.12); }
+.plan__badge {
+  position: absolute;
+  inset-block-start: -13px;
+  inset-inline-start: 24px;
+  padding: 4px 12px;
+  background: var(--accent);
+  color: var(--ink);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.plan__name { font-family: var(--font-body); font-size: 18px; letter-spacing: 0; }
+.plan__price strong { font-family: var(--font-heading); font-size: 30px; line-height: 1.1; }
+.plan__price span { color: var(--muted); font-size: 15px; }
+.plan__text { color: var(--muted); }
+.plan__points { flex: 1 1 auto; list-style: none; margin: 0; padding: 14px 0 6px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--line); font-size: 15px; }
+.plan__points li { display: flex; gap: 8px; }
+.plan__points li::before { content: "✓"; color: var(--primary); font-weight: 700; }
+.plans__note { padding: 12px 16px; background: var(--accent-soft); color: #7A4A06; border-radius: var(--radius); font-weight: 500; }
+
+.table-scroll { overflow-x: auto; }
+.price-table { width: 100%; min-width: 520px; border-collapse: collapse; background: var(--ground); border-radius: var(--radius-card); overflow: hidden; }
+.price-table th, .price-table td { padding: 14px 18px; text-align: start; border-bottom: 1px solid var(--line); }
+.price-table thead th { background: var(--primary-soft); color: var(--primary-dark); font-size: 14px; }
+.price-table tbody th span { display: block; color: var(--muted); font-size: 13px; font-weight: 400; }
+.price-table tbody tr:last-child > * { border-bottom: 0; }
+.price-table__save { color: var(--primary); font-weight: 700; }
+
+.included { display: flex; flex-direction: column; gap: 32px; }
+.included__list { display: flex; flex-direction: column; gap: 16px; }
+.included__items span, .included__items strong { font-weight: 500; }
+.included__pay { align-self: flex-start; gap: 14px; }
+
+@media (min-width: 900px) {
+  .included { flex-direction: row; align-items: flex-start; }
+  .included__list { flex: 1 1 0; }
+  .included__pay { flex: 0 0 380px; }
+}
