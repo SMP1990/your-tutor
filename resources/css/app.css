@@ -850,3 +850,216 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (max-width: 599px) {
   .search-box__field--divided { border-inline-start: 0; border-top: 1px solid var(--line); padding-top: 10px; }
 }
+
+/* ==========================================================================
+   Tutor profile page
+   ========================================================================== */
+.profile-crumbs { padding-block: 20px 0; }
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-block: 20px clamp(48px, 6vw, 88px);
+}
+.profile__main { min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(20px, 3vw, 28px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.profile-card__title { font-size: 22px; letter-spacing: -0.01em; }
+.profile-card__note { margin-top: -8px; color: var(--muted); font-size: 14px; }
+
+/* Intro */
+.profile-intro { flex-direction: column; }
+.profile-intro__photo {
+  flex: none;
+  width: 120px;
+  height: 120px;
+  border-radius: 28px;
+  object-fit: cover;
+  background: var(--primary-soft);
+}
+.profile-intro__text { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.profile-intro__name-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.profile-intro h1 { font-size: clamp(28px, 3.4vw, 40px); line-height: 1.1; }
+.profile-intro__headline { color: var(--muted); font-size: 17px; }
+
+.verified-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.profile-facts { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--muted); }
+.profile-facts li { display: flex; align-items: center; gap: 4px; }
+.profile-facts strong { color: var(--ink); }
+
+.tutor-card__subjects .chip-neutral { background: var(--ground); color: var(--ink); }
+
+/* Video */
+.video-placeholder {
+  aspect-ratio: 16 / 9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 20px;
+  background-color: var(--primary-soft);
+  background-image: radial-gradient(#B9D8CF 1.2px, transparent 1.2px);
+  background-size: 18px 18px;
+  border-radius: var(--radius);
+  text-align: center;
+}
+.video-placeholder__play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  padding-inline-start: 4px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 10px 24px rgba(14, 102, 85, 0.25);
+}
+.video-placeholder p { font-weight: 700; }
+.video-placeholder p span { color: var(--muted); font-size: 14px; font-weight: 400; }
+
+/* About */
+.prose { display: flex; flex-direction: column; gap: 12px; color: var(--ink); }
+
+/* Qualifications */
+.qual-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.qual-list li { display: flex; align-items: flex-start; gap: 12px; }
+.qual-list__icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-radius: var(--radius-sm);
+}
+.qual-list div { display: flex; flex-direction: column; }
+.qual-list span { color: var(--muted); font-size: 14px; }
+
+.check-badges { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.check-badges li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--ground);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.check-badges li::before { content: "✓"; color: var(--primary); font-weight: 700; }
+
+/* Availability */
+.avail-scroll { overflow-x: auto; }
+.avail { width: 100%; min-width: 420px; border-collapse: collapse; font-size: 14px; }
+.avail th { padding: 8px 4px; font-weight: 500; color: var(--muted); }
+.avail tbody th { text-align: start; white-space: nowrap; color: var(--ink); }
+.avail td { padding: 6px 4px; text-align: center; }
+.avail__on, .avail__off { display: inline-block; width: 28px; height: 28px; border-radius: 8px; vertical-align: middle; }
+.avail__on { background: var(--primary); }
+.avail__off { background: var(--ground); border: 1px solid var(--line); }
+
+/* Reviews */
+.rating-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+.rating-summary__score { display: flex; flex-direction: column; min-width: 110px; }
+.rating-summary__score strong { font-family: var(--font-heading); font-size: 48px; line-height: 1; }
+.rating-summary__score span { color: var(--muted); font-size: 14px; }
+
+.rating-bars { flex: 1 1 260px; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.rating-bars li { display: grid; grid-template-columns: 56px 1fr 40px; align-items: center; gap: 10px; }
+.rating-bars li span:last-child { text-align: end; color: var(--muted); }
+.rating-bars__track {
+  width: 100%;
+  height: 8px;
+  appearance: none;
+  border: 0;
+  border-radius: 4px;
+  background: var(--ground);
+  color: var(--accent);
+  overflow: hidden;
+}
+.rating-bars__track::-webkit-progress-bar { background: var(--ground); border-radius: 4px; }
+.rating-bars__track::-webkit-progress-value { background: var(--accent); border-radius: 4px; }
+.rating-bars__track::-moz-progress-bar { background: var(--accent); border-radius: 4px; }
+
+.profile-reviews { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.profile-reviews .review-card { min-height: 0; background: var(--ground); }
+
+/* Booking card */
+.book-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: 0 12px 32px rgba(19, 32, 28, 0.06);
+}
+.book-card__price span { display: block; color: var(--muted); font-size: 14px; }
+.book-card__price strong { font-family: var(--font-heading); font-size: 32px; }
+.book-card__price small { font-family: var(--font-body); font-size: 16px; font-weight: 500; color: var(--muted); }
+.book-card__free {
+  padding: 10px 12px;
+  background: var(--accent-soft);
+  color: #7A4A06;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+}
+.book-card__btn { width: 100%; }
+.book-card__trust { list-style: none; margin: 0; padding: 8px 0 0; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+.book-card__trust li { display: flex; gap: 8px; }
+.book-card__trust li::before { content: "✓"; color: var(--primary); font-weight: 700; }
+
+/* Mobile booking bar */
+.book-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px var(--gutter);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -6px 20px rgba(19, 32, 28, 0.08);
+}
+.book-bar div { display: flex; flex-direction: column; line-height: 1.3; }
+.book-bar span { color: var(--muted); font-size: 13px; }
+.book-bar .btn { min-height: 44px; }
+
+@media (min-width: 600px) {
+  .profile-intro { flex-direction: row; align-items: flex-start; gap: 24px; }
+}
+
+@media (min-width: 900px) {
+  .profile { flex-direction: row; align-items: flex-start; gap: 32px; }
+  .profile__main { flex: 1 1 0; }
+  .profile__side { flex: 0 0 340px; position: sticky; top: 96px; }
+  .profile-reviews { grid-template-columns: repeat(2, 1fr); }
+  .book-bar { display: none; }
+}

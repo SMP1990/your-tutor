@@ -32,15 +32,6 @@
     $chips = ['Physics', 'FSc / A Level', 'PKR 1,000–3,000'];
 
     $sorts = ['Recommended', 'Highest rated', 'Price: low to high', 'Price: high to low'];
-
-    $tutors = [
-        ['name' => 'Ayesha R.', 'subjects' => ['Physics', 'Mathematics'], 'levels' => 'FSc · O Level', 'rating' => '4.9', 'reviews_count' => '38', 'rate' => 'PKR 1,800', 'languages' => 'Urdu, English', 'bio' => 'MSc Physics. Makes numericals simple with step-by-step practice and past papers.'],
-        ['name' => 'Usman F.', 'subjects' => ['Physics', 'Chemistry'], 'levels' => 'FSc · A Level', 'rating' => '4.8', 'reviews_count' => '52', 'rate' => 'PKR 2,500', 'languages' => 'English, Urdu', 'bio' => 'Engineer and A Level examiner-style marking. Focus on exam technique and timing.'],
-        ['name' => 'Sana N.', 'subjects' => ['Physics', 'Biology'], 'levels' => 'FSc · MDCAT', 'rating' => '4.9', 'reviews_count' => '27', 'rate' => 'PKR 1,500', 'languages' => 'Urdu, English', 'bio' => 'MBBS student. Short concept videos plus weekly MCQ tests for medical aspirants.'],
-        ['name' => 'Bilal K.', 'subjects' => ['Physics', 'Mathematics'], 'levels' => 'Matric · FSc', 'rating' => '4.7', 'reviews_count' => '19', 'rate' => 'PKR 1,200', 'languages' => 'Urdu, Punjabi', 'bio' => 'Ten years teaching Punjab Board. Clear notes and chapter-wise practice tests.'],
-        ['name' => 'Zainab H.', 'subjects' => ['Physics'], 'levels' => 'O Level · A Level', 'rating' => '5.0', 'reviews_count' => '11', 'rate' => 'PKR 3,000', 'languages' => 'English', 'bio' => 'Cambridge-trained teacher. Practical-based learning with lab simulations.'],
-        ['name' => 'Omar A.', 'subjects' => ['Physics', 'Computer Science'], 'levels' => 'FSc · ECAT', 'rating' => '4.6', 'reviews_count' => '33', 'rate' => 'PKR 1,600', 'languages' => 'Urdu, English', 'bio' => 'ECAT preparation with shortcut methods and full-length timed mock papers.'],
-    ];
 @endphp
 
 @section('content')

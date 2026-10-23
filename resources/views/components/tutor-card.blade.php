@@ -14,6 +14,8 @@
 
     $rateLabel = is_numeric($rate) ? 'PKR ' . number_format($rate) : $rate;
     $languagesLabel = is_array($languages) ? implode(', ', $languages) : $languages;
+    $slug = data_get($tutor, 'slug');
+    $profileUrl = $slug ? route('tutors.show', $slug) : '#';
 @endphp
 
 <article {{ $attributes->class('tutor-card') }}>
@@ -53,7 +55,7 @@
     </dl>
 
     <div class="tutor-card__actions">
-        <a href="{{ data_get($tutor, 'url', '#') }}" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
-        <a href="#" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
+        <a href="{{ $profileUrl }}" class="tutor-card__btn tutor-card__btn--outline">View profile</a>
+        <a href="{{ $slug ? $profileUrl . '#book' : '#' }}" class="tutor-card__btn tutor-card__btn--primary">Free demo</a>
     </div>
 </article>

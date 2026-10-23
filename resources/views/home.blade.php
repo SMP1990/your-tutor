@@ -11,12 +11,6 @@
         ['n' => '4', 'time' => 'Ongoing', 'title' => 'Start regular classes', 'body' => 'Pay per session through your dashboard. No contracts.'],
     ];
 
-    $tutors = [
-        ['name' => 'Ayesha R.', 'subjects' => ['Physics', 'Mathematics'], 'levels' => 'FSc · O Level', 'rating' => '4.9', 'reviews_count' => '38', 'rate' => 'PKR 1,800', 'languages' => 'Urdu, English', 'bio' => 'MSc Physics. Makes numericals simple with step-by-step practice and past papers.'],
-        ['name' => 'Hamza S.', 'subjects' => ['Computer Science', 'Python'], 'levels' => 'Matric · A Level', 'rating' => '4.8', 'reviews_count' => '21', 'rate' => 'PKR 2,200', 'languages' => 'English, Urdu', 'bio' => 'Software engineer teaching coding through small projects students build themselves.'],
-        ['name' => 'Mehwish T.', 'subjects' => ['Biology', 'Chemistry'], 'levels' => 'FSc · MDCAT', 'rating' => '5.0', 'reviews_count' => '14', 'rate' => 'PKR 2,000', 'languages' => 'Urdu, English, Punjabi', 'bio' => 'Medical student focused on concept clarity and MDCAT-style MCQ practice.'],
-    ];
-
     $subjects = [
         ['name' => 'Mathematics', 'levels' => 'Grade 1 – A Level'], ['name' => 'Physics', 'levels' => 'Matric · FSc · O/A'],
         ['name' => 'Chemistry', 'levels' => 'Matric · FSc · O/A'], ['name' => 'Biology', 'levels' => 'Matric · FSc · MDCAT'],
