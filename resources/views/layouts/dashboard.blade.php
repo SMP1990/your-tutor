@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
-    @vite(['resources/css/app.css'])
+    @vite(['resources/css/app.css', 'resources/js/site.js'])
 </head>
 <body class="dash-body">
     <header class="dash-top">
@@ -57,6 +57,9 @@
         </nav>
 
         <main class="dash-main">
+            @if (session('notice'))
+                <div class="form-note" role="status">{{ session('notice') }}</div>
+            @endif
             @yield('content')
         </main>
     </div>

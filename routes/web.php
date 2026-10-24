@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthPreviewController;
+use App\Http\Controllers\ChildController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardPreviewController;
 use App\Http\Controllers\DemoBookingController;
@@ -85,6 +86,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'redirect'])->name('dashboard');
     Route::get('/dashboard/student', [DashboardController::class, 'student'])->middleware('role:student')->name('dashboard.student');
     Route::get('/dashboard/parent', [DashboardController::class, 'parent'])->middleware('role:parent')->name('dashboard.parent');
+    Route::middleware('role:parent')->prefix('/dashboard/parent/children')->name('children.')->controller(ChildController::class)->group(function () {
+        Route::get('/new', 'create')->name('create');
+        Route::post('/', 'store')->middleware('throttle:20,1')->name('store');
+        Route::get('/{child}/edit', 'edit')->name('edit');
+        Route::put('/{child}', 'update')->middleware('throttle:20,1')->name('update');
+        Route::delete('/{child}', 'destroy')->middleware('throttle:20,1')->name('destroy');
+    });
     Route::get('/dashboard/tutor', [DashboardController::class, 'tutor'])->middleware('role:tutor')->name('dashboard.tutor');
 
     Route::middleware('role:admin')->group(function () {

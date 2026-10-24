@@ -1761,3 +1761,8 @@ button.btn { font: inherit; font-weight: 700; }
 .site-header__hello { align-items: center; min-height: 44px; font-weight: 700; white-space: nowrap; }
 .link-button { padding: 0; background: none; border: 0; color: var(--primary); font: inherit; font-size: 14px; font-weight: 700; text-decoration: underline; cursor: pointer; }
 .link-button:hover { color: var(--primary-dark); }
+.panel--form { max-width: 720px; }
+.form-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn-danger { color: #B42318; }
+.btn-danger:hover { border-color: #B42318; color: #B42318; }
+.item-list__side form { display: inline-flex; }

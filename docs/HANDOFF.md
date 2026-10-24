@@ -99,7 +99,10 @@ Owner asked to explain the plan step by step, no code until approved.
   (6-digit code by email, hashed in cache, 10 min, 5 tries, once per login session).
   Sample-data dashboards moved to `/preview/{role}` (public, for the static site; Log In page links there).
   Header: "Hi, <name> · My dashboard" + Log out. Custom 403 page.
-- [ ] 1e Parent adds children
+- [x] **1e Parent adds children** (24 Oct): `ChildController` (create/store/edit/update/destroy under
+  `/dashboard/parent/children`, role:parent), `ChildRequest` (first name max 40 + grade from `App\Support\Grades`),
+  `ChildPolicy` (own children only, max 10). Remove asks "Remove <name>?" (`data-confirm` in `site.js`).
+  Dashboard layout now loads `site.js` and shows `session('notice')`.
 - [ ] 1f Run on Hostinger as real Laravel (owner creates MySQL DB + email account, click-by-click)
 Public pages still use `DemoTutors`/`DemoSubjects` until Step 3.
 
