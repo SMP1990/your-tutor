@@ -70,6 +70,21 @@ Owner asked to explain the plan step by step, no code until approved.
    Moving host or domain = copy files, edit `.env`, run migrations. No code changes. Use relative paths,
    `url()`/`route()`/`asset()`, Laravel `storage` disks, and migrations (never hand-made tables).
 
+## 6c. Functional build progress (Step 1 = database + accounts, split into 1a-1f)
+- [x] **1a Database tables** (24 Oct): users + role/phone/whatsapp_opt_in, children, subjects,
+  tutor_profiles (status, money in minor units + currency, availability JSON), subject_tutor_profile.
+  Enums `App\Enums\Role`, `TutorStatus`. Models `User`, `Child`, `Subject`, `TutorProfile`.
+  `role` and tutor `status` are NOT mass-assignable (forms cannot make admins or approve themselves).
+  Seeders: `SubjectSeeder` (real list, safe anywhere), `DemoAccountsSeeder` (never in production):
+  `student|parent|tutor|admin@example.test` + 8 tutors `<slug>@example.test`, password = `DEMO_PASSWORD` (default `password`).
+  Local DB is SQLite (`database/database.sqlite`); Hostinger will use MySQL via `.env` only. Not yet run on MySQL.
+- [ ] 1b Register + email verification
+- [ ] 1c Log in / log out / forgot password
+- [ ] 1d Roles: own dashboard per role, admin two-step login
+- [ ] 1e Parent adds children
+- [ ] 1f Run on Hostinger as real Laravel (owner creates MySQL DB + email account, click-by-click)
+Public pages still use `DemoTutors`/`DemoSubjects` until Step 3.
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)

@@ -13,4 +13,7 @@ return [
     // Let search engines index the site. Keep false while the site shows dummy data;
     // set SITE_INDEXABLE=true at launch (adds robots.txt "Allow" and removes the noindex tag).
     'indexable' => (bool) env('SITE_INDEXABLE', false),
+
+    // Password for the sample accounts made by DemoAccountsSeeder (never seeded in production).
+    'demo_password' => env('DEMO_PASSWORD') ?: 'password',
 ];
