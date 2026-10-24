@@ -169,7 +169,8 @@ rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tuto
 learner (child or student); at most 3 requests waiting at once; tutor has 48 hours, then it expires;
 classes on Google Meet; no payments/WhatsApp yet). A client progress report (no tech words) was made as a
 Claude Doc: https://claude.ai/artifact/WeBXxtUiSJ5ZkmKVCb7yCv
-- [x] **3a Request is saved** (24 Oct, LOCAL only, committed, not pushed/deployed): `demo_requests` table
+- [x] **3a Request is saved** (24 Oct, commit ccff0e5, DEPLOYED to Hostinger with the owner's OK
+  (migration run, build files, optimize; public pages checked) and pushed to GitHub): `demo_requests` table
   (migration 2026_10_26_000001), `DemoRequest` model + `DemoStatus` enum. "Pending" past `expires_at` is
   shown as Expired (no cron needed). `/tutors/{slug}/demo`: guests see log in / sign up (comes back to the
   form after login), parents pick one of their children (or are asked to add one), students book for
