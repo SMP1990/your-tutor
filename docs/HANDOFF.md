@@ -129,6 +129,18 @@ Owner asked to explain the plan step by step, no code until approved.
     owner signs up for. Owner pastes secrets (DB password, SMTP key) into the server `.env` themselves.
 Public pages still use `DemoTutors`/`DemoSubjects` until Step 3.
 
+## 6d. Step 2 = tutor application + admin approval (owner decisions 24 Oct: subject test AND interview,
+admin records results by hand for now; CNIC required; after approval, new subjects/documents need re-review,
+rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tutors.php`)
+- [x] **2a Application form** (24 Oct, local + deployed): `TutorApplicationController` + `TutorApplicationRequest`
+  at `/dashboard/tutor/application`. Draft save any time, "Save and submit" checks `TutorProfile::missingForSubmit()`.
+  Photo on `public` disk (needs `storage:link`), CNIC front/back + degree on the private `local` disk
+  (`serve` turned off, random file names). Locked after submit (`isEditableByTutor()`: draft/documents_needed).
+  Status + document paths are not fillable. Photo URLs via `asset()` (domain-portable).
+- [ ] 2b Admin review: list, view documents (authorised download), test/interview notes, approve / reject /
+  documents needed, emails to the tutor (log until the domain email exists).
+- [ ] 2c After approval: re-review rules, public profile + search from the database (replaces DemoTutors).
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)
