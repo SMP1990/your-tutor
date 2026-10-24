@@ -3,21 +3,16 @@
 namespace App\Http\Controllers;
 
 /**
- * DESIGN ONLY. Shows the login pages and moves between them. Nothing is read, checked or stored;
- * replace with Laravel's built-in auth (plus phone OTP) in the database step.
+ * DESIGN ONLY for the pages not built yet (log in, phone code, forgot password).
+ * Nothing is read, checked or stored. Replaced step by step (Register is real since Step 1b).
  */
 class AuthPreviewController extends Controller
 {
-    private const NOT_YET = 'Accounts open soon. This page is a preview and nothing was saved.';
+    private const NOT_YET = 'Log in opens soon. This page is a preview and nothing was saved.';
 
     public function login()
     {
         return view('auth.login');
-    }
-
-    public function register()
-    {
-        return view('auth.register');
     }
 
     public function verifyPhone()
@@ -33,10 +28,5 @@ class AuthPreviewController extends Controller
     public function notYet()
     {
         return back()->with('notice', self::NOT_YET);
-    }
-
-    public function afterRegister()
-    {
-        return redirect()->route('verify-phone');
     }
 }

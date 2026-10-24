@@ -78,7 +78,13 @@ Owner asked to explain the plan step by step, no code until approved.
   Seeders: `SubjectSeeder` (real list, safe anywhere), `DemoAccountsSeeder` (never in production):
   `student|parent|tutor|admin@example.test` + 8 tutors `<slug>@example.test`, password = `DEMO_PASSWORD` (default `password`).
   Local DB is SQLite (`database/database.sqlite`); Hostinger will use MySQL via `.env` only. Not yet run on MySQL.
-- [ ] 1b Register + email verification
+- [x] **1b Register + email verification** (24 Oct): `Auth\RegisterController` + `RegisterRequest`
+  (role only parent/student/tutor, PK phone, unique lowercase email, password 8+ letters+numbers, terms),
+  logs the user in, sends the verification email (`VerifyEmail` text in `AppServiceProvider`).
+  `Auth\EmailVerificationController`: notice page, signed + expiring link that also works logged out,
+  resend (throttled). Locally `MAIL_MAILER=log` (emails land in `storage/logs/laravel.log`);
+  Hostinger SMTP comes via `.env` in 1f. Header still shows Log In/Register when logged in (fixed in 1c/1d).
+  `StaticExportTest` guards that exported login forms never send personal data in the URL.
 - [ ] 1c Log in / log out / forgot password
 - [ ] 1d Roles: own dashboard per role, admin two-step login
 - [ ] 1e Parent adds children

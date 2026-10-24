@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthPreviewController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardPreviewController;
@@ -40,16 +42,25 @@ Route::get('/contact/sent', [ContactController::class, 'sent'])->name('contact.s
 Route::get('/subjects', [SubjectController::class, 'index'])->name('subjects.index');
 Route::get('/subjects/{slug}', [SubjectController::class, 'show'])->name('subjects.show');
 
-// Login pages: design only, see AuthPreviewController.
+// Accounts: register + email verification (Step 1b).
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisterController::class, 'create'])->name('register');
+    Route::post('/register', [RegisterController::class, 'store'])->middleware('throttle:10,1')->name('register.store');
+});
+Route::get('/email/verify', [EmailVerificationController::class, 'notice'])->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
+Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
+    ->middleware(['auth', 'throttle:3,1'])->name('verification.send');
+
+// Login pages still design only (Step 1c), see AuthPreviewController.
 Route::controller(AuthPreviewController::class)->group(function () {
     Route::get('/login', 'login')->name('login');
-    Route::get('/register', 'register')->name('register');
     Route::get('/verify-phone', 'verifyPhone')->name('verify-phone');
     Route::get('/forgot-password', 'forgotPassword')->name('password.request');
 
     Route::middleware('throttle:10,1')->group(function () {
         Route::post('/login', 'notYet')->name('login.attempt');
-        Route::post('/register', 'afterRegister')->name('register.store');
         Route::post('/verify-phone', 'notYet')->name('verify-phone.check');
         Route::post('/forgot-password', 'notYet')->name('password.email');
     });

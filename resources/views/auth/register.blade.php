@@ -10,11 +10,15 @@
         'student' => ['Student', 'For myself'],
         'tutor' => ['Tutor', 'I want to teach'],
     ];
-    $selected = array_key_exists(request('role'), $roles) ? request('role') : 'parent';
+    $selected = old('role', array_key_exists(request('role'), $roles) ? request('role') : 'parent');
 @endphp
 
 @section('auth-body')
-<form class="auth-form" method="post" action="{{ route('register.store') }}">
+@if ($errors->any())
+    <div class="form-alert" role="alert">Please check the highlighted fields.</div>
+@endif
+
+<form class="auth-form" method="post" action="{{ route('register.store') }}" novalidate>
     @csrf
     <fieldset class="role-picker">
         <legend>I am a…</legend>
@@ -25,36 +29,42 @@
             </label>
         @endforeach
     </fieldset>
+    @error('role') <p class="field__error">{{ $message }}</p> @enderror
 
     <div class="field">
         <label for="name">Full name</label>
-        <input id="name" name="name" class="input" required autocomplete="name">
+        <input id="name" name="name" class="input @error('name') is-invalid @enderror" value="{{ old('name') }}" required autocomplete="name">
+        @error('name') <p class="field__error">{{ $message }}</p> @enderror
     </div>
     <div class="field">
         <label for="phone">WhatsApp number</label>
-        <input id="phone" name="phone" type="tel" inputmode="tel" class="input" required autocomplete="tel" placeholder="0300 1234567">
+        <input id="phone" name="phone" type="tel" inputmode="tel" class="input @error('phone') is-invalid @enderror" value="{{ old('phone') }}" required autocomplete="tel" placeholder="0300 1234567">
+        @error('phone') <p class="field__error">{{ $message }}</p> @enderror
     </div>
     <div class="field">
         <label for="email">Email</label>
-        <input id="email" name="email" type="email" class="input" required autocomplete="email">
+        <input id="email" name="email" type="email" class="input @error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="email">
+        @error('email') <p class="field__error">{{ $message }}</p> @enderror
     </div>
     <div class="field">
         <label for="password">Password</label>
-        <input id="password" name="password" type="password" class="input" required minlength="8" autocomplete="new-password">
+        <input id="password" name="password" type="password" class="input @error('password') is-invalid @enderror" required minlength="8" autocomplete="new-password" aria-describedby="password-hint">
+        <p id="password-hint" class="field__hint">At least 8 characters, with letters and numbers.</p>
+        @error('password') <p class="field__error">{{ $message }}</p> @enderror
     </div>
 
     <label class="check">
-        <input type="checkbox" name="whatsapp_ok" value="1" checked>
+        <input type="checkbox" name="whatsapp_ok" value="1" @checked(old('whatsapp_ok', ! $errors->any()))>
         Send me class reminders and updates on WhatsApp.
     </label>
     <label class="check">
-        <input type="checkbox" name="terms" value="1" required>
+        <input type="checkbox" name="terms" value="1" required @checked(old('terms'))>
         <span>I agree to the <a href="{{ route('terms') }}">Terms</a> and <a href="{{ route('privacy') }}">Privacy Policy</a>.</span>
     </label>
+    @error('terms') <p class="field__error">{{ $message }}</p> @enderror
 
     <button type="submit" class="btn btn-primary">Create account</button>
 </form>
 
 <p class="auth-switch">Already have an account? <a href="{{ route('login') }}">Log in</a></p>
 @endsection
-

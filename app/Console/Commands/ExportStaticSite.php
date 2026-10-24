@@ -117,7 +117,7 @@ class ExportStaticSite extends Command
 
         // Login forms: drop every field name so no email, phone or password ever lands in a URL,
         // and only move on to the next page (register -> verify phone).
-        $html = preg_replace_callback("#<form class=\"auth-form\" method=\"post\" action=\"{$root}([^\"]*)\">(.*?)</form>#s", function ($m) {
+        $html = preg_replace_callback("#<form class=\"auth-form\" method=\"post\" action=\"{$root}([^\"]*)\"[^>]*>(.*?)</form>#s", function ($m) {
             $next = $m[1] === '/register' ? '/verify-phone' : $m[1];
             // Keep names on radios/checkboxes (role, consent): they hold no personal data.
             $body = preg_replace_callback('#<input(?![^>]*type="(?:radio|checkbox)")[^>]*>#', fn ($i) => preg_replace('# name="[^"]*"#', '', $i[0]), $m[2]);

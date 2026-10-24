@@ -31,11 +31,6 @@ class AuthPagesTest extends TestCase
         $this->get('/register?role=tutor')->assertSee('value="tutor" checked', false);
     }
 
-    public function test_register_moves_on_to_phone_verification(): void
-    {
-        $this->post('/register', ['name' => 'Test'])->assertRedirect(route('verify-phone'));
-    }
-
     public function test_login_explains_accounts_are_not_open_yet(): void
     {
         $this->from('/login')->post('/login', ['login' => 'a@b.com', 'password' => 'secret123'])
