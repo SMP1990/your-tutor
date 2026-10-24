@@ -137,8 +137,13 @@ rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tuto
   Photo on `public` disk (needs `storage:link`), CNIC front/back + degree on the private `local` disk
   (`serve` turned off, random file names). Locked after submit (`isEditableByTutor()`: draft/documents_needed).
   Status + document paths are not fillable. Photo URLs via `asset()` (domain-portable).
-- [ ] 2b Admin review: list, view documents (authorised download), test/interview notes, approve / reject /
-  documents needed, emails to the tutor (log until the domain email exists).
+- [x] **2b Admin review** (24 Oct, local; NOT yet deployed to Hostinger, waiting for the owner's OK):
+  `Admin\TutorReviewController` at `/admin/tutors` (role:admin + two-factor): tabs per status, review page,
+  private documents streamed to admins only (`no-store`), subject test / interview (date + Meet link) /
+  result, private admin notes; decisions approve (only if `canBeApproved()`: test AND interview passed),
+  reject / documents needed (message required). `TutorApplicationUpdated` emails the tutor. New review
+  columns (migration 2026_10_25_000002). `DashboardNav` now links built pages and marks others "soon".
+  `TutorProfile::hasPublicPage()` is TEMPORARY (DemoTutors slugs only) until 2c.
 - [ ] 2c After approval: re-review rules, public profile + search from the database (replaces DemoTutors).
 
 ## 7. Waiting for the owner (ask, do not invent)
