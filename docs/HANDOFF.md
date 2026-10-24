@@ -186,13 +186,13 @@ Claude Doc: https://claude.ai/artifact/WeBXxtUiSJ5ZkmKVCb7yCv
   (`DemoRequestAnswered`) and see time or reason on their dashboard. Tutor overview shows "N waiting".
   Migration 2026_10_26_000002. New `.env` keys SITE_TIMEZONE / SITE_TIMEZONE_LABEL (optional). 144 tests.
   Known gap: admin interview times (2b) are stored as typed, not converted to UTC; fix if it matters.
-- [x] **3c Join class + outcome** (24 Oct, LOCAL only, committed, not pushed/deployed): parent/student
+- [x] **3c Join class + outcome** (24 Oct, commit 6ce10c3, DEPLOYED to Hostinger + pushed to GitHub): parent/student
   dashboard shows "Join class" from 15 min before to 60 min after the start (`DemoRequest::canJoinNow()`),
   otherwise "Join opens 15 min before". The button goes through `GET /dashboard/demos/{demo}/join`, which
   hands out the Meet link only to the family that booked and only in that window. After the start the tutor
   marks "Class done" or "Student did not join" (`POST /dashboard/tutor/demos/{demo}/finish`; new status
   `no_show`, which still uses up the free demo). 147 tests green. No migration.
-- [x] **3d Admin view** (24 Oct, LOCAL only, committed, not pushed/deployed): `/admin/demos`
+- [x] **3d Admin view** (24 Oct, commit 4c8f5e1, DEPLOYED to Hostinger + pushed to GitHub): `/admin/demos`
   (`Admin\DemoRequestController`, role:admin + two-factor, menu "Demo requests"), read-only. Tabs: waiting,
   not answered in time, upcoming, tutor to confirm, done/no-show, declined/cancelled; shows family contact,
   student, tutor (links to the tutor review page), class time, tutor note. Admin overview has a
