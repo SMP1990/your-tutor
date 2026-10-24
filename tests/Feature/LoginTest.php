@@ -27,7 +27,7 @@ class LoginTest extends TestCase
     {
         $user = $this->user();
 
-        $this->post('/login', ['login' => 'Sadia@Example.test', 'password' => 'secret123'])->assertRedirect(route('home'));
+        $this->post('/login', ['login' => 'Sadia@Example.test', 'password' => 'secret123'])->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($user);
     }
 

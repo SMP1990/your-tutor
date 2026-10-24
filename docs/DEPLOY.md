@@ -28,7 +28,7 @@ The export writes `.htaccess` with HTTPS redirect, security headers (same as
 ## Remove before launch (temporary preview helpers)
 - `resources/views/partials/dashboard-preview-links.blade.php`, its `@include` in `auth/login.blade.php`
   and the `.preview-links` CSS: quick links to the sample dashboards.
-- `DashboardPreviewController` / `AuthPreviewController` and their routes: replace with real login and dashboards.
+- `DashboardPreviewController` (`/preview/{role}`) and `AuthPreviewController` (`/verify-phone`) with their routes.
 - `site:export` command and the `static-site` branch, once the Laravel app itself is deployed.
 
 ## Launch switches

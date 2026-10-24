@@ -1759,3 +1759,5 @@ button.btn { font: inherit; font-weight: 700; }
 .preview-links a { display: inline-flex; align-items: center; min-height: 36px; padding-inline: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; color: var(--ink); font-weight: 700; text-decoration: none; }
 .preview-links a:hover { border-color: var(--primary); color: var(--primary-dark); }
 .site-header__hello { align-items: center; min-height: 44px; font-weight: 700; white-space: nowrap; }
+.link-button { padding: 0; background: none; border: 0; color: var(--primary); font: inherit; font-size: 14px; font-weight: 700; text-decoration: underline; cursor: pointer; }
+.link-button:hover { color: var(--primary-dark); }

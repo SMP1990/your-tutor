@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\TwoFactorController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthPreviewController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardPreviewController;
@@ -68,12 +70,28 @@ Route::post('/email/verification-notification', [EmailVerificationController::cl
 Route::get('/verify-phone', [AuthPreviewController::class, 'verifyPhone'])->name('verify-phone');
 Route::post('/verify-phone', [AuthPreviewController::class, 'notYet'])->middleware('throttle:10,1')->name('verify-phone.check');
 
-// Dashboards: design only with sample data, see DashboardPreviewController.
+// Dashboard previews with sample data (public, for the static site). Remove at launch, see docs/DEPLOY.md.
 foreach (['student', 'parent', 'tutor', 'admin'] as $dashboard) {
-    Route::get("/{$dashboard}", [DashboardPreviewController::class, 'show'])
+    Route::get("/preview/{$dashboard}", [DashboardPreviewController::class, 'show'])
         ->defaults('dashboard', $dashboard)
-        ->name("dashboard.{$dashboard}");
+        ->name("preview.{$dashboard}");
 }
 
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
+
+// Real dashboards: logged in, email verified, own role only (Step 1d).
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'redirect'])->name('dashboard');
+    Route::get('/dashboard/student', [DashboardController::class, 'student'])->middleware('role:student')->name('dashboard.student');
+    Route::get('/dashboard/parent', [DashboardController::class, 'parent'])->middleware('role:parent')->name('dashboard.parent');
+    Route::get('/dashboard/tutor', [DashboardController::class, 'tutor'])->middleware('role:tutor')->name('dashboard.tutor');
+
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/two-factor', [TwoFactorController::class, 'show'])->name('two-factor.show');
+        Route::post('/two-factor', [TwoFactorController::class, 'store'])->middleware('throttle:10,1')->name('two-factor.store');
+        Route::post('/two-factor/resend', [TwoFactorController::class, 'resend'])->middleware('throttle:3,1')->name('two-factor.resend');
+
+        Route::get('/admin', [DashboardController::class, 'admin'])->middleware('two-factor')->name('dashboard.admin');
+    });
+});

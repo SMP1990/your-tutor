@@ -92,7 +92,13 @@ Owner asked to explain the plan step by step, no code until approved.
   message whether or not the email exists. Email subjects: "Verify your email | your tutor",
   "Reset your password | your tutor". `/verify-phone` remains a design preview.
   After login everyone lands on Home until 1d adds role dashboards.
-- [ ] 1d Roles: own dashboard per role, admin two-step login
+- [x] **1d Roles + dashboards + admin two-step** (24 Oct): real dashboards (auth + verified + own role,
+  `EnsureRole` middleware alias `role:`): `/dashboard` redirects to `/dashboard/student|parent|tutor` or `/admin`.
+  They show only real data (account, children, tutor status, admin live counts) and honest "Coming soon" panels.
+  Admin two-step: `EnsureTwoFactor` (`two-factor`) + `Auth\TwoFactorController` + `App\Support\TwoFactorCode`
+  (6-digit code by email, hashed in cache, 10 min, 5 tries, once per login session).
+  Sample-data dashboards moved to `/preview/{role}` (public, for the static site; Log In page links there).
+  Header: "Hi, <name> · My dashboard" + Log out. Custom 403 page.
 - [ ] 1e Parent adds children
 - [ ] 1f Run on Hostinger as real Laravel (owner creates MySQL DB + email account, click-by-click)
 Public pages still use `DemoTutors`/`DemoSubjects` until Step 3.

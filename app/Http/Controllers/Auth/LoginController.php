@@ -23,8 +23,8 @@ class LoginController extends Controller
             return redirect()->route('verification.notice');
         }
 
-        // Role dashboards come in Step 1d; until then go back to where the person was.
-        return redirect()->intended(route('home'));
+        // Each role lands on its own dashboard (admins are asked for their email code first).
+        return redirect()->intended(route('dashboard'));
     }
 
     public function destroy(Request $request)

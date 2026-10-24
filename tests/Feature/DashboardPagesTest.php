@@ -9,10 +9,10 @@ class DashboardPagesTest extends TestCase
     public function test_dashboards_load_with_preview_notice(): void
     {
         $pages = [
-            '/student' => 'Hi Ahmed',
-            '/parent' => 'Good evening, Sadia',
-            '/tutor' => 'Welcome, Ayesha',
-            '/admin' => 'Admin overview',
+            '/preview/student' => 'Hi Ahmed',
+            '/preview/parent' => 'Good evening, Sadia',
+            '/preview/tutor' => 'Welcome, Ayesha',
+            '/preview/admin' => 'Admin overview',
         ];
 
         foreach ($pages as $url => $heading) {
@@ -29,7 +29,7 @@ class DashboardPagesTest extends TestCase
         $response = $this->get('/login')->assertSee('Preview only');
 
         foreach (['student', 'parent', 'tutor', 'admin'] as $dashboard) {
-            $response->assertSee(route("dashboard.{$dashboard}"));
+            $response->assertSee(route("preview.{$dashboard}"));
         }
     }
 
@@ -37,6 +37,6 @@ class DashboardPagesTest extends TestCase
     {
         config(['pricing.package_discount_percent' => 15]);
 
-        $this->get('/admin')->assertSee('Monthly package discount')->assertSee('value="15"', false);
+        $this->get('/preview/admin')->assertSee('Monthly package discount')->assertSee('value="15"', false);
     }
 }

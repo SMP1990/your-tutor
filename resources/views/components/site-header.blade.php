@@ -27,7 +27,7 @@
 
         <div class="site-header__actions">
             @auth
-                <span class="site-header__login site-header__hello">Hi, {{ strtok(auth()->user()->name, ' ') }}</span>
+                <a href="{{ route('dashboard') }}" class="nav-link site-header__login site-header__hello">Hi, {{ strtok(auth()->user()->name, ' ') }} · My dashboard</a>
                 <form method="post" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn btn-outline site-header__register">Log out</button>
@@ -47,9 +47,11 @@
             @foreach ($links as $link)
                 <li><a class="nav-link" href="{{ $link['href'] }}">{{ $link['label'] }}</a></li>
             @endforeach
-            @guest
+            @auth
+                <li><a class="nav-link" href="{{ route('dashboard') }}"><strong>My dashboard</strong></a></li>
+            @else
                 <li><a class="nav-link" href="{{ route('login') }}"><strong>Log In</strong></a></li>
-            @endguest
+            @endauth
         </ul>
     </nav>
 </header>

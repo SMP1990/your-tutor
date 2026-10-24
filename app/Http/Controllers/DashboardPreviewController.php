@@ -19,6 +19,7 @@ class DashboardPreviewController extends Controller
         return view("dashboards.{$dashboard}", [
             'nav' => DashboardNav::for($dashboard),
             'user' => self::USERS[$dashboard],
+            'preview' => true,
         ]);
     }
 }
