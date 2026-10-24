@@ -177,7 +177,8 @@ Claude Doc: https://claude.ai/artifact/WeBXxtUiSJ5ZkmKVCb7yCv
   themselves, tutors/admins cannot book. POST needs auth + verified. Limits in `DemoBookingController`.
   Parent/student dashboards list requests ("Free demo requests") with Cancel while waiting
   (`POST /dashboard/demos/{demo}/cancel`). 138 tests green.
-- [x] **3b Tutor answers** (24 Oct, LOCAL only, committed, not pushed/deployed): `/dashboard/tutor/demos`
+- [x] **3b Tutor answers** (24 Oct, commit 5181d62, DEPLOYED to Hostinger with the owner's OK (migration,
+  build files, optimize; server timezone config reads Asia/Karachi) and pushed to GitHub): `/dashboard/tutor/demos`
   (`TutorDemoController`, menu "Demo requests"): waiting / upcoming / earlier lists. Accept = date+time
   (typed in `config('site.timezone')`, default Asia/Karachi, stored UTC; must be within 14 days) +
   Google Meet link (must be https://meet.google.com/...) + optional message. Decline needs a reason.
