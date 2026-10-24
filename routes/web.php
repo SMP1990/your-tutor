@@ -27,7 +27,7 @@ Route::get('/tutors/{tutor}', [TutorController::class, 'show'])->name('tutors.sh
 
 Route::get('/tutors/{tutor}/demo', [DemoBookingController::class, 'create'])->name('tutors.demo');
 Route::post('/tutors/{tutor}/demo', [DemoBookingController::class, 'store'])
-    ->middleware('throttle:10,1')
+    ->middleware(['auth', 'verified', 'throttle:10,1'])
     ->name('tutors.demo.store');
 Route::get('/tutors/{tutor}/demo/sent', [DemoBookingController::class, 'sent'])->name('tutors.demo.sent');
 
@@ -93,6 +93,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/{child}', 'update')->middleware('throttle:20,1')->name('update');
         Route::delete('/{child}', 'destroy')->middleware('throttle:20,1')->name('destroy');
     });
+    Route::post('/dashboard/demos/{demo}/cancel', [DemoBookingController::class, 'cancel'])
+        ->middleware(['role:parent,student', 'throttle:20,1'])->name('demos.cancel');
     Route::get('/dashboard/tutor', [DashboardController::class, 'tutor'])->middleware('role:tutor')->name('dashboard.tutor');
     Route::middleware('role:tutor')->controller(TutorApplicationController::class)->group(function () {
         Route::get('/dashboard/tutor/application', 'edit')->name('tutor.application');

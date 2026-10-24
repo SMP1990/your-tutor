@@ -56,20 +56,6 @@ function filtersSheet() {
     });
 }
 
-function demoFormStudentField() {
-    const field = document.querySelector('[data-student-field]');
-    const radios = document.querySelectorAll('[data-for-toggle]');
-    if (!field || !radios.length) return;
-
-    const sync = () => {
-        const child = document.querySelector('[data-for-toggle]:checked').value === 'child';
-        field.hidden = !child;
-        field.querySelector('input').required = child;
-    };
-    radios.forEach((r) => r.addEventListener('change', sync));
-    sync();
-}
-
 function registerRoleFromUrl() {
     // ?role=tutor preselects the role (also works on the static preview).
     const role = new URLSearchParams(location.search).get('role');
@@ -80,7 +66,6 @@ function registerRoleFromUrl() {
 mobileMenu();
 reviewSlider();
 filtersSheet();
-demoFormStudentField();
 registerRoleFromUrl();
 
 // Forms with data-confirm="Question?" ask before submitting (e.g. removing a child).

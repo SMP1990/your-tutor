@@ -165,6 +165,21 @@ rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tuto
   tutor emailed (`TutorChangesReviewed`). Migration 2026_10_25_000004. 131 tests green.
   Owner choice made by Claude (ask if wrong): photo and education also go through review.
 
+## 6e. Step 3 = free demo booking (owner decisions 24 Oct: login required; one free demo per tutor per
+learner (child or student); at most 3 requests waiting at once; tutor has 48 hours, then it expires;
+classes on Google Meet; no payments/WhatsApp yet). A client progress report (no tech words) was made as a
+Claude Doc: https://claude.ai/artifact/WeBXxtUiSJ5ZkmKVCb7yCv
+- [x] **3a Request is saved** (24 Oct, LOCAL only, committed, not pushed/deployed): `demo_requests` table
+  (migration 2026_10_26_000001), `DemoRequest` model + `DemoStatus` enum. "Pending" past `expires_at` is
+  shown as Expired (no cron needed). `/tutors/{slug}/demo`: guests see log in / sign up (comes back to the
+  form after login), parents pick one of their children (or are asked to add one), students book for
+  themselves, tutors/admins cannot book. POST needs auth + verified. Limits in `DemoBookingController`.
+  Parent/student dashboards list requests ("Free demo requests") with Cancel while waiting
+  (`POST /dashboard/demos/{demo}/cancel`). 138 tests green.
+- [ ] 3b Tutor accepts (sets date/time + Google Meet link) or declines with a reason.
+- [ ] 3c Parent/student see the upcoming demo with a "Join class" button.
+- [ ] 3d Admin sees all demo requests, including unanswered ones.
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)

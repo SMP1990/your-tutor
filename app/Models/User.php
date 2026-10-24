@@ -48,6 +48,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Child::class, 'parent_id');
     }
 
+    /** Free demo requests this parent or student sent. @return HasMany<DemoRequest, $this> */
+    public function demoRequests(): HasMany
+    {
+        return $this->hasMany(DemoRequest::class);
+    }
+
     /** @return HasOne<TutorProfile, $this> */
     public function tutorProfile(): HasOne
     {

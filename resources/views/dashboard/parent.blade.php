@@ -39,10 +39,7 @@
         @endif
     </section>
 
-    @include('dashboard.partials.coming-soon', [
-        'title' => 'Classes and attendance',
-        'text' => 'Upcoming classes, attendance and tutor feedback for each child will show here once booking opens.',
-    ])
+    @include('dashboard.partials.demo-requests', ['demos' => $demos])
 </div>
 
 @include('dashboard.partials.account')

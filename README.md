@@ -35,7 +35,9 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
   `php artisan demo:remove` deletes them.
 - **Tutor profile editing (working):** approved tutors update rate, bio and times live; new subjects,
   education, photo or documents wait for admin approval.
-- **Next:** booking, classes (Google Meet links),
+- **Free demo requests (working):** logged-in parents and students request a free demo for a child or
+  themselves; requests show on their dashboard and can be cancelled while waiting.
+- **Next:** tutor answers demo requests, classes (Google Meet links),
   reviews, admin tools.
   Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
 - A static HTML export of the public pages lives on branch `static-site` (old preview).

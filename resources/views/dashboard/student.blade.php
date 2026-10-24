@@ -12,11 +12,7 @@
 </div>
 
 <div class="dash-grid dash-grid--halves">
-    @include('dashboard.partials.coming-soon', [
-        'title' => 'My classes',
-        'text' => 'You have no classes yet. Once booking opens, your free demo and regular classes will show here.',
-        'action' => ['href' => route('tutors.index'), 'label' => 'Browse tutors'],
-    ])
+    @include('dashboard.partials.demo-requests', ['demos' => $demos])
     @include('dashboard.partials.account')
 </div>
 @endsection

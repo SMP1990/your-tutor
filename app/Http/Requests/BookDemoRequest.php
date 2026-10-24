@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/** A logged-in parent (for a child) or student (for themself) asks for a free demo (Step 3a). */
 class BookDemoRequest extends FormRequest
 {
     public const GRADES = ['Grade 1–5', 'Grade 6–8', 'Matric (9–10)', 'FSc / A Level', 'O Level', 'Entry tests'];
@@ -13,7 +15,7 @@ class BookDemoRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return true;
+        return in_array($this->user()?->role, [Role::Parent, Role::Student], true);
     }
 
     protected function prepareForValidation(): void
@@ -24,14 +26,15 @@ class BookDemoRequest extends FormRequest
     public function rules(): array
     {
         $tutor = $this->route('tutor');
+        $isParent = $this->user()->role === Role::Parent;
 
         return [
-            'for' => ['required', Rule::in(['child', 'self'])],
-            'name' => ['required', 'string', 'max:80'],
-            'student_name' => ['required_if:for,child', 'nullable', 'string', 'max:80'],
+            // A parent books for one of their own children; a student books for themself.
+            'child_id' => $isParent
+                ? ['required', 'integer', Rule::exists('children', 'id')->where('parent_id', $this->user()->id)]
+                : ['prohibited'],
             'phone' => ['required', 'regex:/^(\+92|0)3\d{9}$/'],
-            'email' => ['nullable', 'email', 'max:120'],
-            'subject' => ['required', Rule::in($tutor['subjects'] ?? [])],
+            'subject' => ['required', Rule::in($tutor['subject_slugs'] ?? [])],
             'grade' => ['required', Rule::in(self::GRADES)],
             'day' => ['required', Rule::in(array_keys(array_filter($tutor['availability'] ?? [])))],
             'time' => ['required', Rule::in(array_keys(self::TIMES))],
@@ -43,8 +46,9 @@ class BookDemoRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'child_id.required' => 'Choose which child the class is for.',
+            'child_id.exists' => 'Choose which child the class is for.',
             'phone.regex' => 'Enter a Pakistani mobile number, e.g. 0300 1234567.',
-            'student_name.required_if' => 'Enter the student\'s name.',
             'contact_ok.accepted' => 'Please allow us to contact you about this demo.',
         ];
     }

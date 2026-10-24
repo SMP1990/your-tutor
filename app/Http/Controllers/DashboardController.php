@@ -24,12 +24,22 @@ class DashboardController extends Controller
 
     public function student(Request $request)
     {
-        return $this->view('student', $request);
+        return $this->view('student', $request, ['demos' => $this->demos($request)]);
     }
 
     public function parent(Request $request)
     {
-        return $this->view('parent', $request, ['children' => $request->user()->children()->orderBy('name')->get()]);
+        return $this->view('parent', $request, [
+            'children' => $request->user()->children()->orderBy('name')->get(),
+            'demos' => $this->demos($request),
+        ]);
+    }
+
+    private function demos(Request $request)
+    {
+        return $request->user()->demoRequests()
+            ->with(['tutorProfile:id,user_id,slug', 'tutorProfile.user:id,name', 'subject:id,name'])
+            ->latest()->limit(10)->get();
     }
 
     public function tutor(Request $request)
