@@ -13,7 +13,7 @@ Owner is non-technical. Full plan: `docs/PLAN.md`. Rules: `CLAUDE.md`. Go-live g
 | GitHub repo | https://github.com/SMP1990/your-tutor |
 | Branch `main` | Laravel app (this folder, git repo) |
 | Branch `static-site` | Exported plain-HTML preview. Local git repo: `...\tutoring-marketplace\website` (local branch is also `static-site`) |
-| Live preview (Hostinger Business, shared) | https://grey-quail-750388.hostingersite.com/ (temporary domain) |
+| Live preview (Hostinger Business, shared) | https://cornflowerblue-tarsier-769699.hostingersite.com/ (temporary domain; was grey-quail-750388 until 24 Oct). Hostinger account is used as a *collaborator*; details in the private notes (see 6c) |
 | Upload zips | `C:\Users\Computer Arena\Downloads\upload-to-hostinger vX.Y (HH-MM AM).zip` |
 | Original handoff files | `F:\Onine tutoring website-Adnan rashid sb\` (plan PDF, cost PDF) |
 
@@ -37,7 +37,7 @@ Owner is non-technical. Full plan: `docs/PLAN.md`. Rules: `CLAUDE.md`. Go-live g
 php artisan test                          # must be green before every commit
 npm run build                             # CSS/JS into public/build
 php artisan serve --port=8001             # local preview
-php artisan site:export --url=https://grey-quail-750388.hostingersite.com
+php artisan site:export --url=https://cornflowerblue-tarsier-769699.hostingersite.com
 ```
 Make the zip (PowerShell), from `...\tutoring-marketplace`:
 1. Copy `laravel-app\static-export` to `upload-to-hostinger` (replace).
@@ -104,6 +104,18 @@ Owner asked to explain the plan step by step, no code until approved.
   `ChildPolicy` (own children only, max 10). Remove asks "Remove <name>?" (`data-confirm` in `site.js`).
   Dashboard layout now loads `site.js` and shows `session('notice')`.
 - [ ] 1f Run on Hostinger as real Laravel (owner creates MySQL DB + email account, click-by-click)
+  - **Server access details are private:** `C:\Users\Computer Arena\Downloads\tutoring-marketplace\PRIVATE-server-notes.md`
+    (not in git; this repo is public). Never write IPs, usernames, emails or passwords into the repo.
+  - 1f-1 done (24 Oct): site PHP 8.4; SSH by key works (`ssh -F ~/.ssh/config.yourtutor yourtutor`).
+    Use `/opt/alt/php84/usr/bin/php` for composer/artisan (default CLI php is 8.3; the lock file needs 8.4).
+    **The hosting account also runs other people's live sites: touch ONLY this site's folder.**
+  - 1f-2 done (24 Oct): MySQL database + user `<account>_tutoring` created by the owner in hPanel.
+  - 1f-3 in progress: app uploaded to `<site>/app` (outside the web root) via `git archive` + `public/build`,
+    `composer install --no-dev`, production `.env` written (APP_DEBUG=false, MAIL_MAILER=log for now),
+    APP_KEY generated. Owner pastes the DB password into `.env` via File Manager. `public_html` is still the
+    static preview; switch it to `app/public` only after migrations work.
+  - Email decision: temporary domain, so no Hostinger mailbox; use a free SMTP service (e.g. Brevo) the
+    owner signs up for. Owner pastes secrets (DB password, SMTP key) into the server `.env` themselves.
 Public pages still use `DemoTutors`/`DemoSubjects` until Step 3.
 
 ## 7. Waiting for the owner (ask, do not invent)
