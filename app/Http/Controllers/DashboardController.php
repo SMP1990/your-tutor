@@ -47,6 +47,9 @@ class DashboardController extends Controller
             'demos' => $this->demos($request),
             'bookings' => $bookings,
             // "tutor-child" pairs that already have a waiting or confirmed booking: no second "Book" button.
+            // "tutor-child" pairs this family already reviewed: the button says "Edit your review".
+            'reviewedPairs' => \App\Models\Review::where('user_id', $request->user()->id)->get(['tutor_profile_id', 'child_id'])
+                ->map(fn ($r) => $r->tutor_profile_id.'-'.$r->child_id)->all(),
             'bookedPairs' => $request->user()->classBookings()->active()->get(['tutor_profile_id', 'child_id'])
                 ->map(fn ($b) => $b->tutor_profile_id.'-'.$b->child_id)->all(),
         ];

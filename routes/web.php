@@ -16,6 +16,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardPreviewController;
 use App\Http\Controllers\DemoBookingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TutorApplicationController;
@@ -115,6 +116,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard/demos/{demo}/book', 'create')->name('bookings.create');
         Route::post('/dashboard/demos/{demo}/book', 'store')->middleware('throttle:10,1')->name('bookings.store');
         Route::post('/dashboard/bookings/{booking}/cancel', 'cancel')->middleware('throttle:20,1')->name('bookings.cancel');
+    });
+    Route::middleware('role:parent,student')->controller(ReviewController::class)->group(function () {
+        Route::get('/dashboard/bookings/{booking}/review', 'edit')->name('reviews.edit');
+        Route::put('/dashboard/bookings/{booking}/review', 'update')->middleware('throttle:10,1')->name('reviews.update');
     });
     Route::get('/dashboard/tutor', [DashboardController::class, 'tutor'])->middleware('role:tutor')->name('dashboard.tutor');
     Route::middleware('role:tutor')->controller(TutorApplicationController::class)->group(function () {

@@ -16,6 +16,11 @@
                     </div>
                     <div class="item-list__side">
                         <span class="status status--{{ $status->colour() }}">{{ $status->label() }}</span>
+                        @if ($booking->held_count > 0)
+                            <a href="{{ route('reviews.edit', $booking) }}" class="btn btn-outline btn-sm">
+                                {{ in_array($booking->tutor_profile_id.'-'.$booking->child_id, $reviewedPairs ?? [], true) ? 'Edit your review' : 'Rate your tutor' }}
+                            </a>
+                        @endif
                         @if ($status === \App\Enums\BookingStatus::Pending)
                             <form method="post" action="{{ route('bookings.cancel', $booking) }}" data-confirm="Cancel this booking request?">
                                 @csrf

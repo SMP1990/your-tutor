@@ -49,7 +49,9 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
 - **Attendance (working):** tutors mark each class held or student absent, or cancel with a reason;
   families can cancel a class up to 12 hours before and see every class outcome.
 - **Admin sees bookings and classes (working):** with attendance and anything not answered or not marked.
-- **Next:**
+- **Reviews (working):** after a held class the family rates the tutor (1-5 stars + comment); the
+  tutor's rating comes from real reviews.
+- **Next:** reviews list on profiles,
   reviews, admin tools.
   Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
 - A static HTML export of the public pages lives on branch `static-site` (old preview).

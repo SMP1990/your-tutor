@@ -158,6 +158,26 @@ class TutorProfile extends Model
         return $this->hasMany(ClassBooking::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<Review, $this> */
+    public function reviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Recalculates the stored rating from visible reviews (Step 5). Called after a review is saved or
+     * hidden. Stored on the profile so search can filter and sort on it cheaply.
+     */
+    public function refreshRating(): void
+    {
+        $count = $this->reviews()->visible()->count();
+
+        $this->forceFill([
+            'reviews_count' => $count,
+            'rating_avg' => $count ? round((float) $this->reviews()->visible()->avg('rating'), 1) : null,
+        ])->save();
+    }
+
     /** Only approved tutors may appear on public pages. */
     public function scopeApproved(Builder $query): void
     {

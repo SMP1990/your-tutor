@@ -231,6 +231,19 @@ has 48 h to answer; one Meet link per booking; no payment yet (page says we will
   overview card "Regular classes" with counts. 169 tests green. No migration.
   **Step 4 is complete.** Next: Step 5 reviews, Step 6 admin tools, Step 7 launch prep.
 
+## 6g. Step 5 = reviews (owner decisions 24 Oct: review only after at least 1 regular class was HELD;
+reviews show at once, admin can hide later; no tutor replies for now; first name + initial only). Demo tutors
+keep their sample ratings until `demo:remove`.
+- [x] **5a Give a review** (24 Oct, LOCAL only, committed, not pushed/deployed): `reviews` table (migration
+  2026_10_28_000001, `is_hidden` ready for 5c), `Review` model (`reviewerName()` = "Sadia M.").
+  `/dashboard/bookings/{booking}/review` (`ReviewController`): 1-5 stars + comment (10-1000 chars); one
+  review per tutor per learner, saving again edits it. `TutorProfile::refreshRating()` recalculates
+  `rating_avg` / `reviews_count` from visible reviews, so profile, cards, rating filter and "Highest rated"
+  sort use real reviews. Family dashboard "Regular classes" card shows "Rate your tutor" / "Edit your
+  review" once a class was held. "1 review" grammar fixed. 174 tests green.
+- [ ] 5b Reviews listed on the tutor's public profile; tutor sees their reviews in the dashboard.
+- [ ] 5c Admin sees all reviews and can hide / unhide one (rating recalculated).
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)

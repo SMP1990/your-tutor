@@ -50,7 +50,7 @@
                     <li>
                         @if ($tutor['reviews_count'] > 0)
                             <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="#F0A53A"/></svg>
-                            <strong>{{ $tutor['rating'] }}</strong>&nbsp;({{ $tutor['reviews_count'] }} reviews)
+                            <strong>{{ $tutor['rating'] }}</strong>&nbsp;({{ $tutor['reviews_count'] }} {{ str('review')->plural($tutor['reviews_count']) }})
                         @else
                             New tutor
                         @endif
@@ -158,7 +158,7 @@
                     <div class="rating-summary__score">
                         <strong>{{ $tutor['rating'] }}</strong>
                         <span>out of 5</span>
-                        <span>{{ $tutor['reviews_count'] }} reviews</span>
+                        <span>{{ $tutor['reviews_count'] }} {{ str('review')->plural($tutor['reviews_count']) }}</span>
                     </div>
                 </div>
             @else
