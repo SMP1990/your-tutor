@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Enums\BookingStatus;
 use App\Models\ClassBooking;
 use App\Notifications\BookingAnswered;
+use App\Support\ClassSchedule;
 use App\Support\DashboardNav;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /** Step 4a: a tutor accepts (with a Google Meet link) or declines a regular-classes booking. */
 class TutorBookingController extends Controller
@@ -36,12 +38,15 @@ class TutorBookingController extends Controller
             'tutor_note' => ['nullable', 'string', 'max:500'],
         ], ['meet_link.regex' => 'Paste a Google Meet link, e.g. https://meet.google.com/abc-defg-hij']);
 
-        $booking->forceFill([
-            'status' => BookingStatus::Accepted,
-            'meet_link' => $data['meet_link'],
-            'tutor_note' => $data['tutor_note'] ?? null,
-            'answered_at' => now(),
-        ])->save();
+        DB::transaction(function () use ($booking, $data) {
+            $booking->forceFill([
+                'status' => BookingStatus::Accepted,
+                'meet_link' => $data['meet_link'],
+                'tutor_note' => $data['tutor_note'] ?? null,
+                'answered_at' => now(),
+            ])->save();
+            ClassSchedule::create($booking); // every class date, for the timetable (Step 4b)
+        });
         $booking->user->notify(new BookingAnswered($booking));
 
         return redirect()->route('tutor.bookings')->with('notice', "Confirmed. {$booking->student_name}'s family has been told.");

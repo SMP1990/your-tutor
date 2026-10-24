@@ -58,6 +58,7 @@
     @endif
 
     @if ($status === \App\Enums\TutorStatus::Approved)
+        @include('dashboard.partials.next-classes', ['nextClasses' => $nextClasses, 'isTutor' => true])
         @php $waitingDemos = $profile->demoRequests()->open()->count(); @endphp
         <section class="panel">
             <div class="panel__head">

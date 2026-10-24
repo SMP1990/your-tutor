@@ -63,6 +63,12 @@ class ClassBooking extends Model
         return $this->currency.' '.number_format(intdiv($this->rate_minor, 100)).' / hour';
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<ClassSession, $this> */
+    public function sessions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ClassSession::class);
+    }
+
     /** @return BelongsTo<TutorProfile, $this> */
     public function tutorProfile(): BelongsTo
     {

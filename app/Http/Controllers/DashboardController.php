@@ -42,6 +42,7 @@ class DashboardController extends Controller
             ->latest()->limit(10)->get();
 
         return [
+            'nextClasses' => TimetableController::sessionsFor($request->user())->upcoming()->limit(3)->get(),
             'demos' => $this->demos($request),
             'bookings' => $bookings,
             // "tutor-child" pairs that already have a waiting or confirmed booking: no second "Book" button.
@@ -59,7 +60,10 @@ class DashboardController extends Controller
 
     public function tutor(Request $request)
     {
-        return $this->view('tutor', $request, ['profile' => $request->user()->tutorProfile]);
+        return $this->view('tutor', $request, [
+            'profile' => $request->user()->tutorProfile,
+            'nextClasses' => TimetableController::sessionsFor($request->user())->upcoming()->limit(3)->get(),
+        ]);
     }
 
     public function admin(Request $request)

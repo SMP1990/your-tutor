@@ -210,7 +210,13 @@ has 48 h to answer; one Meet link per booking; no payment yet (page says we will
   (`ClassBookingController`), cancel while waiting; dashboard panel "Regular classes". Tutor:
   `/dashboard/tutor/bookings` (`TutorBookingController`, menu "Class bookings"), confirm with a Google Meet
   link or decline with a reason; family emailed (`BookingAnswered`). 158 tests green.
-- [ ] 4b Class timetable: each class date made from a confirmed booking; "Join class" per class.
+- [x] **4b Timetable + Join class** (24 Oct, LOCAL only, committed, not pushed/deployed): `class_sessions`
+  table (migration 2026_10_27_000002), `ClassSession` model. `App\Support\ClassSchedule` makes days x weeks
+  classes when the tutor confirms ("week" = 7 days from the start date; times typed in site timezone, stored
+  UTC; safe to run twice). `/dashboard/classes` (`TimetableController`; menu "Classes"/"My classes"/
+  "Timetable") lists upcoming classes; overview cards "Next classes" for family and tutor. "Join class"
+  goes through `/dashboard/classes/{session}/join`: only the class's family or tutor, from 15 min before
+  until the class ends. 163 tests green.
 - [ ] 4c Attendance: tutor marks each class held / student absent / cancelled; family can see it.
 - [ ] 4d Admin view of all bookings and classes.
 

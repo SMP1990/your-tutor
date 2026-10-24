@@ -19,6 +19,7 @@ use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TutorApplicationController;
 use App\Http\Controllers\TutorController;
+use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\TutorBookingController;
 use App\Http\Controllers\TutorDemoController;
 use Illuminate\Support\Facades\Route;
@@ -101,6 +102,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware(['role:parent,student', 'throttle:20,1'])->name('demos.cancel');
     Route::get('/dashboard/demos/{demo}/join', [DemoBookingController::class, 'join'])
         ->middleware(['role:parent,student', 'throttle:30,1'])->name('demos.join');
+    Route::middleware('role:parent,student,tutor')->controller(TimetableController::class)->group(function () {
+        Route::get('/dashboard/classes', 'index')->name('classes.index');
+        Route::get('/dashboard/classes/{session}/join', 'join')->middleware('throttle:30,1')->name('classes.join');
+    });
     Route::middleware('role:parent,student')->controller(ClassBookingController::class)->group(function () {
         Route::get('/dashboard/demos/{demo}/book', 'create')->name('bookings.create');
         Route::post('/dashboard/demos/{demo}/book', 'store')->middleware('throttle:10,1')->name('bookings.store');

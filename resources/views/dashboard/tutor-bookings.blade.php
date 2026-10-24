@@ -59,7 +59,7 @@
 <section class="panel">
     <div class="panel__head"><h2>Confirmed students ({{ $confirmed->count() }})</h2></div>
     @if ($confirmed->isEmpty())
-        <p class="muted">No confirmed regular classes yet. The class timetable comes in the next update.</p>
+        <p class="muted">No confirmed regular classes yet. Once you confirm a booking, every class shows in your <a href="{{ route('classes.index') }}">timetable</a>.</p>
     @else
         <ul class="item-list">
             @foreach ($confirmed as $booking)

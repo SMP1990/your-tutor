@@ -29,17 +29,17 @@ class DashboardNav
     /** label => [icon, route name (null = not built yet), routes that make it active] */
     private const MENUS = [
         'student' => [
-            'Overview' => ['home', 'dashboard.student'], 'My classes' => ['calendar', null], 'Class notes' => ['notes', null],
+            'Overview' => ['home', 'dashboard.student'], 'My classes' => ['calendar', 'classes.index', 'classes.*'], 'Class notes' => ['notes', null],
             'Payments' => ['wallet', null], 'Reviews' => ['star', null], 'Profile' => ['user', null],
         ],
         'parent' => [
             'Overview' => ['home', 'dashboard.parent'], 'Children' => ['users', 'children.create', 'children.*'],
-            'Classes' => ['calendar', null], 'Progress' => ['chart', null], 'Payments' => ['wallet', null], 'Profile' => ['user', null],
+            'Classes' => ['calendar', 'classes.index', 'classes.*'], 'Progress' => ['chart', null], 'Payments' => ['wallet', null], 'Profile' => ['user', null],
         ],
         'tutor' => [
             'Overview' => ['home', 'dashboard.tutor'], 'Application' => ['check', 'tutor.application', 'tutor.application*'],
             'Demo requests' => ['calendar', 'tutor.demos', 'tutor.demos*'],
-            'Class bookings' => ['notes', 'tutor.bookings', 'tutor.bookings*'], 'Earnings' => ['wallet', null], 'Reviews' => ['star', null],
+            'Class bookings' => ['notes', 'tutor.bookings', 'tutor.bookings*'], 'Timetable' => ['clock', 'classes.index', 'classes.*'], 'Earnings' => ['wallet', null], 'Reviews' => ['star', null],
         ],
         'admin' => [
             'Overview' => ['home', 'dashboard.admin'], 'Tutor approvals' => ['check', 'admin.tutors.index', 'admin.tutors.*'],

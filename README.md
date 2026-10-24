@@ -44,7 +44,9 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
 - **Admin sees all demo requests (working):** including ones a tutor did not answer in time.
 - **Regular class booking (working):** after a good demo the family asks for weekly classes; the tutor
   confirms with a Google Meet link or declines.
-- **Next:** class timetable and Join class for each class, attendance,
+- **Class timetable (working):** confirmed bookings become dated classes for the family and the tutor,
+  each with a "Join class" button that opens shortly before the class.
+- **Next:** attendance,
   reviews, admin tools.
   Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
 - A static HTML export of the public pages lives on branch `static-site` (old preview).
