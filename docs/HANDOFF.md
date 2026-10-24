@@ -143,7 +143,8 @@ rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tuto
   result, private admin notes; decisions approve (only if `canBeApproved()`: test AND interview passed),
   reject / documents needed (message required). `TutorApplicationUpdated` emails the tutor. New review
   columns (migration 2026_10_25_000002). `DashboardNav` now links built pages and marks others "soon".
-- [x] **2c-1 Public pages from the database** (24 Oct, LOCAL only, committed, not pushed/deployed):
+- [x] **2c-1 Public pages from the database** (24 Oct, committed c2d57a3, DEPLOYED to Hostinger with the
+  owner's OK: migration run, DemoTutorsSeeder seeded 8 demo tutors, optimize; live checks OK; NOT pushed to GitHub yet):
   Find a Tutor (`TutorSearch`: subject[], level, min/max PKR, rating, q, sort, 12 per page, removable
   filter chips, "Sort by" auto-submits via `data-autosubmit` in site.js, no inline JS), tutor profile,
   demo form, subject pages, home, sitemap and `site:export` all read approved `TutorProfile`s via
