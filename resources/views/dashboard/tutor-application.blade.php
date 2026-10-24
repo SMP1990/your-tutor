@@ -26,7 +26,9 @@
     <a href="{{ route('dashboard.tutor') }}" class="btn btn-outline btn-sm">Back to dashboard</a>
 </div>
 
-@if (! $editable)
+@include('dashboard.partials.application-message', ['profile' => $profile->exists ? $profile : null])
+
+@if (! $editable && in_array($profile->status, [\App\Enums\TutorStatus::Submitted, \App\Enums\TutorStatus::InterviewScheduled], true))
     <section class="panel">
         <p>Your application has been sent for review. You can change it again if our team asks for more documents.</p>
     </section>

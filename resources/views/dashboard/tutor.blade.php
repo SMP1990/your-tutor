@@ -20,10 +20,14 @@
             Application: <span class="status status--{{ $statusColour }}">{{ $status?->label() ?? 'Not started' }}</span>
         </p>
     </div>
-    @if ($status === \App\Enums\TutorStatus::Approved)
+    @if ($profile?->hasPublicPage())
         <a href="{{ route('tutors.show', $profile->slug) }}" class="btn btn-outline btn-sm">View my public profile</a>
+    @elseif ($status === \App\Enums\TutorStatus::Approved)
+        <span class="status status--grey">Public profile page: coming in the next update</span>
     @endif
 </div>
+
+@include('dashboard.partials.application-message', ['profile' => $profile])
 
 <div class="dash-grid dash-grid--halves">
     @if ($status === \App\Enums\TutorStatus::Approved)
@@ -41,6 +45,9 @@
             @if (! $profile || $profile->isEditableByTutor())
                 <p class="muted">Tell us what you teach, your rate and when you are free, and upload your CNIC and degree. You can save and finish later.</p>
                 <div><a href="{{ route('tutor.application') }}" class="btn btn-primary btn-sm">{{ $profile ? 'Continue application' : 'Start application' }}</a></div>
+            @elseif ($status === \App\Enums\TutorStatus::Rejected)
+                <p class="muted">This application was not approved.</p>
+                <div><a href="{{ route('tutor.application') }}" class="btn btn-outline btn-sm">View application</a></div>
             @else
                 <p class="muted">Thank you! Your application is being reviewed. We will email you about the next step.</p>
                 <div><a href="{{ route('tutor.application') }}" class="btn btn-outline btn-sm">View application</a></div>

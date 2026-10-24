@@ -47,9 +47,10 @@
             <ul>
                 @foreach ($nav as $item)
                     <li>
-                        <a href="#" @class(['dash-nav__link', 'is-active' => $item['active'] ?? false]) @if ($item['active'] ?? false) aria-current="page" @endif>
+                        <a href="{{ $item['href'] ?? '#' }}" @class(['dash-nav__link', 'is-active' => $item['active'] ?? false, 'is-soon' => $item['soon'] ?? false]) @if ($item['active'] ?? false) aria-current="page" @endif @if ($item['soon'] ?? false) aria-disabled="true" @endif>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{!! $item['icon'] !!}</svg>
                             {{ $item['label'] }}
+                            @if ($item['soon'] ?? false)<span class="dash-nav__soon">soon</span>@endif
                         </a>
                     </li>
                 @endforeach

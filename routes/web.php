@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\TutorReviewController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -104,5 +105,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/two-factor/resend', [TwoFactorController::class, 'resend'])->middleware('throttle:3,1')->name('two-factor.resend');
 
         Route::get('/admin', [DashboardController::class, 'admin'])->middleware('two-factor')->name('dashboard.admin');
+
+        Route::middleware('two-factor')->prefix('/admin/tutors')->name('admin.tutors.')->controller(TutorReviewController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/{profile:id}', 'show')->name('show');
+            Route::get('/{profile:id}/documents/{document}', 'document')->name('document');
+            Route::post('/{profile:id}/review', 'review')->middleware('throttle:30,1')->name('review');
+            Route::post('/{profile:id}/decision', 'decide')->middleware('throttle:30,1')->name('decide');
+        });
     });
 });

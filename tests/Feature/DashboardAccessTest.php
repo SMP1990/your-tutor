@@ -84,7 +84,12 @@ class DashboardAccessTest extends TestCase
         $tutor = $this->as(Role::Tutor);
         $this->get('/dashboard/tutor')->assertSee('Not started');
 
-        TutorProfile::factory()->approved()->create(['user_id' => $tutor->id]);
+        $profile = TutorProfile::factory()->approved()->create(['user_id' => $tutor->id]);
+        // Until Step 2c, only demo-tutor slugs have a public page, so no broken link is shown.
+        $this->actingAs($tutor->fresh())->get('/dashboard/tutor')
+            ->assertSee('coming in the next update')->assertDontSee('View my public profile');
+
+        $profile->update(['slug' => 'ayesha-r']);
         $this->actingAs($tutor->fresh())->get('/dashboard/tutor')->assertSee('View my public profile');
     }
 

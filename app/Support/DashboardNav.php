@@ -2,7 +2,12 @@
 
 namespace App\Support;
 
-/** Menu items for the dashboard sidebars (design only, links are not wired yet). */
+use Illuminate\Support\Facades\Route;
+
+/**
+ * Sidebar menus for the dashboards. An item links to its route once that page exists; until then it
+ * shows as "soon". The preview dashboards (sample data) pass $live = false: no links, first item active.
+ */
 class DashboardNav
 {
     private const ICONS = [
@@ -21,18 +26,40 @@ class DashboardNav
         'settings' => '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
     ];
 
+    /** label => [icon, route name (null = not built yet), routes that make it active] */
     private const MENUS = [
-        'student' => ['Overview' => 'home', 'My classes' => 'calendar', 'Class notes' => 'notes', 'Payments' => 'wallet', 'Reviews' => 'star', 'Profile' => 'user'],
-        'parent' => ['Overview' => 'home', 'Children' => 'users', 'Classes' => 'calendar', 'Progress' => 'chart', 'Payments' => 'wallet', 'Profile' => 'user'],
-        'tutor' => ['Overview' => 'home', 'Classes' => 'calendar', 'Availability' => 'clock', 'Earnings' => 'wallet', 'Reviews' => 'star', 'My profile' => 'user'],
-        'admin' => ['Overview' => 'home', 'Tutor approvals' => 'check', 'Users' => 'users', 'Classes' => 'calendar', 'Payments' => 'wallet', 'Refunds' => 'refund', 'Complaints' => 'flag', 'Site settings' => 'settings'],
+        'student' => [
+            'Overview' => ['home', 'dashboard.student'], 'My classes' => ['calendar', null], 'Class notes' => ['notes', null],
+            'Payments' => ['wallet', null], 'Reviews' => ['star', null], 'Profile' => ['user', null],
+        ],
+        'parent' => [
+            'Overview' => ['home', 'dashboard.parent'], 'Children' => ['users', 'children.create', 'children.*'],
+            'Classes' => ['calendar', null], 'Progress' => ['chart', null], 'Payments' => ['wallet', null], 'Profile' => ['user', null],
+        ],
+        'tutor' => [
+            'Overview' => ['home', 'dashboard.tutor'], 'Application' => ['check', 'tutor.application', 'tutor.application*'],
+            'Classes' => ['calendar', null], 'Earnings' => ['wallet', null], 'Reviews' => ['star', null],
+        ],
+        'admin' => [
+            'Overview' => ['home', 'dashboard.admin'], 'Tutor approvals' => ['check', 'admin.tutors.index', 'admin.tutors.*'],
+            'Users' => ['users', null], 'Classes' => ['calendar', null], 'Payments' => ['wallet', null],
+            'Refunds' => ['refund', null], 'Complaints' => ['flag', null], 'Site settings' => ['settings', null],
+        ],
     ];
 
-    public static function for(string $dashboard): array
+    public static function for(string $dashboard, bool $live = true): array
     {
         $items = [];
-        foreach (self::MENUS[$dashboard] as $label => $icon) {
-            $items[] = ['label' => $label, 'icon' => self::ICONS[$icon], 'active' => $items === []];
+        foreach (self::MENUS[$dashboard] as $label => $entry) {
+            [$icon, $route] = $entry;
+            $pattern = $entry[2] ?? $route;
+            $items[] = [
+                'label' => $label,
+                'icon' => self::ICONS[$icon],
+                'href' => $live && $route ? route($route) : null,
+                'active' => $live ? ($pattern && request()->routeIs($pattern)) : $items === [],
+                'soon' => $live && ! $route,
+            ];
         }
 
         return $items;

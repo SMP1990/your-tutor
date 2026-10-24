@@ -42,7 +42,7 @@ class DashboardController extends Controller
         return $this->view('admin', $request, [
             'usersByRole' => User::toBase()->selectRaw('role, count(*) as total')->groupBy('role')->pluck('total', 'role'),
             'tutorsByStatus' => TutorProfile::toBase()->selectRaw('status, count(*) as total')->groupBy('status')->pluck('total', 'status'),
-            'waiting' => TutorProfile::where('status', TutorStatus::Submitted)->count(),
+            'waiting' => TutorProfile::whereIn('status', [TutorStatus::Submitted, TutorStatus::InterviewScheduled])->count(),
             'latestUsers' => User::latest()->limit(8)->get(['id', 'name', 'email', 'role', 'email_verified_at', 'created_at']),
         ]);
     }

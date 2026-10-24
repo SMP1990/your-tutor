@@ -17,7 +17,7 @@ class DashboardPreviewController extends Controller
     public function show(string $dashboard)
     {
         return view("dashboards.{$dashboard}", [
-            'nav' => DashboardNav::for($dashboard),
+            'nav' => DashboardNav::for($dashboard, live: false),
             'user' => self::USERS[$dashboard],
             'preview' => true,
         ]);

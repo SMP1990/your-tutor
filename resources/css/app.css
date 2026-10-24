@@ -1783,3 +1783,14 @@ button.btn { font: inherit; font-weight: 700; }
 .avail__pick { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: var(--ground); border: 1px solid var(--line); cursor: pointer; }
 .avail__pick input { width: 18px; height: 18px; margin: 0; accent-color: var(--primary); }
 @media (min-width: 600px) { .form-grid--three { grid-template-columns: 2fr 2fr 1fr; } }
+
+/* Admin: tutor review */
+.review-head { display: flex; align-items: center; gap: 16px; }
+.review-head__title { font-family: var(--font-body); font-size: 20px; letter-spacing: 0; }
+.review-list { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 0; }
+.review-list > div { display: grid; grid-template-columns: 130px 1fr; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.review-list dt { color: var(--muted); font-size: 14px; }
+.review-list dd { margin: 0; }
+.review-sub { font-family: var(--font-body); font-size: 15px; letter-spacing: 0; padding-bottom: 6px; }
+.prose-text { white-space: pre-line; color: var(--ink); }
+.review-side { display: flex; flex-direction: column; gap: 20px; min-width: 0; }

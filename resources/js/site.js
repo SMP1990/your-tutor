@@ -89,3 +89,10 @@ document.querySelectorAll('form[data-confirm]').forEach((form) => {
         if (!window.confirm(form.dataset.confirm)) e.preventDefault();
     });
 });
+
+// Submit buttons with data-confirm-button="Question?" ask first (e.g. rejecting a tutor).
+document.querySelectorAll('button[data-confirm-button]').forEach((button) => {
+    button.addEventListener('click', (e) => {
+        if (!window.confirm(button.dataset.confirmButton)) e.preventDefault();
+    });
+});

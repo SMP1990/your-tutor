@@ -47,7 +47,30 @@ class TutorProfile extends Model
             'education' => 'array',
             'submitted_at' => 'datetime',
             'approved_at' => 'datetime',
+            'interview_at' => 'datetime',
+            'reviewed_at' => 'datetime',
         ];
+    }
+
+    /** @return BelongsTo<User, $this> */
+    public function reviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
+    }
+
+    /**
+     * TEMPORARY until Step 2c: public tutor pages still come from DemoTutors, so only those slugs
+     * have a page. Replace with `status === Approved` when profiles are read from the database.
+     */
+    public function hasPublicPage(): bool
+    {
+        return $this->status === TutorStatus::Approved && \App\Support\DemoTutors::find($this->slug) !== null;
+    }
+
+    /** Owner rule: a tutor is approved only after passing the subject test and the interview. */
+    public function canBeApproved(): bool
+    {
+        return $this->subject_test_result === 'passed' && $this->interview_result === 'passed';
     }
 
     public function getRouteKeyName(): string

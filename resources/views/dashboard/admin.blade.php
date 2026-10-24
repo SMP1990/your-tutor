@@ -36,10 +36,13 @@
         </ul>
     </section>
 
-    @include('dashboard.partials.coming-soon', [
-        'title' => 'Approvals, payments and settings',
-        'text' => 'Approving tutors comes with the tutor application step; payments, refunds and site settings come later.',
-    ])
+    <section class="panel">
+        <div class="panel__head"><h2>Tutor approvals</h2>
+            @if ($waiting)<span class="status status--amber">{{ $waiting }} waiting</span>@endif
+        </div>
+        <p class="muted">Review applications, record the subject test and interview, then approve, reject or ask for documents.</p>
+        <div><a href="{{ route('admin.tutors.index') }}" class="btn btn-primary btn-sm">Open approvals</a></div>
+    </section>
 </div>
 
 <section class="panel">
