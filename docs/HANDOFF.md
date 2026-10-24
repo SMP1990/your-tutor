@@ -245,7 +245,13 @@ keep their sample ratings until `demo:remove`.
   10 newest visible reviews with `<x-review-card>` (`Review::toCardArray()`: "Sadia M.", "Parent ·
   Physics · Oct 2026", stars); hidden reviews never show. Tutor page `/dashboard/tutor/reviews`
   (`TutorReviewsController`, menu "Reviews") with average and all visible reviews. 176 tests green.
-- [ ] 5c Admin sees all reviews and can hide / unhide one (rating recalculated).
+- [x] **5c Admin moderation** (24 Oct, LOCAL only, committed, not pushed/deployed): `/admin/reviews`
+  (`Admin\ReviewModerationController`, role:admin + two-factor, menu "Reviews"): tabs low ratings (1-2
+  stars), all visible, hidden; real name + "shown as" name; Hide / Show again
+  (`POST /admin/reviews/{review}/toggle`) recalculates the tutor's rating at once. Admin overview card
+  "Reviews". 179 tests green. No migration.
+  **Step 5 is complete.** Next: Step 6 admin tools (users, complaints, site settings incl. brand/stats),
+  then Step 7 launch prep.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

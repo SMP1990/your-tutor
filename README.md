@@ -51,7 +51,8 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
 - **Admin sees bookings and classes (working):** with attendance and anything not answered or not marked.
 - **Reviews (working):** after a held class the family rates the tutor (1-5 stars + comment); the
   tutor's rating comes from real reviews, and reviews show on the profile and in the tutor dashboard.
-- **Next:** admin can hide reviews,
+- **Review moderation (working):** admins can hide or show any review; the rating updates at once.
+- **Next:**
   admin tools (users, complaints, site settings).
   Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
 - A static HTML export of the public pages lives on branch `static-site` (old preview).

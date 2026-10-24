@@ -76,6 +76,20 @@
             @endforeach
         </ul>
     </section>
+
+    <section class="panel">
+        <div class="panel__head"><h2>Reviews</h2>
+            @if ($reviewCounts['low'])<span class="status status--amber">{{ $reviewCounts['low'] }} low ratings</span>@endif
+        </div>
+        <ul class="item-list">
+            @foreach (\App\Http\Controllers\Admin\ReviewModerationController::TABS as $key => $label)
+                <li>
+                    <div class="item-list__main"><a href="{{ route('admin.reviews.index', ['tab' => $key]) }}">{{ $label }}</a></div>
+                    <div class="item-list__side"><strong>{{ $reviewCounts[$key] }}</strong></div>
+                </li>
+            @endforeach
+        </ul>
+    </section>
 </div>
 
 <section class="panel">

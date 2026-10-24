@@ -84,6 +84,8 @@ class DashboardController extends Controller
                 'classes_upcoming' => \App\Http\Controllers\Admin\ClassesController::classTab('upcoming')->count(),
                 'classes_unmarked' => \App\Http\Controllers\Admin\ClassesController::classTab('unmarked')->count(),
             ],
+            'reviewCounts' => collect(\App\Http\Controllers\Admin\ReviewModerationController::TABS)
+                ->map(fn ($label, $tab) => \App\Http\Controllers\Admin\ReviewModerationController::tab($tab)->count()),
             'latestUsers' => User::latest()->limit(8)->get(['id', 'name', 'email', 'role', 'email_verified_at', 'created_at']),
         ]);
     }
