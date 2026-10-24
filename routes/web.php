@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthPreviewController;
 use App\Http\Controllers\ContactController;
@@ -42,29 +44,29 @@ Route::get('/contact/sent', [ContactController::class, 'sent'])->name('contact.s
 Route::get('/subjects', [SubjectController::class, 'index'])->name('subjects.index');
 Route::get('/subjects/{slug}', [SubjectController::class, 'show'])->name('subjects.show');
 
-// Accounts: register + email verification (Step 1b).
+// Accounts: register, email verification (Step 1b), log in / out, password reset (Step 1c).
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'create'])->name('register');
     Route::post('/register', [RegisterController::class, 'store'])->middleware('throttle:10,1')->name('register.store');
+
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])->middleware('throttle:20,1')->name('login.attempt');
+
+    Route::get('/forgot-password', [PasswordResetController::class, 'create'])->name('password.request');
+    Route::post('/forgot-password', [PasswordResetController::class, 'store'])->middleware('throttle:5,1')->name('password.email');
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'edit'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'update'])->middleware('throttle:5,1')->name('password.update');
 });
+Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::get('/email/verify', [EmailVerificationController::class, 'notice'])->middleware('auth')->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
     ->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
 Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
     ->middleware(['auth', 'throttle:3,1'])->name('verification.send');
 
-// Login pages still design only (Step 1c), see AuthPreviewController.
-Route::controller(AuthPreviewController::class)->group(function () {
-    Route::get('/login', 'login')->name('login');
-    Route::get('/verify-phone', 'verifyPhone')->name('verify-phone');
-    Route::get('/forgot-password', 'forgotPassword')->name('password.request');
-
-    Route::middleware('throttle:10,1')->group(function () {
-        Route::post('/login', 'notYet')->name('login.attempt');
-        Route::post('/verify-phone', 'notYet')->name('verify-phone.check');
-        Route::post('/forgot-password', 'notYet')->name('password.email');
-    });
-});
+// Phone code page: design only until an SMS/WhatsApp OTP provider is added (see AuthPreviewController).
+Route::get('/verify-phone', [AuthPreviewController::class, 'verifyPhone'])->name('verify-phone');
+Route::post('/verify-phone', [AuthPreviewController::class, 'notYet'])->middleware('throttle:10,1')->name('verify-phone.check');
 
 // Dashboards: design only with sample data, see DashboardPreviewController.
 foreach (['student', 'parent', 'tutor', 'admin'] as $dashboard) {

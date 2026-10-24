@@ -26,8 +26,16 @@
         </nav>
 
         <div class="site-header__actions">
-            <a href="{{ route('login') }}" class="nav-link site-header__login">Log In</a>
-            <a href="{{ route('register') }}" class="btn btn-primary site-header__register">Register</a>
+            @auth
+                <span class="site-header__login site-header__hello">Hi, {{ strtok(auth()->user()->name, ' ') }}</span>
+                <form method="post" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-outline site-header__register">Log out</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="nav-link site-header__login">Log In</a>
+                <a href="{{ route('register') }}" class="btn btn-primary site-header__register">Register</a>
+            @endauth
             <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
             </button>
@@ -39,7 +47,9 @@
             @foreach ($links as $link)
                 <li><a class="nav-link" href="{{ $link['href'] }}">{{ $link['label'] }}</a></li>
             @endforeach
-            <li><a class="nav-link" href="{{ route('login') }}"><strong>Log In</strong></a></li>
+            @guest
+                <li><a class="nav-link" href="{{ route('login') }}"><strong>Log In</strong></a></li>
+            @endguest
         </ul>
     </nav>
 </header>

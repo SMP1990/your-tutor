@@ -1758,3 +1758,4 @@ button.btn { font: inherit; font-weight: 700; }
 .preview-links ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .preview-links a { display: inline-flex; align-items: center; min-height: 36px; padding-inline: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; color: var(--ink); font-weight: 700; text-decoration: none; }
 .preview-links a:hover { border-color: var(--primary); color: var(--primary-dark); }
+.site-header__hello { align-items: center; min-height: 44px; font-weight: 700; white-space: nowrap; }

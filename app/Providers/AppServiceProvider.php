@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\ServiceProvider;
@@ -28,5 +29,13 @@ class AppServiceProvider extends ServiceProvider
             ->action('Verify email address', $url)
             ->line('The link works for '.config('auth.verification.expire', 60).' minutes.')
             ->line('If you did not create an account, you can ignore this email.'));
+
+        ResetPassword::toMailUsing(fn (object $user, string $token) => (new MailMessage)
+            ->subject('Reset your '.config('app.name').' password')
+            ->greeting('Hi '.strtok($user->name, ' ').',')
+            ->line('We received a request to reset your password.')
+            ->action('Set a new password', route('password.reset', ['token' => $token, 'email' => $user->email]))
+            ->line('The link works for '.config('auth.passwords.users.expire', 60).' minutes.')
+            ->line('If you did not ask for this, ignore this email. Your password stays the same.'));
     }
 }
