@@ -57,6 +57,25 @@
             @endforeach
         </ul>
     </section>
+
+    <section class="panel">
+        <div class="panel__head"><h2>Regular classes</h2>
+            @if ($classCounts['classes_unmarked'])<span class="status status--red">{{ $classCounts['classes_unmarked'] }} not marked</span>@endif
+        </div>
+        <ul class="item-list">
+            @foreach ([
+                ['Bookings waiting for tutor', 'admin.bookings.index', 'waiting', 'bookings_waiting'],
+                ['Bookings not answered in time', 'admin.bookings.index', 'unanswered', 'bookings_unanswered'],
+                ['Upcoming classes', 'admin.classes.index', 'upcoming', 'classes_upcoming'],
+                ['Attendance not marked', 'admin.classes.index', 'unmarked', 'classes_unmarked'],
+            ] as [$label, $route, $tab, $key])
+                <li>
+                    <div class="item-list__main"><a href="{{ route($route, ['tab' => $tab]) }}">{{ $label }}</a></div>
+                    <div class="item-list__side"><strong>{{ $classCounts[$key] }}</strong></div>
+                </li>
+            @endforeach
+        </ul>
+    </section>
 </div>
 
 <section class="panel">

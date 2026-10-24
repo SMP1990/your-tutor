@@ -75,6 +75,12 @@ class DashboardController extends Controller
             'waiting' => TutorProfile::whereIn('status', [TutorStatus::Submitted, TutorStatus::InterviewScheduled])->count(),
             'demoCounts' => collect(['waiting', 'unanswered', 'outcome'])
                 ->mapWithKeys(fn ($tab) => [$tab => \App\Http\Controllers\Admin\DemoRequestController::tab($tab)->count()]),
+            'classCounts' => [
+                'bookings_waiting' => \App\Http\Controllers\Admin\ClassesController::bookingTab('waiting')->count(),
+                'bookings_unanswered' => \App\Http\Controllers\Admin\ClassesController::bookingTab('unanswered')->count(),
+                'classes_upcoming' => \App\Http\Controllers\Admin\ClassesController::classTab('upcoming')->count(),
+                'classes_unmarked' => \App\Http\Controllers\Admin\ClassesController::classTab('unmarked')->count(),
+            ],
             'latestUsers' => User::latest()->limit(8)->get(['id', 'name', 'email', 'role', 'email_verified_at', 'created_at']),
         ]);
     }

@@ -48,7 +48,8 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
   each with a "Join class" button that opens shortly before the class.
 - **Attendance (working):** tutors mark each class held or student absent, or cancel with a reason;
   families can cancel a class up to 12 hours before and see every class outcome.
-- **Next:** admin view of bookings and classes,
+- **Admin sees bookings and classes (working):** with attendance and anything not answered or not marked.
+- **Next:**
   reviews, admin tools.
   Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
 - A static HTML export of the public pages lives on branch `static-site` (old preview).

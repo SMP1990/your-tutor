@@ -224,7 +224,12 @@ has 48 h to answer; one Meet link per booking; no payment yet (page says we will
   reason. Family: "Cancel class" up to 12 hours before (`ClassSession::FAMILY_CANCEL_HOURS`,
   `POST /dashboard/classes/{session}/cancel`). Both see "Past and cancelled classes"; family booking card
   shows "N of M classes held". 166 tests green. (No make-up classes yet: a cancelled class is not replaced.)
-- [ ] 4d Admin view of all bookings and classes.
+- [x] **4d Admin view** (24 Oct, LOCAL only, committed, not pushed/deployed): `Admin\ClassesController`
+  (role:admin + two-factor), read-only. `/admin/bookings` tabs: waiting, not answered in time, confirmed,
+  declined/cancelled (family, student, tutor link, schedule, rate, "N of M held"). `/admin/classes` tabs:
+  upcoming, attendance not marked, held, student absent, cancelled. Admin menu "Bookings" and "Classes";
+  overview card "Regular classes" with counts. 169 tests green. No migration.
+  **Step 4 is complete.** Next: Step 5 reviews, Step 6 admin tools, Step 7 launch prep.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ClassesController as AdminClassesController;
 use App\Http\Controllers\Admin\DemoRequestController as AdminDemoRequestController;
 use App\Http\Controllers\Admin\TutorReviewController;
 use App\Http\Controllers\Auth\EmailVerificationController;
@@ -140,6 +141,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/admin', [DashboardController::class, 'admin'])->middleware('two-factor')->name('dashboard.admin');
 
         Route::get('/admin/demos', [AdminDemoRequestController::class, 'index'])->middleware('two-factor')->name('admin.demos.index');
+        Route::get('/admin/bookings', [AdminClassesController::class, 'bookings'])->middleware('two-factor')->name('admin.bookings.index');
+        Route::get('/admin/classes', [AdminClassesController::class, 'classes'])->middleware('two-factor')->name('admin.classes.index');
 
         Route::middleware('two-factor')->prefix('/admin/tutors')->name('admin.tutors.')->controller(TutorReviewController::class)->group(function () {
             Route::get('/', 'index')->name('index');
