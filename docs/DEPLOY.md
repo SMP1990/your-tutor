@@ -25,6 +25,29 @@ Links between pages are relative, so the files work on any domain. Export again 
 The export writes `.htaccess` with HTTPS redirect, security headers (same as
 `App\Http\Middleware\SecurityHeaders`) and the custom 404 page.
 
+## Hostinger shared hosting (current setup)
+Server access details are in the owner's private notes, never in this repo.
+
+Layout inside the site's folder (`~/domains/<site>/`):
+- `app/`: the Laravel app (outside the web root). Its `.env` holds all secrets (owner pastes passwords/keys).
+- `public_html` → symlink to `app/public` (the web root).
+- `public_html_static_backup/`: the old static preview, kept for rollback.
+
+Use PHP 8.4 for every command: `/opt/alt/php84/usr/bin/php` (the default `php` over SSH is older).
+
+**Deploy an update** (from the local `laravel-app`, after `php artisan test` passes and `npm run build`):
+1. `git archive --format=tar.gz -o app.tar.gz HEAD` and, if CSS/JS changed, `tar --force-local -czf build.tar.gz -C public build`
+2. Upload both to `~/domains/<site>/`, then: `tar -xzf app.tar.gz -C app` (and `tar -xzf build.tar.gz -C app/public`)
+3. In `app/`: `composer install --no-dev --optimize-autoloader` (only if composer.lock changed),
+   `php artisan migrate --force`, `php artisan optimize`
+4. Check the live pages.
+
+**Roll back to the static site:** in `~/domains/<site>/`: `rm public_html && cp -a public_html_static_backup public_html`.
+**Back to Laravel:** `rm -rf public_html && ln -s app/public public_html`.
+
+Things that only show up in production (cached config/routes): never call `env()` outside `config/`,
+and never register bindings or other setup in `routes/web.php` (use a service provider).
+
 ## Remove before launch (temporary preview helpers)
 - `resources/views/partials/dashboard-preview-links.blade.php`, its `@include` in `auth/login.blade.php`
   and the `.preview-links` CSS: quick links to the sample dashboards.

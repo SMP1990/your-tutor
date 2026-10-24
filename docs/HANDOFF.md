@@ -114,8 +114,15 @@ Owner asked to explain the plan step by step, no code until approved.
     `composer install --no-dev`, production `.env` written (APP_DEBUG=false, MAIL_MAILER=log for now),
     APP_KEY generated. Owner pasted the DB password into `.env` (24 Oct). On MySQL: all migrations ran,
     12 subjects seeded, 0 users (demo accounts correctly skipped in production), `artisan optimize` done,
-    internal requests to /, /tutors, /login, /register, /sitemap.xml return 200. `public_html` is still the
-    static preview. Next: owner approves switching `public_html` to `app/public` (keep a backup to roll back).
+    internal requests to /, /tutors, /login, /register, /sitemap.xml return 200.
+  - **1f-4 LIVE (24 Oct):** `public_html` is now a symlink to `app/public`; the old static site is kept in
+    `public_html_static_backup`. All public pages return 200 on the live URL, forms work (CSRF, sessions on MySQL),
+    `.env` is not reachable (403), security headers present. Bug found and fixed on the way: route binding in
+    routes/web.php is lost with cached routes; moved to AppServiceProvider (+ `ProductionCacheTest`).
+    Deploy and rollback steps: `docs/DEPLOY.md` ("Hostinger shared hosting").
+  - **Next (1f-5): email.** Owner signs up for a free SMTP service (Brevo), pastes the SMTP key into the server
+    `.env`; then switch `MAIL_MAILER=smtp` and test register → verification email on the live site.
+    Until then registration works but verification emails are only written to the server log.
   - Email decision: temporary domain, so no Hostinger mailbox; use a free SMTP service (e.g. Brevo) the
     owner signs up for. Owner pastes secrets (DB password, SMTP key) into the server `.env` themselves.
 Public pages still use `DemoTutors`/`DemoSubjects` until Step 3.
