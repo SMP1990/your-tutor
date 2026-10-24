@@ -58,13 +58,56 @@ class TutorProfile extends Model
         return $this->belongsTo(User::class, 'reviewed_by');
     }
 
-    /**
-     * TEMPORARY until Step 2c: public tutor pages still come from DemoTutors, so only those slugs
-     * have a page. Replace with `status === Approved` when profiles are read from the database.
-     */
+    /** Approved tutors have a public page at /tutors/{slug}. */
     public function hasPublicPage(): bool
     {
-        return $this->status === TutorStatus::Approved && \App\Support\DemoTutors::find($this->slug) !== null;
+        return $this->status === TutorStatus::Approved && filled($this->slug);
+    }
+
+    /** Uploaded photo, else the sample avatar for demo tutors, else a neutral avatar. Domain-portable. */
+    public function photoUrl(): string
+    {
+        if ($this->photo_path) {
+            return asset('storage/'.$this->photo_path);
+        }
+        $avatar = 'images/avatars/'.\Illuminate\Support\Str::slug(strtok((string) $this->user?->name, ' ')).'.svg';
+
+        return asset($this->is_demo && is_file(public_path($avatar)) ? $avatar : 'images/avatars/default.svg');
+    }
+
+    /**
+     * The shape the public views use (same keys the old DemoTutors arrays had), so pages and
+     * forms read real data without knowing about the model.
+     */
+    public function toPublicArray(): array
+    {
+        $this->loadMissing(['user:id,name', 'subjects:id,name,slug']);
+        $days = config('tutors.days');
+
+        return [
+            'id' => $this->id,
+            'slug' => $this->slug,
+            'name' => $this->user->name,
+            'photo_url' => $this->photoUrl(),
+            'is_demo' => (bool) $this->is_demo,
+            'headline' => $this->headline,
+            'bio' => $this->bio,
+            'about' => array_values(array_filter(preg_split('/\R{2,}/', (string) $this->bio))),
+            'city' => $this->city,
+            'experience_years' => $this->experience_years,
+            'subjects' => $this->subjects->pluck('name')->all(),
+            'subject_slugs' => $this->subjects->pluck('slug')->all(),
+            'levels' => $this->levels,
+            'languages' => $this->languages,
+            'rate' => $this->hourlyRate() !== null ? $this->currency.' '.number_format($this->hourlyRate()) : null,
+            'rating' => $this->rating_avg !== null ? number_format((float) $this->rating_avg, 1) : null,
+            'reviews_count' => (int) $this->reviews_count,
+            'availability' => collect($days)->mapWithKeys(fn ($d) => [$d => $this->availability[$d] ?? []])->all(),
+            'qualifications' => array_map(fn ($e) => [
+                'title' => $e['degree'] ?? '', 'place' => $e['institute'] ?? '', 'year' => $e['year'] ?? '',
+            ], $this->education ?? []),
+            'intro_video_url' => $this->intro_video_url,
+        ];
     }
 
     /** Owner rule: a tutor is approved only after passing the subject test and the interview. */

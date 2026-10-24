@@ -94,6 +94,9 @@ class DatabaseStructureTest extends TestCase
         $this->app->make(DatabaseSeeder::class)->setContainer($this->app)->__invoke();
 
         $this->assertSame(12, Subject::count());
-        $this->assertSame(0, User::count());
+        // Sample tutors are allowed (flagged is_demo, removable with demo:remove); log-in accounts are not.
+        $this->assertSame(8, User::count());
+        $this->assertSame(8, TutorProfile::where('is_demo', true)->count());
+        $this->assertFalse(User::where('email', 'admin@example.test')->exists());
     }
 }

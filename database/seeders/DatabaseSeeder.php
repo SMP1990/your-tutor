@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SubjectSeeder::class,
-            DemoAccountsSeeder::class, // skips itself in production
+            DemoTutorsSeeder::class,   // sample tutors (flagged is_demo) until launch; `demo:remove` deletes them
+            DemoAccountsSeeder::class, // log-in test accounts; skips itself in production
         ]);
     }
 }

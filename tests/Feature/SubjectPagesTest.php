@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Support\DemoSubjects;
+use Tests\Concerns\SeedsDemoContent;
 use Tests\TestCase;
 
 class SubjectPagesTest extends TestCase
 {
+    use SeedsDemoContent;
+
     public function test_subjects_index_lists_every_subject(): void
     {
         $response = $this->get('/subjects')->assertOk();

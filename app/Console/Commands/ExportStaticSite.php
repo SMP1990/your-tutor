@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Http\Middleware\SecurityHeaders;
-use App\Support\DemoSubjects;
-use App\Support\DemoTutors;
+use App\Models\Subject;
+use App\Models\TutorProfile;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
@@ -97,13 +97,13 @@ class ExportStaticSite extends Command
             '/preview/tutor' => 'dashboard-tutor.html',
             '/preview/admin' => 'dashboard-admin.html',
         ];
-        foreach (DemoSubjects::all() as $subject) {
-            $pages["/subjects/{$subject['slug']}"] = "subject-{$subject['slug']}.html";
+        foreach (Subject::where('is_active', true)->pluck('slug') as $slug) {
+            $pages["/subjects/{$slug}"] = "subject-{$slug}.html";
         }
-        foreach (DemoTutors::all() as $tutor) {
-            $pages["/tutors/{$tutor['slug']}"] = "tutor-{$tutor['slug']}.html";
-            $pages["/tutors/{$tutor['slug']}/demo"] = "demo-{$tutor['slug']}.html";
-            $pages["/tutors/{$tutor['slug']}/demo/sent"] = "demo-{$tutor['slug']}-sent.html";
+        foreach (TutorProfile::approved()->pluck('slug') as $slug) {
+            $pages["/tutors/{$slug}"] = "tutor-{$slug}.html";
+            $pages["/tutors/{$slug}/demo"] = "demo-{$slug}.html";
+            $pages["/tutors/{$slug}/demo/sent"] = "demo-{$slug}-sent.html";
         }
 
         return $pages;

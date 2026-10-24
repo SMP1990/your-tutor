@@ -30,8 +30,11 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
   CSRF, validation and rate limits on every form, private document storage.
 - **Tutor approval (working):** admins review applications, view documents privately, record the subject
   test and interview (Google Meet link), then approve, reject or ask for documents; tutors are emailed.
-- **Next:** real tutor profiles and search from the
-  database (Step 2c), booking, classes (Google Meet links), reviews, admin tools.
+- **Find a Tutor and profiles (working):** search, filters (subject, level, price, rating), sort and pages
+  read approved tutors from the database. Until launch, 8 sample tutors (flagged demo) fill the pages;
+  `php artisan demo:remove` deletes them.
+- **Next:** approved tutors edit their profile (Step 2c-2), booking, classes (Google Meet links),
+  reviews, admin tools.
   Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
 - A static HTML export of the public pages lives on branch `static-site` (old preview).
 

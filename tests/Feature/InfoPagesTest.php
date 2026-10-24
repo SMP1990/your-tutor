@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Tests\Concerns\SeedsDemoContent;
 use Tests\TestCase;
 
 class InfoPagesTest extends TestCase
 {
+    use SeedsDemoContent;
+
     public function test_info_and_legal_pages_load(): void
     {
         $pages = [

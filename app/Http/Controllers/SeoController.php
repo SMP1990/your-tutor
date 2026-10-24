@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\DemoSubjects;
-use App\Support\DemoTutors;
+use App\Models\Subject;
+use App\Models\TutorProfile;
 
 class SeoController extends Controller
 {
@@ -15,8 +15,8 @@ class SeoController extends Controller
 
         return array_merge(
             array_map(fn ($name) => route($name), $routes),
-            array_map(fn ($t) => route('tutors.show', $t['slug']), DemoTutors::all()),
-            array_map(fn ($s) => route('subjects.show', $s['slug']), DemoSubjects::all()),
+            TutorProfile::approved()->orderBy('id')->pluck('slug')->map(fn ($slug) => route('tutors.show', $slug))->all(),
+            Subject::where('is_active', true)->orderBy('sort_order')->pluck('slug')->map(fn ($slug) => route('subjects.show', $slug))->all(),
         );
     }
 

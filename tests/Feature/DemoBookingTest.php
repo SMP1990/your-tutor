@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Tests\Concerns\SeedsDemoContent;
 use Tests\TestCase;
 
 class DemoBookingTest extends TestCase
 {
+    use SeedsDemoContent;
+
     private function validData(array $overrides = []): array
     {
         return $overrides + [

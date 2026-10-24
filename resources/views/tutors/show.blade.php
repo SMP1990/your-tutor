@@ -4,7 +4,7 @@
 @section('description', $tutor['headline'] . '. ' . $tutor['bio'] . ' Book a free demo class.')
 
 @php
-    $slots = ['morning' => 'Morning', 'afternoon' => 'Afternoon', 'evening' => 'Evening'];
+    $slots = config('tutors.time_slots');
     $firstName = \Illuminate\Support\Str::before($tutor['name'], ' ');
     $photo = $tutor['photo_url'];
     $demoUrl = route('tutors.demo', $tutor['slug']);
@@ -48,11 +48,16 @@
                 <p class="profile-intro__headline">{{ $tutor['headline'] }}</p>
                 <ul class="profile-facts">
                     <li>
-                        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="#F0A53A"/></svg>
-                        <strong>{{ $tutor['rating'] }}</strong>&nbsp;({{ $tutor['reviews_count'] }} reviews)
+                        @if ($tutor['reviews_count'] > 0)
+                            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="#F0A53A"/></svg>
+                            <strong>{{ $tutor['rating'] }}</strong>&nbsp;({{ $tutor['reviews_count'] }} reviews)
+                        @else
+                            New tutor
+                        @endif
                     </li>
-                    <li>{{ $tutor['experience_years'] }} years teaching</li>
-                    <li>{{ $tutor['students_taught'] }}+ students</li>
+                    @if ($tutor['experience_years'])
+                        <li>{{ $tutor['experience_years'] }} years teaching</li>
+                    @endif
                     <li>{{ $tutor['city'] }}</li>
                     <li>Speaks {{ $tutor['languages'] }}</li>
                 </ul>
@@ -147,27 +152,18 @@
         {{-- REVIEWS --}}
         <section class="profile-card" aria-labelledby="reviews-title" id="reviews">
             <h2 id="reviews-title" class="profile-card__title">Reviews</h2>
-            <div class="rating-summary">
-                <div class="rating-summary__score">
-                    <strong>{{ $tutor['rating'] }}</strong>
-                    <span>out of 5</span>
-                    <span>{{ $tutor['reviews_count'] }} reviews</span>
+            {{-- Written reviews arrive with the reviews module; until then only the score is shown. --}}
+            @if ($tutor['reviews_count'] > 0)
+                <div class="rating-summary">
+                    <div class="rating-summary__score">
+                        <strong>{{ $tutor['rating'] }}</strong>
+                        <span>out of 5</span>
+                        <span>{{ $tutor['reviews_count'] }} reviews</span>
+                    </div>
                 </div>
-                <ul class="rating-bars">
-                    @foreach ($tutor['rating_breakdown'] as $stars => $percent)
-                        <li>
-                            <span>{{ $stars }} star</span>
-                            <progress class="rating-bars__track" value="{{ $percent }}" max="100">{{ $percent }}%</progress>
-                            <span>{{ $percent }}%</span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-            <div class="profile-reviews">
-                @foreach ($tutor['reviews'] as $review)
-                    <x-review-card :review="$review" />
-                @endforeach
-            </div>
+            @else
+                <p class="profile-card__note">No reviews yet. Reviews appear here after {{ $firstName }}'s first classes.</p>
+            @endif
         </section>
     </div>
 
@@ -196,7 +192,7 @@
         <div class="container stack">
             <div class="section-head">
                 <span class="eyebrow">Similar tutors</span>
-                <h2>More {{ $tutor['subjects'][0] }} tutors</h2>
+                <h2>More {{ $tutor['subjects'][0] ?? '' }} tutors</h2>
             </div>
             <div class="grid grid--cards">
                 @foreach ($similar as $other)

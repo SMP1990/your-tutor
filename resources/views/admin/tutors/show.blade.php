@@ -141,8 +141,6 @@
                 <p class="muted">Test: {{ $profile->subject_test_result ?? 'not recorded' }} · Interview: {{ $profile->interview_result ?? 'not recorded' }}</p>
                 @if ($profile->hasPublicPage())
                     <a href="{{ route('tutors.show', $profile->slug) }}" class="btn btn-outline btn-sm">View public profile</a>
-                @elseif ($profile->status === \App\Enums\TutorStatus::Approved)
-                    <p class="muted">The public profile page from the database comes in the next update.</p>
                 @endif
             </section>
         @endif

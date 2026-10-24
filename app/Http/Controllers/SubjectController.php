@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\DemoSubjects;
+use App\Models\Subject;
+use App\Models\TutorProfile;
 
 class SubjectController extends Controller
 {
     public function index()
     {
-        return view('subjects.index', ['subjects' => DemoSubjects::all()]);
+        return view('subjects.index', ['subjects' => Subject::where('is_active', true)->orderBy('sort_order')->get()]);
     }
 
     public function show(string $slug)
     {
-        $subject = DemoSubjects::find($slug) ?? abort(404);
+        $subject = Subject::where('is_active', true)->where('slug', $slug)->first() ?? abort(404);
 
         return view('subjects.show', [
             'subject' => $subject,
-            'tutors' => DemoSubjects::tutorsFor($subject),
-            'others' => array_values(array_filter(DemoSubjects::all(), fn ($s) => $s['slug'] !== $slug)),
+            'tutors' => $subject->tutors()->approved()->with(['user:id,name', 'subjects:id,name,slug'])
+                ->orderByDesc('reviews_count')->get()
+                ->map(fn (TutorProfile $p) => $p->toPublicArray())->all(),
+            'others' => Subject::where('is_active', true)->whereKeyNot($subject->id)->orderBy('sort_order')->get(),
         ]);
     }
 }

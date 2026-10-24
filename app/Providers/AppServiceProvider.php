@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Support\DemoTutors;
+use App\Models\TutorProfile;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -24,9 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // {tutor} in URLs = a dummy tutor until the database step; unknown slugs give a 404.
+        // {tutor} in URLs = an approved tutor's public data; unknown or unapproved slugs give a 404.
         // Registered here (not in routes/web.php) so it also works when routes are cached in production.
-        Route::bind('tutor', fn (string $slug) => DemoTutors::find($slug) ?? abort(404));
+        Route::bind('tutor', fn (string $slug) => TutorProfile::approved()->where('slug', $slug)->first()?->toPublicArray() ?? abort(404));
 
         VerifyEmail::toMailUsing(fn (object $user, string $url) => (new MailMessage)
             ->subject('Verify your email | '.config('app.name'))

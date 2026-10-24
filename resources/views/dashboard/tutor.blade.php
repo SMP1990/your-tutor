@@ -22,8 +22,6 @@
     </div>
     @if ($profile?->hasPublicPage())
         <a href="{{ route('tutors.show', $profile->slug) }}" class="btn btn-outline btn-sm">View my public profile</a>
-    @elseif ($status === \App\Enums\TutorStatus::Approved)
-        <span class="status status--grey">Public profile page: coming in the next update</span>
     @endif
 </div>
 

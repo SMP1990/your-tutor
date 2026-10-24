@@ -140,7 +140,7 @@
                 <div>
                     <strong>{{ $tutor['name'] }}</strong>
                     <span>{{ implode(' · ', $tutor['subjects']) }}</span>
-                    <span>★ {{ $tutor['rating'] }} ({{ $tutor['reviews_count'] }} reviews)</span>
+                    <span>{{ $tutor['reviews_count'] > 0 ? '★ '.$tutor['rating'].' ('.$tutor['reviews_count'].' reviews)' : 'New tutor' }}</span>
                 </div>
             </div>
             <ol class="next-steps">

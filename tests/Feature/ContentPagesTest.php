@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Tests\Concerns\SeedsDemoContent;
 use Tests\TestCase;
 
 class ContentPagesTest extends TestCase
 {
+    use SeedsDemoContent;
+
     public function test_how_it_works_page_loads(): void
     {
         $this->get('/how-it-works')

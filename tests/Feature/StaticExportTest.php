@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use Illuminate\Support\Facades\File;
+use Tests\Concerns\SeedsDemoContent;
 use Tests\TestCase;
 
 class StaticExportTest extends TestCase
 {
+    use SeedsDemoContent;
+
     private string $out;
 
     protected function setUp(): void

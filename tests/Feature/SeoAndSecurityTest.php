@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Http\Controllers\SeoController;
+use Tests\Concerns\SeedsDemoContent;
 use Tests\TestCase;
 
 class SeoAndSecurityTest extends TestCase
 {
+    use SeedsDemoContent;
+
     public function test_pages_send_security_headers(): void
     {
         $response = $this->get('/');

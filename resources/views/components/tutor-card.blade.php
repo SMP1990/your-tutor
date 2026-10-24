@@ -7,10 +7,11 @@
     $rate = data_get($tutor, 'rate');
     $languages = data_get($tutor, 'languages');
 
-    // Uploads live in storage/; fall back to the placeholder avatar when there is no photo.
-    $photoUrl = $photo
+    // TutorProfile::toPublicArray() gives photo_url; otherwise uploads live in storage/ with a neutral fallback.
+    $photoUrl = data_get($tutor, 'photo_url') ?? ($photo
         ? (\Illuminate\Support\Str::startsWith($photo, ['http', '/']) ? $photo : asset('storage/' . $photo))
-        : asset('images/avatars/' . \Illuminate\Support\Str::slug(\Illuminate\Support\Str::before($name, ' ')) . '.svg');
+        : asset('images/avatars/default.svg'));
+    $reviews = (int) data_get($tutor, 'reviews_count');
 
     $rateLabel = is_numeric($rate) ? 'PKR ' . number_format($rate) : $rate;
     $languagesLabel = is_array($languages) ? implode(', ', $languages) : $languages;
@@ -28,9 +29,13 @@
             </div>
             <span class="tutor-card__levels">{{ data_get($tutor, 'levels') }}</span>
             <span class="tutor-card__rating">
-                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="currentColor"/></svg>
-                <strong>{{ data_get($tutor, 'rating') }}</strong>
-                <span class="tutor-card__muted">({{ data_get($tutor, 'reviews_count') }} reviews)</span>
+                @if ($reviews > 0)
+                    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" fill="currentColor"/></svg>
+                    <strong>{{ data_get($tutor, 'rating') }}</strong>
+                    <span class="tutor-card__muted">({{ $reviews }} {{ \Illuminate\Support\Str::plural('review', $reviews) }})</span>
+                @else
+                    <span class="tutor-card__muted">New tutor</span>
+                @endif
             </span>
         </div>
     </div>

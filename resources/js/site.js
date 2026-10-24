@@ -96,3 +96,8 @@ document.querySelectorAll('button[data-confirm-button]').forEach((button) => {
         if (!window.confirm(button.dataset.confirmButton)) e.preventDefault();
     });
 });
+
+// <select data-autosubmit> submits its form on change (e.g. "Sort by"). No inline JavaScript (CSP).
+document.querySelectorAll('select[data-autosubmit]').forEach((select) => {
+    select.addEventListener('change', () => select.form.submit());
+});

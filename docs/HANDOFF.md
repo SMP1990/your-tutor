@@ -143,8 +143,18 @@ rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tuto
   result, private admin notes; decisions approve (only if `canBeApproved()`: test AND interview passed),
   reject / documents needed (message required). `TutorApplicationUpdated` emails the tutor. New review
   columns (migration 2026_10_25_000002). `DashboardNav` now links built pages and marks others "soon".
-  `TutorProfile::hasPublicPage()` is TEMPORARY (DemoTutors slugs only) until 2c.
-- [ ] 2c After approval: re-review rules, public profile + search from the database (replaces DemoTutors).
+- [x] **2c-1 Public pages from the database** (24 Oct, LOCAL only, committed, not pushed/deployed):
+  Find a Tutor (`TutorSearch`: subject[], level, min/max PKR, rating, q, sort, 12 per page, removable
+  filter chips, "Sort by" auto-submits via `data-autosubmit` in site.js, no inline JS), tutor profile,
+  demo form, subject pages, home, sitemap and `site:export` all read approved `TutorProfile`s via
+  `toPublicArray()`. Unapproved slugs 404. No fake reviews: profile shows the score only, "New tutor" when
+  0 reviews. The 8 sample tutors are now DB rows (`DemoTutorsSeeder`, `is_demo`, unusable passwords,
+  allowed on production as preview content); delete them all before launch with `php artisan demo:remove`.
+  Migration 2026_10_25_000003 (is_demo, rating_avg, reviews_count). `DemoTutors`/`DemoSubjects` are now
+  only seed sources. Tests use `Tests\Concerns\SeedsDemoContent`. 123 tests green.
+  **Deploy needs:** `migrate --force`, `db:seed --class=DemoTutorsSeeder --force`, `npm run build` output.
+- [ ] 2c-2 Approved tutor edits the profile: rate/bio/availability live directly; new subjects/documents
+  go back to admin re-review.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

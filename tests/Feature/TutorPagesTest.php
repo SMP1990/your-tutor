@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Tests\Concerns\SeedsDemoContent;
 use Tests\TestCase;
 
 class TutorPagesTest extends TestCase
 {
+    use SeedsDemoContent;
+
     public function test_home_page_loads_with_featured_tutors(): void
     {
         $this->get('/')

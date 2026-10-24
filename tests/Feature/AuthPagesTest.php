@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Tests\Concerns\SeedsDemoContent;
 use Tests\TestCase;
 
 class AuthPagesTest extends TestCase
 {
+    use SeedsDemoContent;
+
     public function test_login_pages_load(): void
     {
         $pages = [

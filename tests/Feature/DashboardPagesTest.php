@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Tests\Concerns\SeedsDemoContent;
 use Tests\TestCase;
 
 class DashboardPagesTest extends TestCase
 {
+    use SeedsDemoContent;
+
     public function test_dashboards_load_with_preview_notice(): void
     {
         $pages = [

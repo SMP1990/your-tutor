@@ -2,22 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\DemoTutors;
+use App\Models\Subject;
+use App\Models\TutorProfile;
+use App\Support\TutorSearch;
+use Illuminate\Http\Request;
 
 class TutorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tutors = DemoTutors::only(['ayesha-r', 'usman-f', 'sana-n', 'bilal-k', 'zainab-h', 'omar-a']);
+        $filters = TutorSearch::filters($request);
 
-        return view('tutors.index', compact('tutors'));
+        return view('tutors.index', [
+            'filters' => $filters,
+            'tutors' => TutorSearch::run($filters),
+            'subjects' => Subject::where('is_active', true)->orderBy('sort_order')->get(['slug', 'name']),
+        ]);
     }
 
     public function show(array $tutor)
     {
-        return view('tutors.show', [
-            'tutor' => $tutor,
-            'similar' => DemoTutors::similarTo($tutor),
-        ]);
+        $similar = TutorProfile::approved()
+            ->whereKeyNot($tutor['id'])
+            ->whereHas('subjects', fn ($s) => $s->whereIn('slug', $tutor['subject_slugs']))
+            ->orderByDesc('reviews_count')->limit(3)->get()
+            ->map->toPublicArray()->all();
+
+        return view('tutors.show', compact('tutor', 'similar'));
     }
 }
