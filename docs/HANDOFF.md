@@ -64,6 +64,11 @@ Update `static-site`: replace files in `website\` with `upload-to-hostinger\` (k
 4. **OTP only if free.** SMS/WhatsApp OTP is paid in Pakistan, so: email verification now (free); phone OTP later behind an OTP-sender interface.
 5. **Stay on Hostinger shared hosting.** No VPS yet. Use database queue + cron, Hostinger SMTP email. Code must stay ready for a VPS later.
 Owner asked to explain the plan step by step, no code until approved.
+6. **Do not explain future modules in advance.** Explain each module only when it is being built.
+7. **Nothing fixed to one domain, host or database.** Everything that differs per server (URL, database
+   name/user/password, mail settings, storage paths, service keys) comes from `.env` / config only.
+   Moving host or domain = copy files, edit `.env`, run migrations. No code changes. Use relative paths,
+   `url()`/`route()`/`asset()`, Laravel `storage` disks, and migrations (never hand-made tables).
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

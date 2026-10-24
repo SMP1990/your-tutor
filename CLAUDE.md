@@ -24,6 +24,8 @@ Brand name: "your tutor" (set in `APP_NAME`, never hard-coded in views).
 - Ask for confirmation before redoing work if the same request is repeated.
 
 ## Rules for safety and portability
+- Owner rule: changing domain, hosting or database server must need only `.env` edits (plus migrations
+  on a new database). Never hard-code a domain, server path, database name or credentials anywhere.
 - No secrets in code. Everything in `.env` (keys, passwords, URLs). Keep `.env.example` updated.
 - Database changes only through migrations. Seeders for test data.
 - Files/recordings go through Laravel's storage layer (so storage can move to cloud later).
