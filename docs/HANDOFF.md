@@ -137,7 +137,7 @@ rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tuto
   Photo on `public` disk (needs `storage:link`), CNIC front/back + degree on the private `local` disk
   (`serve` turned off, random file names). Locked after submit (`isEditableByTutor()`: draft/documents_needed).
   Status + document paths are not fillable. Photo URLs via `asset()` (domain-portable).
-- [x] **2b Admin review** (24 Oct, local; NOT yet deployed to Hostinger, waiting for the owner's OK):
+- [x] **2b Admin review** (24 Oct, local + deployed to Hostinger with the owner's OK):
   `Admin\TutorReviewController` at `/admin/tutors` (role:admin + two-factor): tabs per status, review page,
   private documents streamed to admins only (`no-store`), subject test / interview (date + Meet link) /
   result, private admin notes; decisions approve (only if `canBeApproved()`: test AND interview passed),

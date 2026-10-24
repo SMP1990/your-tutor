@@ -28,8 +28,10 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
 - **SEO and security:** unique titles and descriptions, canonical, Open Graph, schema, sitemap.xml,
   robots.txt (site is noindex until launch), security headers with a strict CSP (no inline JavaScript),
   CSRF, validation and rate limits on every form, private document storage.
-- **Next:** admin review and approval of tutors (Step 2b), then real tutor profiles and search from the
-  database (2c), booking, classes (Google Meet links), reviews, admin tools.
+- **Tutor approval (working):** admins review applications, view documents privately, record the subject
+  test and interview (Google Meet link), then approve, reject or ask for documents; tutors are emailed.
+- **Next:** real tutor profiles and search from the
+  database (Step 2c), booking, classes (Google Meet links), reviews, admin tools.
   Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
 - A static HTML export of the public pages lives on branch `static-site` (old preview).
 
