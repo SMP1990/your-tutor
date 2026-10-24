@@ -39,7 +39,8 @@
         @endif
     </section>
 
-    @include('dashboard.partials.demo-requests', ['demos' => $demos])
+    @include('dashboard.partials.demo-requests', ['demos' => $demos, 'bookedPairs' => $bookedPairs])
+    @include('dashboard.partials.class-bookings', ['bookings' => $bookings])
 </div>
 
 @include('dashboard.partials.account')

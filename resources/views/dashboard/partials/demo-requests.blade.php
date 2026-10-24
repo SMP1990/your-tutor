@@ -29,6 +29,9 @@
                         @if ($status === \App\Enums\DemoStatus::Accepted && $demo->scheduled_at->isFuture() && ! $demo->canJoinNow())
                             <span class="muted">Join opens {{ \App\Models\DemoRequest::JOIN_OPENS_BEFORE }} min before</span>
                         @endif
+                        @if ($status === \App\Enums\DemoStatus::Completed && ! in_array($demo->tutor_profile_id.'-'.$demo->child_id, $bookedPairs ?? [], true))
+                            <a href="{{ route('bookings.create', $demo) }}" class="btn btn-primary btn-sm">Book regular classes</a>
+                        @endif
                         @if ($status === \App\Enums\DemoStatus::Pending)
                             <form method="post" action="{{ route('demos.cancel', $demo) }}" data-confirm="Cancel this demo request?">
                                 @csrf

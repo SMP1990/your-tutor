@@ -38,7 +38,8 @@ class DashboardNav
         ],
         'tutor' => [
             'Overview' => ['home', 'dashboard.tutor'], 'Application' => ['check', 'tutor.application', 'tutor.application*'],
-            'Demo requests' => ['calendar', 'tutor.demos', 'tutor.demos*'], 'Earnings' => ['wallet', null], 'Reviews' => ['star', null],
+            'Demo requests' => ['calendar', 'tutor.demos', 'tutor.demos*'],
+            'Class bookings' => ['notes', 'tutor.bookings', 'tutor.bookings*'], 'Earnings' => ['wallet', null], 'Reviews' => ['star', null],
         ],
         'admin' => [
             'Overview' => ['home', 'dashboard.admin'], 'Tutor approvals' => ['check', 'admin.tutors.index', 'admin.tutors.*'],

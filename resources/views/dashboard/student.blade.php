@@ -12,7 +12,8 @@
 </div>
 
 <div class="dash-grid dash-grid--halves">
-    @include('dashboard.partials.demo-requests', ['demos' => $demos])
+    @include('dashboard.partials.demo-requests', ['demos' => $demos, 'bookedPairs' => $bookedPairs])
+    @include('dashboard.partials.class-bookings', ['bookings' => $bookings])
     @include('dashboard.partials.account')
 </div>
 @endsection

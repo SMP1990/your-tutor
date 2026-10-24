@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthPreviewController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\ClassBookingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardPreviewController;
 use App\Http\Controllers\DemoBookingController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TutorApplicationController;
 use App\Http\Controllers\TutorController;
+use App\Http\Controllers\TutorBookingController;
 use App\Http\Controllers\TutorDemoController;
 use Illuminate\Support\Facades\Route;
 
@@ -99,6 +101,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware(['role:parent,student', 'throttle:20,1'])->name('demos.cancel');
     Route::get('/dashboard/demos/{demo}/join', [DemoBookingController::class, 'join'])
         ->middleware(['role:parent,student', 'throttle:30,1'])->name('demos.join');
+    Route::middleware('role:parent,student')->controller(ClassBookingController::class)->group(function () {
+        Route::get('/dashboard/demos/{demo}/book', 'create')->name('bookings.create');
+        Route::post('/dashboard/demos/{demo}/book', 'store')->middleware('throttle:10,1')->name('bookings.store');
+        Route::post('/dashboard/bookings/{booking}/cancel', 'cancel')->middleware('throttle:20,1')->name('bookings.cancel');
+    });
     Route::get('/dashboard/tutor', [DashboardController::class, 'tutor'])->middleware('role:tutor')->name('dashboard.tutor');
     Route::middleware('role:tutor')->controller(TutorApplicationController::class)->group(function () {
         Route::get('/dashboard/tutor/application', 'edit')->name('tutor.application');
@@ -109,6 +116,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{demo}/accept', 'accept')->middleware('throttle:30,1')->name('.accept');
         Route::post('/{demo}/decline', 'decline')->middleware('throttle:30,1')->name('.decline');
         Route::post('/{demo}/finish', 'finish')->middleware('throttle:30,1')->name('.finish');
+    });
+    Route::middleware('role:tutor')->prefix('/dashboard/tutor/bookings')->name('tutor.bookings')->controller(TutorBookingController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/{booking}/accept', 'accept')->middleware('throttle:30,1')->name('.accept');
+        Route::post('/{booking}/decline', 'decline')->middleware('throttle:30,1')->name('.decline');
     });
 
     Route::middleware('role:admin')->group(function () {

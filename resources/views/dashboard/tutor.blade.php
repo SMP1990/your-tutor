@@ -67,6 +67,15 @@
             <p class="muted">{{ $waitingDemos ? 'Please answer within '.\App\Models\DemoRequest::ANSWER_HOURS.' hours, or the request expires.' : 'No requests waiting right now.' }}</p>
             <div><a href="{{ route('tutor.demos') }}" class="btn btn-primary btn-sm">Open demo requests</a></div>
         </section>
+        @php $waitingBookings = $profile->classBookings()->where('status', \App\Enums\BookingStatus::Pending)->where('expires_at', '>', now())->count(); @endphp
+        <section class="panel">
+            <div class="panel__head">
+                <h2>Regular class bookings</h2>
+                @if ($waitingBookings)<span class="status status--amber">{{ $waitingBookings }} waiting</span>@endif
+            </div>
+            <p class="muted">{{ $waitingBookings ? 'Families want weekly classes with you. Please answer soon.' : 'No bookings waiting right now.' }}</p>
+            <div><a href="{{ route('tutor.bookings') }}" class="btn btn-outline btn-sm">Open class bookings</a></div>
+        </section>
     @else
         @include('dashboard.partials.coming-soon', [
             'title' => 'Classes and earnings',

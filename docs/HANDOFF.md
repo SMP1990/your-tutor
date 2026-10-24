@@ -200,6 +200,20 @@ Claude Doc: https://claude.ai/artifact/WeBXxtUiSJ5ZkmKVCb7yCv
   **Step 3 is complete.** Next (owner agreed order): Step 4 regular classes (split into parts), Step 5
   reviews, Step 6 admin tools (users, complaints, site settings incl. brand/stats), Step 7 launch prep.
 
+## 6f. Step 4 = regular classes, in parts (owner: one part at a time). Defaults chosen by Claude (owner may
+change): booking only after a COMPLETED free demo with that tutor; weekly days from the tutor's free days,
+one start time, 45/60/90 min, 4/8/12 weeks, start within 30 days; rate copied from the tutor at booking; tutor
+has 48 h to answer; one Meet link per booking; no payment yet (page says we will contact about paying).
+- [x] **4a Booking request + tutor answer** (24 Oct, LOCAL only, committed, not pushed/deployed):
+  `class_bookings` table (migration 2026_10_27_000001), `ClassBooking` model, `BookingStatus` enum.
+  Family: "Book regular classes" on a completed demo → `/dashboard/demos/{demo}/book`
+  (`ClassBookingController`), cancel while waiting; dashboard panel "Regular classes". Tutor:
+  `/dashboard/tutor/bookings` (`TutorBookingController`, menu "Class bookings"), confirm with a Google Meet
+  link or decline with a reason; family emailed (`BookingAnswered`). 158 tests green.
+- [ ] 4b Class timetable: each class date made from a confirmed booking; "Join class" per class.
+- [ ] 4c Attendance: tutor marks each class held / student absent / cancelled; family can see it.
+- [ ] 4d Admin view of all bookings and classes.
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)

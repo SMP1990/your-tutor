@@ -24,15 +24,30 @@ class DashboardController extends Controller
 
     public function student(Request $request)
     {
-        return $this->view('student', $request, ['demos' => $this->demos($request)]);
+        return $this->view('student', $request, $this->classData($request));
     }
 
     public function parent(Request $request)
     {
         return $this->view('parent', $request, [
             'children' => $request->user()->children()->orderBy('name')->get(),
+        ] + $this->classData($request));
+    }
+
+    /** Demo requests and regular-class bookings for a parent or student dashboard. */
+    private function classData(Request $request): array
+    {
+        $bookings = $request->user()->classBookings()
+            ->with(['tutorProfile:id,user_id', 'tutorProfile.user:id,name', 'subject:id,name'])
+            ->latest()->limit(10)->get();
+
+        return [
             'demos' => $this->demos($request),
-        ]);
+            'bookings' => $bookings,
+            // "tutor-child" pairs that already have a waiting or confirmed booking: no second "Book" button.
+            'bookedPairs' => $request->user()->classBookings()->active()->get(['tutor_profile_id', 'child_id'])
+                ->map(fn ($b) => $b->tutor_profile_id.'-'.$b->child_id)->all(),
+        ];
     }
 
     private function demos(Request $request)
