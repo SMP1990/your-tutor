@@ -41,7 +41,8 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
   a reason; the family sees the answer on their dashboard.
 - **Join demo class (working):** the family gets a "Join class" button shortly before the class; the tutor
   then marks it done or "student did not join".
-- **Next:** admin view of all demos, classes (Google Meet links),
+- **Admin sees all demo requests (working):** including ones a tutor did not answer in time.
+- **Next:** regular classes (Google Meet links),
   reviews, admin tools.
   Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
 - A static HTML export of the public pages lives on branch `static-site` (old preview).

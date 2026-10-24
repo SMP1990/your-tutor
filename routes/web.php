@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DemoRequestController as AdminDemoRequestController;
 use App\Http\Controllers\Admin\TutorReviewController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LoginController;
@@ -116,6 +117,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/two-factor/resend', [TwoFactorController::class, 'resend'])->middleware('throttle:3,1')->name('two-factor.resend');
 
         Route::get('/admin', [DashboardController::class, 'admin'])->middleware('two-factor')->name('dashboard.admin');
+
+        Route::get('/admin/demos', [AdminDemoRequestController::class, 'index'])->middleware('two-factor')->name('admin.demos.index');
 
         Route::middleware('two-factor')->prefix('/admin/tutors')->name('admin.tutors.')->controller(TutorReviewController::class)->group(function () {
             Route::get('/', 'index')->name('index');

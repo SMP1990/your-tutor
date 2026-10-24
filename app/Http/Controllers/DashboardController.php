@@ -53,6 +53,8 @@ class DashboardController extends Controller
             'usersByRole' => User::toBase()->selectRaw('role, count(*) as total')->groupBy('role')->pluck('total', 'role'),
             'tutorsByStatus' => TutorProfile::toBase()->selectRaw('status, count(*) as total')->groupBy('status')->pluck('total', 'status'),
             'waiting' => TutorProfile::whereIn('status', [TutorStatus::Submitted, TutorStatus::InterviewScheduled])->count(),
+            'demoCounts' => collect(['waiting', 'unanswered', 'outcome'])
+                ->mapWithKeys(fn ($tab) => [$tab => \App\Http\Controllers\Admin\DemoRequestController::tab($tab)->count()]),
             'latestUsers' => User::latest()->limit(8)->get(['id', 'name', 'email', 'role', 'email_verified_at', 'created_at']),
         ]);
     }

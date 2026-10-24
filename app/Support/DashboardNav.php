@@ -42,6 +42,7 @@ class DashboardNav
         ],
         'admin' => [
             'Overview' => ['home', 'dashboard.admin'], 'Tutor approvals' => ['check', 'admin.tutors.index', 'admin.tutors.*'],
+            'Demo requests' => ['clock', 'admin.demos.index', 'admin.demos.*'],
             'Users' => ['users', null], 'Classes' => ['calendar', null], 'Payments' => ['wallet', null],
             'Refunds' => ['refund', null], 'Complaints' => ['flag', null], 'Site settings' => ['settings', null],
         ],

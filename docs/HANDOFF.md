@@ -192,7 +192,13 @@ Claude Doc: https://claude.ai/artifact/WeBXxtUiSJ5ZkmKVCb7yCv
   hands out the Meet link only to the family that booked and only in that window. After the start the tutor
   marks "Class done" or "Student did not join" (`POST /dashboard/tutor/demos/{demo}/finish`; new status
   `no_show`, which still uses up the free demo). 147 tests green. No migration.
-- [ ] 3d Admin sees all demo requests, including unanswered ones.
+- [x] **3d Admin view** (24 Oct, LOCAL only, committed, not pushed/deployed): `/admin/demos`
+  (`Admin\DemoRequestController`, role:admin + two-factor, menu "Demo requests"), read-only. Tabs: waiting,
+  not answered in time, upcoming, tutor to confirm, done/no-show, declined/cancelled; shows family contact,
+  student, tutor (links to the tutor review page), class time, tutor note. Admin overview has a
+  "Free demo requests" card with counts. 150 tests green. No migration.
+  **Step 3 is complete.** Next (owner agreed order): Step 4 regular classes (split into parts), Step 5
+  reviews, Step 6 admin tools (users, complaints, site settings incl. brand/stats), Step 7 launch prep.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

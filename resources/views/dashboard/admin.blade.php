@@ -43,6 +43,20 @@
         <p class="muted">Review applications, record the subject test and interview, then approve, reject or ask for documents.</p>
         <div><a href="{{ route('admin.tutors.index') }}" class="btn btn-primary btn-sm">Open approvals</a></div>
     </section>
+
+    <section class="panel">
+        <div class="panel__head"><h2>Free demo requests</h2>
+            @if ($demoCounts['unanswered'])<span class="status status--red">{{ $demoCounts['unanswered'] }} not answered</span>@endif
+        </div>
+        <ul class="item-list">
+            @foreach (['waiting', 'unanswered', 'outcome'] as $key)
+                <li>
+                    <div class="item-list__main"><a href="{{ route('admin.demos.index', ['tab' => $key]) }}">{{ \App\Http\Controllers\Admin\DemoRequestController::TABS[$key] }}</a></div>
+                    <div class="item-list__side"><strong>{{ $demoCounts[$key] }}</strong></div>
+                </li>
+            @endforeach
+        </ul>
+    </section>
 </div>
 
 <section class="panel">
