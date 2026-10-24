@@ -15,18 +15,23 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
 | [`docs/LAUNCH_CHECKLIST.md`](docs/LAUNCH_CHECKLIST.md) | Must be fully ticked before going live |
 
 ## Status (24 Oct 2026)
+- **Live (temporary domain):** https://cornflowerblue-tarsier-769699.hostingersite.com/ runs this Laravel app on
+  Hostinger shared hosting with MySQL. Emails are not sent yet (they start when the real domain and its mailbox
+  are set up), so sign-up cannot be completed on the live site yet.
 - **Public pages (design, dummy data):** Home, Find a Tutor, Tutor Profile, Book Free Demo, Subjects,
   How it works, Pricing, Become a Tutor, About, Contact, FAQs, Terms / Privacy / Refund (drafts), 404/403/500.
 - **Accounts (working):** register as parent / student / tutor, email verification, log in with email or
   phone, log out, password reset, role dashboards (`/dashboard`), admin two-step login (email code),
   parents manage their children.
+- **Tutor application (working):** tutors fill in subjects, levels, rate, availability, education, photo,
+  CNIC and degree; save a draft and submit for review. Documents are stored privately.
 - **SEO and security:** unique titles and descriptions, canonical, Open Graph, schema, sitemap.xml,
   robots.txt (site is noindex until launch), security headers with a strict CSP (no inline JavaScript),
-  CSRF, validation and rate limits on every form.
-- **Not built yet:** tutor application + approval, real tutor search, booking, classes (Google Meet links),
-  reviews, admin tools. Payments, WhatsApp and SMS OTP are planned for later, behind replaceable interfaces.
-- **Hosting:** Hostinger shared hosting; moving the Laravel app there (Step 1f). A static HTML export of the
-  pages lives on branch `static-site`.
+  CSRF, validation and rate limits on every form, private document storage.
+- **Next:** admin review and approval of tutors (Step 2b), then real tutor profiles and search from the
+  database (2c), booking, classes (Google Meet links), reviews, admin tools.
+  Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
+- A static HTML export of the public pages lives on branch `static-site` (old preview).
 
 ## Run locally
 ```
