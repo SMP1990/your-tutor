@@ -112,8 +112,10 @@ Owner asked to explain the plan step by step, no code until approved.
   - 1f-2 done (24 Oct): MySQL database + user `<account>_tutoring` created by the owner in hPanel.
   - 1f-3 in progress: app uploaded to `<site>/app` (outside the web root) via `git archive` + `public/build`,
     `composer install --no-dev`, production `.env` written (APP_DEBUG=false, MAIL_MAILER=log for now),
-    APP_KEY generated. Owner pastes the DB password into `.env` via File Manager. `public_html` is still the
-    static preview; switch it to `app/public` only after migrations work.
+    APP_KEY generated. Owner pasted the DB password into `.env` (24 Oct). On MySQL: all migrations ran,
+    12 subjects seeded, 0 users (demo accounts correctly skipped in production), `artisan optimize` done,
+    internal requests to /, /tutors, /login, /register, /sitemap.xml return 200. `public_html` is still the
+    static preview. Next: owner approves switching `public_html` to `app/public` (keep a backup to roll back).
   - Email decision: temporary domain, so no Hostinger mailbox; use a free SMTP service (e.g. Brevo) the
     owner signs up for. Owner pastes secrets (DB password, SMTP key) into the server `.env` themselves.
 Public pages still use `DemoTutors`/`DemoSubjects` until Step 3.
