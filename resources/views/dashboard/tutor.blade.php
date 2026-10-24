@@ -57,10 +57,22 @@
         </section>
     @endif
 
-    @include('dashboard.partials.coming-soon', [
-        'title' => 'Classes and earnings',
-        'text' => 'Demo requests, your timetable and earnings will show here once booking opens.',
-    ])
+    @if ($status === \App\Enums\TutorStatus::Approved)
+        @php $waitingDemos = $profile->demoRequests()->open()->count(); @endphp
+        <section class="panel">
+            <div class="panel__head">
+                <h2>Free demo requests</h2>
+                @if ($waitingDemos)<span class="status status--amber">{{ $waitingDemos }} waiting</span>@endif
+            </div>
+            <p class="muted">{{ $waitingDemos ? 'Please answer within '.\App\Models\DemoRequest::ANSWER_HOURS.' hours, or the request expires.' : 'No requests waiting right now.' }}</p>
+            <div><a href="{{ route('tutor.demos') }}" class="btn btn-primary btn-sm">Open demo requests</a></div>
+        </section>
+    @else
+        @include('dashboard.partials.coming-soon', [
+            'title' => 'Classes and earnings',
+            'text' => 'Demo requests, your timetable and earnings will show here once you are approved.',
+        ])
+    @endif
 </div>
 
 @include('dashboard.partials.account')

@@ -146,6 +146,12 @@ class TutorProfile extends Model
         return $this->belongsToMany(Subject::class);
     }
 
+    /** @return \Illuminate\Database\Eloquent\Relations\HasMany<DemoRequest, $this> */
+    public function demoRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(DemoRequest::class);
+    }
+
     /** Only approved tutors may appear on public pages. */
     public function scopeApproved(Builder $query): void
     {

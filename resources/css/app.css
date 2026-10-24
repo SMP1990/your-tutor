@@ -1681,6 +1681,9 @@ button.btn { font: inherit; font-weight: 700; }
 .item-list__main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
 .item-list__main span { color: var(--muted); font-size: 14px; }
 .item-list__side { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; text-align: end; font-size: 14px; }
+/* Tutor answers one demo request: details on top, accept / decline forms below. */
+.demo-answer { display: flex; flex-direction: column; gap: 14px; padding: 16px 0; border-top: 1px solid var(--line); }
+.demo-answer:first-of-type { border-top: 0; padding-top: 0; }
 .date-chip {
   flex: none;
   display: flex;

@@ -17,6 +17,7 @@ use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TutorApplicationController;
 use App\Http\Controllers\TutorController;
+use App\Http\Controllers\TutorDemoController;
 use Illuminate\Support\Facades\Route;
 
 // Note: route bindings live in AppServiceProvider, because this file is not loaded once routes are cached.
@@ -99,6 +100,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:tutor')->controller(TutorApplicationController::class)->group(function () {
         Route::get('/dashboard/tutor/application', 'edit')->name('tutor.application');
         Route::put('/dashboard/tutor/application', 'update')->middleware('throttle:20,1')->name('tutor.application.update');
+    });
+    Route::middleware('role:tutor')->prefix('/dashboard/tutor/demos')->name('tutor.demos')->controller(TutorDemoController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/{demo}/accept', 'accept')->middleware('throttle:30,1')->name('.accept');
+        Route::post('/{demo}/decline', 'decline')->middleware('throttle:30,1')->name('.decline');
     });
 
     Route::middleware('role:admin')->group(function () {

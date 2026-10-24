@@ -38,7 +38,7 @@ class DashboardNav
         ],
         'tutor' => [
             'Overview' => ['home', 'dashboard.tutor'], 'Application' => ['check', 'tutor.application', 'tutor.application*'],
-            'Classes' => ['calendar', null], 'Earnings' => ['wallet', null], 'Reviews' => ['star', null],
+            'Demo requests' => ['calendar', 'tutor.demos', 'tutor.demos*'], 'Earnings' => ['wallet', null], 'Reviews' => ['star', null],
         ],
         'admin' => [
             'Overview' => ['home', 'dashboard.admin'], 'Tutor approvals' => ['check', 'admin.tutors.index', 'admin.tutors.*'],

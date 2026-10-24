@@ -37,7 +37,9 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
   education, photo or documents wait for admin approval.
 - **Free demo requests (working):** logged-in parents and students request a free demo for a child or
   themselves; requests show on their dashboard and can be cancelled while waiting.
-- **Next:** tutor answers demo requests, classes (Google Meet links),
+- **Tutors answer demo requests (working):** accept with a time and Google Meet link, or decline with
+  a reason; the family sees the answer on their dashboard.
+- **Next:** "Join class" for the family, admin view of all demos, classes (Google Meet links),
   reviews, admin tools.
   Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
 - A static HTML export of the public pages lives on branch `static-site` (old preview).

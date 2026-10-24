@@ -11,7 +11,14 @@
                 <li>
                     <div class="item-list__main">
                         <strong>{{ $tutor?->user?->name ?? 'Tutor no longer listed' }} · {{ $demo->subject?->name ?? '—' }}</strong>
-                        <span>For {{ $demo->student_name }} · {{ $demo->preferred_day }} {{ strtolower(\App\Http\Requests\BookDemoRequest::TIMES[$demo->preferred_time] ?? $demo->preferred_time) }} · sent {{ $demo->created_at->format('d M') }}</span>
+                        @if ($status === \App\Enums\DemoStatus::Accepted)
+                            <span>For {{ $demo->student_name }} · <strong>{{ $demo->scheduledLabel() }}</strong> ({{ config('site.timezone_label') }})</span>
+                        @else
+                            <span>For {{ $demo->student_name }} · {{ $demo->preferred_day }} {{ strtolower(\App\Http\Requests\BookDemoRequest::TIMES[$demo->preferred_time] ?? $demo->preferred_time) }} · sent {{ $demo->created_at->format('d M') }}</span>
+                        @endif
+                        @if ($demo->tutor_note)
+                            <span>Tutor: “{{ $demo->tutor_note }}”</span>
+                        @endif
                     </div>
                     <div class="item-list__side">
                         <span class="status status--{{ $status->colour() }}">{{ $status->label() }}</span>

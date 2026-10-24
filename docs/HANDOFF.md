@@ -177,7 +177,14 @@ Claude Doc: https://claude.ai/artifact/WeBXxtUiSJ5ZkmKVCb7yCv
   themselves, tutors/admins cannot book. POST needs auth + verified. Limits in `DemoBookingController`.
   Parent/student dashboards list requests ("Free demo requests") with Cancel while waiting
   (`POST /dashboard/demos/{demo}/cancel`). 138 tests green.
-- [ ] 3b Tutor accepts (sets date/time + Google Meet link) or declines with a reason.
+- [x] **3b Tutor answers** (24 Oct, LOCAL only, committed, not pushed/deployed): `/dashboard/tutor/demos`
+  (`TutorDemoController`, menu "Demo requests"): waiting / upcoming / earlier lists. Accept = date+time
+  (typed in `config('site.timezone')`, default Asia/Karachi, stored UTC; must be within 14 days) +
+  Google Meet link (must be https://meet.google.com/...) + optional message. Decline needs a reason.
+  Only the tutor it was sent to, only while waiting (else 404/409). Parent/student emailed
+  (`DemoRequestAnswered`) and see time or reason on their dashboard. Tutor overview shows "N waiting".
+  Migration 2026_10_26_000002. New `.env` keys SITE_TIMEZONE / SITE_TIMEZONE_LABEL (optional). 144 tests.
+  Known gap: admin interview times (2b) are stored as typed, not converted to UTC; fix if it matters.
 - [ ] 3c Parent/student see the upcoming demo with a "Join class" button.
 - [ ] 3d Admin sees all demo requests, including unanswered ones.
 

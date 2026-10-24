@@ -10,6 +10,10 @@ return [
     'support_hours' => 'Monday to Saturday, 10 am to 8 pm (PKT)',
     'legal_updated' => '24 October 2026',
 
+    // Times people type and read (class times). The database stays in UTC (config app.timezone).
+    'timezone' => env('SITE_TIMEZONE', 'Asia/Karachi'),
+    'timezone_label' => env('SITE_TIMEZONE_LABEL', 'Pakistan time'),
+
     // Let search engines index the site. Keep false while the site shows dummy data;
     // set SITE_INDEXABLE=true at launch (adds robots.txt "Allow" and removes the noindex tag).
     'indexable' => (bool) env('SITE_INDEXABLE', false),

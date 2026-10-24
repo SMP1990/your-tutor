@@ -20,7 +20,18 @@ class DemoRequest extends Model
 
     protected function casts(): array
     {
-        return ['status' => DemoStatus::class, 'expires_at' => 'datetime'];
+        return [
+            'status' => DemoStatus::class,
+            'expires_at' => 'datetime',
+            'scheduled_at' => 'datetime',
+            'answered_at' => 'datetime',
+        ];
+    }
+
+    /** The class time as people read it, e.g. "Sat 26 Oct, 5:00 PM" (site timezone, stored in UTC). */
+    public function scheduledLabel(): ?string
+    {
+        return $this->scheduled_at?->copy()->timezone(config('site.timezone'))->format('D j M, g:i A');
     }
 
     /** Status as the user should see it: a pending request past its time is expired. */
