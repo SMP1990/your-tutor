@@ -24,8 +24,8 @@ class TutorDemoController extends Controller
             'waiting' => $demos->filter(fn ($d) => $d->currentStatus() === DemoStatus::Pending),
             'upcoming' => $demos->filter(fn ($d) => $d->status === DemoStatus::Accepted && $d->scheduled_at?->isFuture())
                 ->sortBy('scheduled_at'),
-            'past' => $demos->reject(fn ($d) => $d->currentStatus() === DemoStatus::Pending
-                || ($d->status === DemoStatus::Accepted && $d->scheduled_at?->isFuture())),
+            'toConfirm' => $demos->filter(fn ($d) => $d->awaitsOutcome())->sortBy('scheduled_at'),
+            'past' => $demos->reject(fn ($d) => $d->currentStatus() === DemoStatus::Pending || $d->status === DemoStatus::Accepted),
             'nav' => DashboardNav::for('tutor'),
             'user' => ['name' => $request->user()->name, 'role' => $request->user()->role->label()],
         ]);
@@ -76,6 +76,20 @@ class TutorDemoController extends Controller
         $demo->user->notify(new DemoRequestAnswered($demo));
 
         return redirect()->route('tutor.demos')->with('notice', 'Declined. The family has been told.');
+    }
+
+    /** After the class time: the tutor says whether the demo happened (Step 3c). */
+    public function finish(Request $request, DemoRequest $demo)
+    {
+        abort_unless($demo->tutor_profile_id === $this->profile($request)?->id, 404);
+        abort_unless($demo->awaitsOutcome(), 409, 'You can mark a demo only after its start time.');
+
+        $outcome = $request->validate(['outcome' => ['required', 'in:completed,no_show']])['outcome'];
+        $demo->forceFill(['status' => DemoStatus::from($outcome)])->save();
+
+        return redirect()->route('tutor.demos')->with('notice', $outcome === 'completed'
+            ? 'Marked as done. Thank you!'
+            : 'Marked as "student did not join".');
     }
 
     /** Only the tutor it was sent to, only while it is still waiting. */

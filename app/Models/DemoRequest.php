@@ -16,6 +16,12 @@ class DemoRequest extends Model
     /** Most requests one account may have waiting at the same time (owner decision). */
     public const MAX_OPEN = 3;
 
+    /** "Join class" works from this many minutes before the start ... */
+    public const JOIN_OPENS_BEFORE = 15;
+
+    /** ... until this many minutes after it (a demo lasts 30 minutes). */
+    public const JOIN_CLOSES_AFTER = 60;
+
     protected $attributes = ['status' => 'pending'];
 
     protected function casts(): array
@@ -40,16 +46,29 @@ class DemoRequest extends Model
         return $this->status === DemoStatus::Pending && $this->expires_at->isPast() ? DemoStatus::Expired : $this->status;
     }
 
+    /** Accepted demo whose join window is open now. */
+    public function canJoinNow(): bool
+    {
+        return $this->status === DemoStatus::Accepted && $this->scheduled_at
+            && now()->between($this->scheduled_at->copy()->subMinutes(self::JOIN_OPENS_BEFORE), $this->scheduled_at->copy()->addMinutes(self::JOIN_CLOSES_AFTER));
+    }
+
+    /** Accepted, and the class time has started: the tutor may now say whether it happened. */
+    public function awaitsOutcome(): bool
+    {
+        return $this->status === DemoStatus::Accepted && $this->scheduled_at?->isPast();
+    }
+
     /** Waiting for the tutor and not expired. */
     public function scopeOpen(Builder $query): void
     {
         $query->where('status', DemoStatus::Pending)->where('expires_at', '>', now());
     }
 
-    /** Still counts towards "one free demo per tutor": waiting, accepted or done. */
+    /** Still counts towards "one free demo per tutor": waiting, accepted, done or missed by the student. */
     public function scopeActive(Builder $query): void
     {
-        $query->where(fn (Builder $q) => $q->whereIn('status', [DemoStatus::Accepted, DemoStatus::Completed])
+        $query->where(fn (Builder $q) => $q->whereIn('status', [DemoStatus::Accepted, DemoStatus::Completed, DemoStatus::NoShow])
             ->orWhere(fn (Builder $p) => $p->where('status', DemoStatus::Pending)->where('expires_at', '>', now())));
     }
 

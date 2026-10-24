@@ -96,6 +96,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
     Route::post('/dashboard/demos/{demo}/cancel', [DemoBookingController::class, 'cancel'])
         ->middleware(['role:parent,student', 'throttle:20,1'])->name('demos.cancel');
+    Route::get('/dashboard/demos/{demo}/join', [DemoBookingController::class, 'join'])
+        ->middleware(['role:parent,student', 'throttle:30,1'])->name('demos.join');
     Route::get('/dashboard/tutor', [DashboardController::class, 'tutor'])->middleware('role:tutor')->name('dashboard.tutor');
     Route::middleware('role:tutor')->controller(TutorApplicationController::class)->group(function () {
         Route::get('/dashboard/tutor/application', 'edit')->name('tutor.application');
@@ -105,6 +107,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', 'index');
         Route::post('/{demo}/accept', 'accept')->middleware('throttle:30,1')->name('.accept');
         Route::post('/{demo}/decline', 'decline')->middleware('throttle:30,1')->name('.decline');
+        Route::post('/{demo}/finish', 'finish')->middleware('throttle:30,1')->name('.finish');
     });
 
     Route::middleware('role:admin')->group(function () {

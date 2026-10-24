@@ -116,6 +116,51 @@ class TutorDemoTest extends TestCase
         $this->actingAs($this->parent)->post(route('tutor.demos.accept', $this->demo))->assertForbidden();
     }
 
+    public function test_family_joins_only_inside_the_class_window(): void
+    {
+        $this->accept(); // Mon 26 Oct 17:00 PKT = 12:00 UTC
+        $join = route('demos.join', $this->demo);
+
+        $this->actingAs($this->parent)->get('/dashboard/parent')->assertSee('Join opens 15 min before')->assertDontSee($join);
+        $this->actingAs($this->parent)->get($join)->assertRedirect(route('dashboard'))->assertSessionHas('notice');
+
+        $this->travelTo(now()->setDateTime(2026, 10, 26, 11, 50)); // 16:50 PKT
+        $this->actingAs($this->parent)->get('/dashboard/parent')->assertSee($join);
+        $this->actingAs($this->parent)->get($join)->assertRedirect('https://meet.google.com/abc-defg-hij');
+
+        // Nobody else gets the link.
+        $this->actingAs(User::factory()->parent()->create())->get($join)->assertNotFound();
+        $this->actingAs($this->profile->user)->get($join)->assertForbidden();
+
+        $this->travelTo(now()->setDateTime(2026, 10, 26, 13, 5)); // 18:05 PKT, window closed
+        $this->actingAs($this->parent)->get($join)->assertRedirect(route('dashboard'));
+    }
+
+    public function test_tutor_marks_the_outcome_after_the_start_time(): void
+    {
+        $this->accept();
+        $this->asTutor()->post(route('tutor.demos.finish', $this->demo), ['outcome' => 'completed'])->assertStatus(409);
+
+        $this->travelTo(now()->setDateTime(2026, 10, 26, 12, 40));
+        $this->asTutor()->get(route('tutor.demos'))->assertSee('Did these demos happen?');
+        $this->asTutor()->post(route('tutor.demos.finish', $this->demo), ['outcome' => 'maybe'])->assertSessionHasErrors('outcome');
+        $this->asTutor()->post(route('tutor.demos.finish', $this->demo), ['outcome' => 'completed'])->assertRedirect();
+
+        $this->assertSame(DemoStatus::Completed, $this->demo->fresh()->status);
+        $this->actingAs($this->parent)->get('/dashboard/parent')->assertSee('Class done');
+        $this->asTutor()->post(route('tutor.demos.finish', $this->demo), ['outcome' => 'no_show'])->assertStatus(409);
+    }
+
+    public function test_no_show_still_uses_the_free_demo(): void
+    {
+        $this->accept();
+        $this->travelTo(now()->setDateTime(2026, 10, 26, 13, 0));
+        $this->asTutor()->post(route('tutor.demos.finish', $this->demo), ['outcome' => 'no_show']);
+
+        $this->assertSame(DemoStatus::NoShow, $this->demo->fresh()->status);
+        $this->assertTrue(DemoRequest::active()->whereKey($this->demo->id)->exists());
+    }
+
     public function test_expired_cancelled_or_answered_requests_cannot_be_answered(): void
     {
         $this->demo->forceFill(['expires_at' => now()->subMinute()])->save();

@@ -86,6 +86,33 @@
     @endif
 </section>
 
+{{-- DID IT HAPPEN? (Step 3c) --}}
+@if ($toConfirm->isNotEmpty())
+    <section class="panel">
+        <div class="panel__head"><h2>Did these demos happen?</h2></div>
+        <ul class="item-list">
+            @foreach ($toConfirm as $demo)
+                <li>
+                    <div class="item-list__main">
+                        <strong>{{ $demo->scheduledLabel() }} · {{ $demo->student_name }}</strong>
+                        <span>{{ $demo->subject?->name ?? '—' }} · {{ $demo->grade }}</span>
+                    </div>
+                    <div class="item-list__side">
+                        @if ($demo->scheduled_at->copy()->addMinutes(\App\Models\DemoRequest::JOIN_CLOSES_AFTER)->isFuture())
+                            <a href="{{ $demo->meet_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">Open Google Meet</a>
+                        @endif
+                        <form method="post" action="{{ route('tutor.demos.finish', $demo) }}">
+                            @csrf
+                            <button type="submit" name="outcome" value="completed" class="btn btn-primary btn-sm">Class done</button>
+                            <button type="submit" name="outcome" value="no_show" class="btn btn-outline btn-sm">Student did not join</button>
+                        </form>
+                    </div>
+                </li>
+            @endforeach
+        </ul>
+    </section>
+@endif
+
 {{-- PAST --}}
 @if ($past->isNotEmpty())
     <section class="panel">

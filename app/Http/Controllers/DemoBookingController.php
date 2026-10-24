@@ -75,6 +75,23 @@ class DemoBookingController extends Controller
         return back()->with('notice', 'Demo request cancelled.');
     }
 
+    /**
+     * "Join class": the Google Meet link is handed out only to the family that booked, and only
+     * from shortly before the class until shortly after it.
+     */
+    public function join(Request $request, DemoRequest $demo)
+    {
+        abort_unless($demo->user_id === $request->user()->id, 404);
+
+        if (! $demo->canJoinNow()) {
+            return redirect()->route('dashboard')->with('notice', $demo->status === DemoStatus::Accepted && $demo->scheduled_at->isFuture()
+                ? 'The class opens '.DemoRequest::JOIN_OPENS_BEFORE.' minutes before it starts ('.$demo->scheduledLabel().').'
+                : 'This class link is no longer open.');
+        }
+
+        return redirect()->away($demo->meet_link);
+    }
+
     /** Owner rules: one free demo per tutor per learner, and at most MAX_OPEN requests waiting at once. */
     private function checkLimits(int $userId, int $tutorId, ?int $childId): void
     {

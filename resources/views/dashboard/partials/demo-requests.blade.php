@@ -21,7 +21,14 @@
                         @endif
                     </div>
                     <div class="item-list__side">
-                        <span class="status status--{{ $status->colour() }}">{{ $status->label() }}</span>
+                        @if ($demo->canJoinNow())
+                            <a href="{{ route('demos.join', $demo) }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Join class</a>
+                        @else
+                            <span class="status status--{{ $status->colour() }}">{{ $status->label() }}</span>
+                        @endif
+                        @if ($status === \App\Enums\DemoStatus::Accepted && $demo->scheduled_at->isFuture() && ! $demo->canJoinNow())
+                            <span class="muted">Join opens {{ \App\Models\DemoRequest::JOIN_OPENS_BEFORE }} min before</span>
+                        @endif
                         @if ($status === \App\Enums\DemoStatus::Pending)
                             <form method="post" action="{{ route('demos.cancel', $demo) }}" data-confirm="Cancel this demo request?">
                                 @csrf
