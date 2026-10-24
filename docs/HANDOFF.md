@@ -120,9 +120,11 @@ Owner asked to explain the plan step by step, no code until approved.
     `.env` is not reachable (403), security headers present. Bug found and fixed on the way: route binding in
     routes/web.php is lost with cached routes; moved to AppServiceProvider (+ `ProductionCacheTest`).
     Deploy and rollback steps: `docs/DEPLOY.md` ("Hostinger shared hosting").
-  - **Next (1f-5): email.** Owner signs up for a free SMTP service (Brevo), pastes the SMTP key into the server
-    `.env`; then switch `MAIL_MAILER=smtp` and test register → verification email on the live site.
-    Until then registration works but verification emails are only written to the server log.
+  - **1f-5 email: POSTPONED by the owner (24 Oct).** No free SMTP service. When the real domain is connected,
+    create a mailbox on that domain in Hostinger and set `MAIL_MAILER=smtp` + Hostinger SMTP in the server `.env`
+    (owner pastes the mailbox password). Until then `MAIL_MAILER=log`: on the live site registration works, but
+    verification, password-reset and admin login-code emails are only written to `storage/logs/laravel.log`,
+    so nobody can finish sign-up or log in as admin on the live site yet. Build and test new modules locally.
   - Email decision: temporary domain, so no Hostinger mailbox; use a free SMTP service (e.g. Brevo) the
     owner signs up for. Owner pastes secrets (DB password, SMTP key) into the server `.env` themselves.
 Public pages still use `DemoTutors`/`DemoSubjects` until Step 3.
