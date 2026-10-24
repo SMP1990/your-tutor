@@ -49,7 +49,20 @@ class TutorProfile extends Model
             'approved_at' => 'datetime',
             'interview_at' => 'datetime',
             'reviewed_at' => 'datetime',
+            'pending_changes' => 'array',
+            'changes_submitted_at' => 'datetime',
         ];
+    }
+
+    /** Approved tutors keep editing their live profile; some changes wait for the admin (TutorProfileChanges). */
+    public function isLive(): bool
+    {
+        return $this->status === TutorStatus::Approved;
+    }
+
+    public function hasPendingChanges(): bool
+    {
+        return ! empty($this->pending_changes);
     }
 
     /** @return BelongsTo<User, $this> */

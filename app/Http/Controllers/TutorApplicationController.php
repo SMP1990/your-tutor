@@ -7,6 +7,7 @@ use App\Http\Requests\TutorApplicationRequest;
 use App\Models\Subject;
 use App\Models\TutorProfile;
 use App\Support\DashboardNav;
+use App\Support\TutorProfileChanges;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -25,7 +26,9 @@ class TutorApplicationController extends Controller
         return view('dashboard.tutor-application', [
             'profile' => $profile,
             'subjects' => Subject::where('is_active', true)->orderBy('sort_order')->get(['id', 'name']),
-            'chosenSubjects' => $profile->subjects()->pluck('subjects.id')->all(),
+            // Subjects waiting for review stay ticked, so saving again does not drop them.
+            'chosenSubjects' => array_merge($profile->subjects()->pluck('subjects.id')->all(), $profile->pending_changes['subjects'] ?? []),
+            'pendingSubjects' => Subject::whereIn('id', $profile->pending_changes['subjects'] ?? [])->pluck('name')->all(),
             'missing' => $profile->exists ? $profile->missingForSubmit() : [],
             'nav' => DashboardNav::for('tutor'),
             'user' => ['name' => $request->user()->name, 'role' => $request->user()->role->label()],
@@ -35,6 +38,9 @@ class TutorApplicationController extends Controller
     public function update(TutorApplicationRequest $request)
     {
         $profile = $this->profileFor($request);
+        if ($profile->isLive()) {
+            return $this->updateLive($request, $profile);
+        }
         abort_unless($profile->isEditableByTutor(), 403, 'Your application is being reviewed and cannot be changed now.');
 
         $profile->fill($request->profileData());
@@ -48,6 +54,24 @@ class TutorApplicationController extends Controller
         $message = $request->boolean('submit') ? $this->submit($profile) : 'Your application is saved.';
 
         return redirect()->route('tutor.application')->with('notice', $message);
+    }
+
+    /** Approved tutor (Step 2c-2): most changes go live now; new subjects, education and files wait for review. */
+    private function updateLive(TutorApplicationRequest $request, TutorProfile $profile)
+    {
+        $files = [];
+        foreach (['photo' => 'photo_path'] + self::DOCUMENTS as $input => $column) {
+            if ($file = $request->file($input)) {
+                $files[$column] = $file;
+            }
+        }
+        $live = collect($request->profileData())->except('education')->all();
+
+        $waiting = TutorProfileChanges::save($profile, $live, $request->validated('subjects', []), $request->validated('education'), $files);
+
+        return redirect()->route('tutor.application')->with('notice', $waiting
+            ? 'Saved. Your profile is updated. New subjects, education or files are waiting for our team to approve them.'
+            : 'Saved. Your public profile is updated.');
     }
 
     private function submit(TutorProfile $profile): string

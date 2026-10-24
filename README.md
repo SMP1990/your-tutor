@@ -33,7 +33,9 @@ Online tutoring marketplace, Pakistan first (KSA later). Laravel 13 + MySQL. Bra
 - **Find a Tutor and profiles (working):** search, filters (subject, level, price, rating), sort and pages
   read approved tutors from the database. Until launch, 8 sample tutors (flagged demo) fill the pages;
   `php artisan demo:remove` deletes them.
-- **Next:** approved tutors edit their profile (Step 2c-2), booking, classes (Google Meet links),
+- **Tutor profile editing (working):** approved tutors update rate, bio and times live; new subjects,
+  education, photo or documents wait for admin approval.
+- **Next:** booking, classes (Google Meet links),
   reviews, admin tools.
   Payments, WhatsApp and SMS OTP come later, behind replaceable interfaces.
 - A static HTML export of the public pages lives on branch `static-site` (old preview).

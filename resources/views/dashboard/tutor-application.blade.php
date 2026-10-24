@@ -1,13 +1,15 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tutor application')
+@section('title', $profile->isLive() ? 'Edit your profile' : 'Tutor application')
 
 @php
     $c = config('tutors');
-    $editable = $profile->isEditableByTutor();
+    $live = $profile->isLive();
+    $editable = $profile->isEditableByTutor() || $live;
+    $pending = $profile->pending_changes ?? [];
     $chosenLanguages = array_filter(array_map('trim', explode(',', (string) $profile->languages)));
     $chosenLevels = array_filter(array_map('trim', explode('·', (string) $profile->levels)));
-    $education = old('education', $profile->education ?: []);
+    $education = old('education', $pending['education'] ?? ($profile->education ?: []));
     $education = array_pad($education, max(1, count($education)), ['degree' => '', 'institute' => '', 'year' => '']);
     $statusColour = match ($profile->status) {
         \App\Enums\TutorStatus::Approved => 'green',
@@ -20,11 +22,18 @@
 @section('content')
 <div class="dash-head">
     <div>
-        <h1>Tutor application</h1>
+        <h1>{{ $live ? 'Edit your profile' : 'Tutor application' }}</h1>
         <p>Status: <span class="status status--{{ $statusColour }}">{{ $profile->exists ? $profile->status->label() : 'Not started' }}</span></p>
     </div>
-    <a href="{{ route('dashboard.tutor') }}" class="btn btn-outline btn-sm">Back to dashboard</a>
+    <div class="form-actions">
+        @if ($live)<a href="{{ route('tutors.show', $profile->slug) }}" class="btn btn-outline btn-sm">View public profile</a>@endif
+        <a href="{{ route('dashboard.tutor') }}" class="btn btn-outline btn-sm">Back to dashboard</a>
+    </div>
 </div>
+
+@if ($live)
+    @include('dashboard.partials.live-profile-note', ['pending' => $pending, 'pendingSubjects' => $pendingSubjects])
+@endif
 
 @include('dashboard.partials.application-message', ['profile' => $profile->exists ? $profile : null])
 
@@ -186,7 +195,9 @@
                 <div class="field">
                     <label for="{{ $input }}">{{ $label }}</label>
                     <input id="{{ $input }}" name="{{ $input }}" type="file" accept="{{ $accept }}" class="input input--file @error($input) is-invalid @enderror">
-                    @if ($profile->{$column})
+                    @if (isset($pending['files'][$column]))
+                        <p class="field__hint">New file sent for review. Your current one stays until it is approved.</p>
+                    @elseif ($profile->{$column})
                         <p class="field__hint upload-ok">✓ Uploaded. Choose a new file only to replace it.</p>
                     @endif
                     @error($input) <p class="field__error">{{ $message }}</p> @enderror
@@ -201,7 +212,11 @@
 
     </fieldset>
 
-    @if ($editable)
+    @if ($live)
+        <div class="form-actions application__actions">
+            <button type="submit" name="submit" value="0" class="btn btn-primary">Save changes</button>
+        </div>
+    @elseif ($editable)
         <div class="form-actions application__actions">
             <button type="submit" name="submit" value="0" class="btn btn-outline">Save draft</button>
             <button type="submit" name="submit" value="1" class="btn btn-primary">Save and submit for review</button>

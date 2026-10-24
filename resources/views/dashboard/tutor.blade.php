@@ -36,6 +36,10 @@
                 <li><div class="item-list__main"><strong>Hourly rate</strong><span>{{ $profile->hourlyRate() ? $profile->currency.' '.number_format($profile->hourlyRate()) : 'Not set' }}</span></div></li>
                 <li><div class="item-list__main"><strong>City</strong><span>{{ $profile->city ?: 'Not set' }}</span></div></li>
             </ul>
+            @if ($profile->hasPendingChanges())
+                <p class="muted">Some changes are waiting for our team to approve them.</p>
+            @endif
+            <div><a href="{{ route('tutor.application') }}" class="btn btn-primary btn-sm">Edit my profile</a></div>
         </section>
     @else
         <section class="panel">

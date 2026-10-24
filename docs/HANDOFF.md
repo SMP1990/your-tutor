@@ -154,8 +154,15 @@ rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tuto
   Migration 2026_10_25_000003 (is_demo, rating_avg, reviews_count). `DemoTutors`/`DemoSubjects` are now
   only seed sources. Tests use `Tests\Concerns\SeedsDemoContent`. 123 tests green.
   **Deploy needs:** `migrate --force`, `db:seed --class=DemoTutorsSeeder --force`, `npm run build` output.
-- [ ] 2c-2 Approved tutor edits the profile: rate/bio/availability live directly; new subjects/documents
-  go back to admin re-review.
+- [x] **2c-2 Approved tutor edits the profile** (24 Oct, LOCAL only, committed, not pushed/deployed):
+  same form at `/dashboard/tutor/application` becomes "Edit your profile" once approved. Headline, bio,
+  city, languages, levels, rate, video, availability and removing a subject go live at once (a live
+  profile cannot be emptied; at least one approved subject must stay). NEW subjects, education, photo and
+  CNIC/degree wait in `pending_changes` (`App\Support\TutorProfileChanges`); the profile stays live with
+  the old details. Admin: tab "Profile changes" in `/admin/tutors`, approve/reject on the review page
+  (`POST /admin/tutors/{id}/changes`, reject needs a message, new files viewable with `?pending=1`);
+  tutor emailed (`TutorChangesReviewed`). Migration 2026_10_25_000004. 131 tests green.
+  Owner choice made by Claude (ask if wrong): photo and education also go through review.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

@@ -112,6 +112,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/{profile:id}/documents/{document}', 'document')->name('document');
             Route::post('/{profile:id}/review', 'review')->middleware('throttle:30,1')->name('review');
             Route::post('/{profile:id}/decision', 'decide')->middleware('throttle:30,1')->name('decide');
+            Route::post('/{profile:id}/changes', 'changes')->middleware('throttle:30,1')->name('changes');
         });
     });
 });

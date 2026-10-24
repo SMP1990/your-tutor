@@ -32,6 +32,20 @@ class TutorApplicationRequest extends FormRequest
         $c = config('tutors');
         $slots = array_keys($c['time_slots']);
 
+        // A live (approved) profile must stay complete: these cannot be emptied.
+        if ($this->user()->tutorProfile()->first()?->isLive()) {
+            return array_merge_recursive($this->baseRules($c, $slots), [
+                'headline' => ['required'], 'bio' => ['required', 'min:80'], 'city' => ['required'],
+                'rate' => ['required'], 'languages' => ['required'], 'levels' => ['required'],
+                'subjects' => ['required'], 'availability' => ['required'], 'education' => ['min:1'],
+            ]);
+        }
+
+        return $this->baseRules($c, $slots);
+    }
+
+    private function baseRules(array $c, array $slots): array
+    {
         return [
             'headline' => ['nullable', 'string', 'max:120'],
             'bio' => ['nullable', 'string', 'max:2000'],

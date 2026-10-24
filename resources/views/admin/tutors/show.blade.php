@@ -135,6 +135,9 @@
                 </form>
             </section>
         @else
+            @if ($profile->hasPendingChanges())
+                @include('admin.tutors.pending-changes')
+            @endif
             <section class="panel">
                 <div class="panel__head"><h2>Decision</h2><span class="status status--grey">{{ $profile->status->label() }}</span></div>
                 @if ($profile->decision_note)<p>Message sent: “{{ $profile->decision_note }}”</p>@endif
