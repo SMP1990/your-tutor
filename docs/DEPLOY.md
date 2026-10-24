@@ -40,6 +40,7 @@ Use PHP 8.4 for every command: `/opt/alt/php84/usr/bin/php` (the default `php` o
 2. Upload both to `~/domains/<site>/`, then: `tar -xzf app.tar.gz -C app` (and `tar -xzf build.tar.gz -C app/public`)
 3. In `app/`: `composer install --no-dev --optimize-autoloader` (only if composer.lock changed),
    `php artisan migrate --force`, `php artisan optimize`
+   (first time only: `php artisan storage:link` so uploaded profile photos are served from `/storage`)
 4. Check the live pages.
 
 **Roll back to the static site:** in `~/domains/<site>/`: `rm public_html && cp -a public_html_static_backup public_html`.

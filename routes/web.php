@@ -14,6 +14,7 @@ use App\Http\Controllers\DemoBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TutorApplicationController;
 use App\Http\Controllers\TutorController;
 use Illuminate\Support\Facades\Route;
 
@@ -92,6 +93,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/{child}', 'destroy')->middleware('throttle:20,1')->name('destroy');
     });
     Route::get('/dashboard/tutor', [DashboardController::class, 'tutor'])->middleware('role:tutor')->name('dashboard.tutor');
+    Route::middleware('role:tutor')->controller(TutorApplicationController::class)->group(function () {
+        Route::get('/dashboard/tutor/application', 'edit')->name('tutor.application');
+        Route::put('/dashboard/tutor/application', 'update')->middleware('throttle:20,1')->name('tutor.application.update');
+    });
 
     Route::middleware('role:admin')->group(function () {
         Route::get('/two-factor', [TwoFactorController::class, 'show'])->name('two-factor.show');

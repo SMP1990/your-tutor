@@ -33,7 +33,9 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            // Private files (tutor CNIC, degrees) are never served by URL; admins view them through an
+            // authorised controller instead.
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],

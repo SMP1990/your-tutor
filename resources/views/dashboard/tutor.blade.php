@@ -36,10 +36,16 @@
             </ul>
         </section>
     @else
-        @include('dashboard.partials.coming-soon', [
-            'title' => 'Your tutor application',
-            'text' => 'The application form (subjects, rate, documents) opens in the next update. You will be able to fill it in here and follow its status.',
-        ])
+        <section class="panel">
+            <div class="panel__head"><h2>Your tutor application</h2><span class="status status--{{ $statusColour }}">{{ $status?->label() ?? 'Not started' }}</span></div>
+            @if (! $profile || $profile->isEditableByTutor())
+                <p class="muted">Tell us what you teach, your rate and when you are free, and upload your CNIC and degree. You can save and finish later.</p>
+                <div><a href="{{ route('tutor.application') }}" class="btn btn-primary btn-sm">{{ $profile ? 'Continue application' : 'Start application' }}</a></div>
+            @else
+                <p class="muted">Thank you! Your application is being reviewed. We will email you about the next step.</p>
+                <div><a href="{{ route('tutor.application') }}" class="btn btn-outline btn-sm">View application</a></div>
+            @endif
+        </section>
     @endif
 
     @include('dashboard.partials.coming-soon', [
