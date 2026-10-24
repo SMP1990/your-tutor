@@ -106,6 +106,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard/classes', 'index')->name('classes.index');
         Route::get('/dashboard/classes/{session}/join', 'join')->middleware('throttle:30,1')->name('classes.join');
     });
+    Route::post('/dashboard/classes/{session}/mark', [TimetableController::class, 'mark'])
+        ->middleware(['role:tutor', 'throttle:60,1'])->name('classes.mark');
+    Route::post('/dashboard/classes/{session}/cancel', [TimetableController::class, 'cancel'])
+        ->middleware(['role:parent,student', 'throttle:20,1'])->name('classes.cancel');
     Route::middleware('role:parent,student')->controller(ClassBookingController::class)->group(function () {
         Route::get('/dashboard/demos/{demo}/book', 'create')->name('bookings.create');
         Route::post('/dashboard/demos/{demo}/book', 'store')->middleware('throttle:10,1')->name('bookings.store');

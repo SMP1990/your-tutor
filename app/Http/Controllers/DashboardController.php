@@ -39,6 +39,7 @@ class DashboardController extends Controller
     {
         $bookings = $request->user()->classBookings()
             ->with(['tutorProfile:id,user_id', 'tutorProfile.user:id,name', 'subject:id,name'])
+            ->withCount(['sessions', 'sessions as held_count' => fn ($q) => $q->where('status', \App\Enums\ClassStatus::Held)])
             ->latest()->limit(10)->get();
 
         return [

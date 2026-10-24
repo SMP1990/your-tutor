@@ -217,7 +217,13 @@ has 48 h to answer; one Meet link per booking; no payment yet (page says we will
   "Timetable") lists upcoming classes; overview cards "Next classes" for family and tutor. "Join class"
   goes through `/dashboard/classes/{session}/join`: only the class's family or tutor, from 15 min before
   until the class ends. 163 tests green.
-- [ ] 4c Attendance: tutor marks each class held / student absent / cancelled; family can see it.
+- [x] **4c Attendance** (24 Oct, LOCAL only, committed, not pushed/deployed): `ClassStatus` enum
+  (scheduled, held, student_absent, tutor_cancelled, family_cancelled); migration 2026_10_27_000003 adds
+  note, marked_by, marked_at. Tutor: "Mark attendance" on the timetable for started classes (held /
+  student absent; `POST /dashboard/classes/{session}/mark`), "Cancel class" any time before it with a
+  reason. Family: "Cancel class" up to 12 hours before (`ClassSession::FAMILY_CANCEL_HOURS`,
+  `POST /dashboard/classes/{session}/cancel`). Both see "Past and cancelled classes"; family booking card
+  shows "N of M classes held". 166 tests green. (No make-up classes yet: a cancelled class is not replaced.)
 - [ ] 4d Admin view of all bookings and classes.
 
 ## 7. Waiting for the owner (ask, do not invent)

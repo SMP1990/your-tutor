@@ -9,6 +9,9 @@
                     <div class="item-list__main">
                         <strong>{{ $booking->tutorProfile?->user?->name ?? 'Tutor' }} · {{ $booking->subject?->name ?? '—' }}</strong>
                         <span>For {{ $booking->student_name }} · {{ $booking->scheduleLabel() }} · from {{ $booking->starts_on->format('D j M') }}, {{ $booking->weeks }} weeks</span>
+                        @if ($booking->sessions_count)
+                            <span>{{ $booking->held_count }} of {{ $booking->sessions_count }} classes held · <a href="{{ route('classes.index') }}">see classes</a></span>
+                        @endif
                         @if ($booking->tutor_note)<span>Tutor: “{{ $booking->tutor_note }}”</span>@endif
                     </div>
                     <div class="item-list__side">

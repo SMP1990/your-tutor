@@ -20,6 +20,25 @@
                     @else
                         <span class="muted">Join opens {{ \App\Models\ClassSession::JOIN_OPENS_BEFORE }} min before</span>
                     @endif
+                    @if ($withActions ?? false)
+                        @if ($isTutor)
+                            <details class="class-cancel">
+                                <summary class="btn btn-outline btn-sm">Cancel class</summary>
+                                <form method="post" action="{{ route('classes.mark', $session) }}">
+                                    @csrf
+                                    <input type="hidden" name="status" value="tutor_cancelled">
+                                    <label class="sr-only" for="why-{{ $session->id }}">Reason</label>
+                                    <input id="why-{{ $session->id }}" name="note" class="input" maxlength="300" required placeholder="Reason, e.g. I am unwell">
+                                    <button type="submit" class="btn btn-outline btn-sm btn-danger">Confirm cancel</button>
+                                </form>
+                            </details>
+                        @elseif ($session->familyMayCancel())
+                            <form method="post" action="{{ route('classes.cancel', $session) }}" data-confirm="Cancel the class on {{ $session->label() }}?">
+                                @csrf
+                                <button type="submit" class="btn btn-outline btn-sm">Cancel class</button>
+                            </form>
+                        @endif
+                    @endif
                 </div>
             </li>
         @endforeach

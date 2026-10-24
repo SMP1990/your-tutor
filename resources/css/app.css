@@ -1684,6 +1684,11 @@ button.btn { font: inherit; font-weight: 700; }
 /* Tutor answers one demo request: details on top, accept / decline forms below. */
 .demo-answer { display: flex; flex-direction: column; gap: 14px; padding: 16px 0; border-top: 1px solid var(--line); }
 .demo-answer:first-of-type { border-top: 0; padding-top: 0; }
+/* Tutor cancels a class: the reason box opens under the button. */
+.class-cancel summary { list-style: none; cursor: pointer; }
+.class-cancel summary::-webkit-details-marker { display: none; }
+.class-cancel[open] form { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.class-cancel .input { min-width: 200px; }
 .date-chip {
   flex: none;
   display: flex;

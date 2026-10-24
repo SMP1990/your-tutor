@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\BookingStatus;
+use App\Enums\ClassStatus;
 use App\Models\ClassBooking;
 use App\Models\ClassSession;
 use App\Models\Subject;
@@ -107,6 +108,67 @@ class TimetableTest extends TestCase
         $this->travelTo(now()->setDateTime(2026, 10, 28, 13, 1)); // class ended
         $this->actingAs($this->parent)->get($join)->assertRedirect(route('classes.index'));
         $this->actingAs($this->parent)->get(route('classes.index'))->assertDontSee('Wed 28 Oct, 5:00 PM');
+    }
+
+    // ---- Step 4c: attendance ----
+
+    private function first(): ClassSession
+    {
+        return $this->booking->sessions()->orderBy('starts_at')->first();
+    }
+
+    public function test_tutor_marks_attendance_only_after_the_class_started(): void
+    {
+        $this->confirm();
+        $class = $this->first();
+        $tutor = $this->actingAs($this->profile->user);
+
+        $tutor->post(route('classes.mark', $class), ['status' => 'held'])->assertStatus(409);
+
+        $this->travelTo(now()->setDateTime(2026, 10, 28, 12, 30)); // during the class
+        $tutor->get(route('classes.index'))->assertSee('Mark attendance (1)');
+        $tutor->post(route('classes.mark', $class), ['status' => 'held'])->assertRedirect();
+
+        $this->assertSame(ClassStatus::Held, $class->fresh()->status);
+        $this->assertSame($this->profile->user_id, $class->fresh()->marked_by);
+        $tutor->post(route('classes.mark', $class), ['status' => 'student_absent'])->assertStatus(409); // already marked
+
+        $this->actingAs($this->parent)->get(route('classes.index'))->assertSee('Past and cancelled classes')->assertSee('Class held');
+        $this->actingAs($this->parent)->get('/dashboard/parent')->assertSee('1 of 4 classes held');
+    }
+
+    public function test_tutor_cancels_with_a_reason_and_others_cannot_mark(): void
+    {
+        $this->confirm();
+        $class = $this->first();
+
+        $this->actingAs($this->profile->user)->post(route('classes.mark', $class), ['status' => 'tutor_cancelled'])
+            ->assertSessionHasErrorsIn('class'.$class->id, 'note');
+        $this->actingAs($this->profile->user)->post(route('classes.mark', $class), ['status' => 'tutor_cancelled', 'note' => 'Unwell']);
+        $this->assertSame(ClassStatus::TutorCancelled, $class->fresh()->status);
+        $this->actingAs($this->parent)->get(route('classes.index'))->assertSee('Cancelled by tutor')->assertSee('Unwell');
+
+        $other = TutorProfile::factory()->approved()->create();
+        $this->actingAs($other->user)->post(route('classes.mark', $this->booking->sessions()->latest('starts_at')->first()), ['status' => 'tutor_cancelled', 'note' => 'x'])->assertNotFound();
+        $this->actingAs($this->parent)->post(route('classes.mark', $class), ['status' => 'held'])->assertForbidden();
+        $this->actingAs($this->profile->user)->post(route('classes.mark', $class), ['status' => 'family_cancelled'])->assertSessionHasErrorsIn('class'.$class->id, 'status');
+    }
+
+    public function test_family_cancels_only_twelve_hours_ahead(): void
+    {
+        $this->confirm();
+        $class = $this->first(); // Wed 28 Oct 12:00 UTC
+
+        $this->travelTo(now()->setDateTime(2026, 10, 28, 1, 0)); // 11 hours before
+        $this->actingAs($this->parent)->post(route('classes.cancel', $class))->assertStatus(409);
+
+        $this->travelTo(now()->setDateTime(2026, 10, 27, 23, 0)); // 13 hours before
+        $this->actingAs($this->parent)->get(route('classes.index'))->assertSee(route('classes.cancel', $class));
+        $this->actingAs($this->parent)->post(route('classes.cancel', $class), ['note' => 'School trip'])->assertRedirect();
+
+        $this->assertSame(ClassStatus::FamilyCancelled, $class->fresh()->status);
+        $this->actingAs($this->profile->user)->get(route('classes.index'))->assertSee('Cancelled by family')->assertSee('School trip');
+        $this->actingAs(User::factory()->parent()->create())->post(route('classes.cancel', $this->booking->sessions()->latest('starts_at')->first()))->assertNotFound();
     }
 
     public function test_classes_of_unconfirmed_bookings_are_not_shown(): void
