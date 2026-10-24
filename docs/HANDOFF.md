@@ -204,27 +204,27 @@ Claude Doc: https://claude.ai/artifact/WeBXxtUiSJ5ZkmKVCb7yCv
 change): booking only after a COMPLETED free demo with that tutor; weekly days from the tutor's free days,
 one start time, 45/60/90 min, 4/8/12 weeks, start within 30 days; rate copied from the tutor at booking; tutor
 has 48 h to answer; one Meet link per booking; no payment yet (page says we will contact about paying).
-- [x] **4a Booking request + tutor answer** (24 Oct, LOCAL only, committed, not pushed/deployed):
+- [x] **4a Booking request + tutor answer** (24 Oct, DEPLOYED to Hostinger + pushed to GitHub):
   `class_bookings` table (migration 2026_10_27_000001), `ClassBooking` model, `BookingStatus` enum.
   Family: "Book regular classes" on a completed demo → `/dashboard/demos/{demo}/book`
   (`ClassBookingController`), cancel while waiting; dashboard panel "Regular classes". Tutor:
   `/dashboard/tutor/bookings` (`TutorBookingController`, menu "Class bookings"), confirm with a Google Meet
   link or decline with a reason; family emailed (`BookingAnswered`). 158 tests green.
-- [x] **4b Timetable + Join class** (24 Oct, LOCAL only, committed, not pushed/deployed): `class_sessions`
+- [x] **4b Timetable + Join class** (24 Oct, DEPLOYED to Hostinger + pushed to GitHub): `class_sessions`
   table (migration 2026_10_27_000002), `ClassSession` model. `App\Support\ClassSchedule` makes days x weeks
   classes when the tutor confirms ("week" = 7 days from the start date; times typed in site timezone, stored
   UTC; safe to run twice). `/dashboard/classes` (`TimetableController`; menu "Classes"/"My classes"/
   "Timetable") lists upcoming classes; overview cards "Next classes" for family and tutor. "Join class"
   goes through `/dashboard/classes/{session}/join`: only the class's family or tutor, from 15 min before
   until the class ends. 163 tests green.
-- [x] **4c Attendance** (24 Oct, LOCAL only, committed, not pushed/deployed): `ClassStatus` enum
+- [x] **4c Attendance** (24 Oct, DEPLOYED to Hostinger + pushed to GitHub): `ClassStatus` enum
   (scheduled, held, student_absent, tutor_cancelled, family_cancelled); migration 2026_10_27_000003 adds
   note, marked_by, marked_at. Tutor: "Mark attendance" on the timetable for started classes (held /
   student absent; `POST /dashboard/classes/{session}/mark`), "Cancel class" any time before it with a
   reason. Family: "Cancel class" up to 12 hours before (`ClassSession::FAMILY_CANCEL_HOURS`,
   `POST /dashboard/classes/{session}/cancel`). Both see "Past and cancelled classes"; family booking card
   shows "N of M classes held". 166 tests green. (No make-up classes yet: a cancelled class is not replaced.)
-- [x] **4d Admin view** (24 Oct, LOCAL only, committed, not pushed/deployed): `Admin\ClassesController`
+- [x] **4d Admin view** (24 Oct, DEPLOYED to Hostinger + pushed to GitHub): `Admin\ClassesController`
   (role:admin + two-factor), read-only. `/admin/bookings` tabs: waiting, not answered in time, confirmed,
   declined/cancelled (family, student, tutor link, schedule, rate, "N of M held"). `/admin/classes` tabs:
   upcoming, attendance not marked, held, student absent, cancelled. Admin menu "Bookings" and "Classes";
