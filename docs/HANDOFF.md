@@ -241,7 +241,10 @@ keep their sample ratings until `demo:remove`.
   `rating_avg` / `reviews_count` from visible reviews, so profile, cards, rating filter and "Highest rated"
   sort use real reviews. Family dashboard "Regular classes" card shows "Rate your tutor" / "Edit your
   review" once a class was held. "1 review" grammar fixed. 174 tests green.
-- [ ] 5b Reviews listed on the tutor's public profile; tutor sees their reviews in the dashboard.
+- [x] **5b Reviews shown** (24 Oct, LOCAL only, committed, not pushed/deployed): public profile lists the
+  10 newest visible reviews with `<x-review-card>` (`Review::toCardArray()`: "Sadia M.", "Parent ·
+  Physics · Oct 2026", stars); hidden reviews never show. Tutor page `/dashboard/tutor/reviews`
+  (`TutorReviewsController`, menu "Reviews") with average and all visible reviews. 176 tests green.
 - [ ] 5c Admin sees all reviews and can hide / unhide one (rating recalculated).
 
 ## 7. Waiting for the owner (ask, do not invent)

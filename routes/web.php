@@ -24,6 +24,7 @@ use App\Http\Controllers\TutorController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\TutorBookingController;
 use App\Http\Controllers\TutorDemoController;
+use App\Http\Controllers\TutorReviewsController;
 use Illuminate\Support\Facades\Route;
 
 // Note: route bindings live in AppServiceProvider, because this file is not loaded once routes are cached.
@@ -132,6 +133,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{demo}/decline', 'decline')->middleware('throttle:30,1')->name('.decline');
         Route::post('/{demo}/finish', 'finish')->middleware('throttle:30,1')->name('.finish');
     });
+    Route::get('/dashboard/tutor/reviews', TutorReviewsController::class)->middleware('role:tutor')->name('tutor.reviews');
     Route::middleware('role:tutor')->prefix('/dashboard/tutor/bookings')->name('tutor.bookings')->controller(TutorBookingController::class)->group(function () {
         Route::get('/', 'index');
         Route::post('/{booking}/accept', 'accept')->middleware('throttle:30,1')->name('.accept');

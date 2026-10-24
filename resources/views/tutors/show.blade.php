@@ -152,7 +152,7 @@
         {{-- REVIEWS --}}
         <section class="profile-card" aria-labelledby="reviews-title" id="reviews">
             <h2 id="reviews-title" class="profile-card__title">Reviews</h2>
-            {{-- Written reviews arrive with the reviews module; until then only the score is shown. --}}
+            {{-- Real reviews from families after a held class (Step 5). Sample tutors show their score only. --}}
             @if ($tutor['reviews_count'] > 0)
                 <div class="rating-summary">
                     <div class="rating-summary__score">
@@ -161,6 +161,13 @@
                         <span>{{ $tutor['reviews_count'] }} {{ str('review')->plural($tutor['reviews_count']) }}</span>
                     </div>
                 </div>
+                @if ($reviews)
+                    <div class="profile-reviews">
+                        @foreach ($reviews as $review)
+                            <x-review-card :review="$review" />
+                        @endforeach
+                    </div>
+                @endif
             @else
                 <p class="profile-card__note">No reviews yet. Reviews appear here after {{ $firstName }}'s first classes.</p>
             @endif

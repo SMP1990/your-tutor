@@ -39,7 +39,7 @@ class DashboardNav
         'tutor' => [
             'Overview' => ['home', 'dashboard.tutor'], 'Application' => ['check', 'tutor.application', 'tutor.application*'],
             'Demo requests' => ['calendar', 'tutor.demos', 'tutor.demos*'],
-            'Class bookings' => ['notes', 'tutor.bookings', 'tutor.bookings*'], 'Timetable' => ['clock', 'classes.index', 'classes.*'], 'Earnings' => ['wallet', null], 'Reviews' => ['star', null],
+            'Class bookings' => ['notes', 'tutor.bookings', 'tutor.bookings*'], 'Timetable' => ['clock', 'classes.index', 'classes.*'], 'Earnings' => ['wallet', null], 'Reviews' => ['star', 'tutor.reviews'],
         ],
         'admin' => [
             'Overview' => ['home', 'dashboard.admin'], 'Tutor approvals' => ['check', 'admin.tutors.index', 'admin.tutors.*'],

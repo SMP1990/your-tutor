@@ -32,6 +32,19 @@ class Review extends Model
         return isset($parts[1]) ? $first.' '.mb_strtoupper(mb_substr($parts[1], 0, 1)).'.' : $first;
     }
 
+    /** The shape <x-review-card> reads: quote, name, role, rating. */
+    public function toCardArray(): array
+    {
+        return [
+            'quote' => $this->comment,
+            'name' => $this->reviewerName(),
+            'role' => ($this->child_id ? 'Parent' : 'Student')
+                .($this->booking?->subject ? ' · '.$this->booking->subject->name : '')
+                .' · '.$this->created_at->format('M Y'),
+            'rating' => $this->rating,
+        ];
+    }
+
     /** @return BelongsTo<TutorProfile, $this> */
     public function tutorProfile(): BelongsTo
     {

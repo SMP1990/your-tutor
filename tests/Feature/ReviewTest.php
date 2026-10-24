@@ -105,6 +105,30 @@ class ReviewTest extends TestCase
         $this->assertSame('4.0', number_format((float) $this->tutor->fresh()->rating_avg, 1));
     }
 
+    // ---- Step 5b: reviews on the profile and in the tutor's dashboard ----
+
+    public function test_profile_lists_visible_reviews_with_privacy_names(): void
+    {
+        $this->review(['comment' => 'Explains every step clearly. Marks went up.']);
+        tap(Review::sole()->replicate(), fn ($r) => $r->forceFill(['comment' => 'This one is hidden by admin', 'is_hidden' => true])->save());
+
+        $this->get('/tutors/'.$this->tutor->slug)->assertOk()
+            ->assertSee('Explains every step clearly. Marks went up.')
+            ->assertSee('Sadia M.')->assertDontSee('Sadia Malik')
+            ->assertSee('Parent')->assertSee('(1 review)')
+            ->assertDontSee('This one is hidden by admin');
+    }
+
+    public function test_tutor_sees_their_reviews_in_the_dashboard(): void
+    {
+        $this->actingAs($this->tutor->user)->get(route('tutor.reviews'))->assertOk()->assertSee('No reviews yet');
+
+        $this->review();
+        $this->actingAs($this->tutor->user)->get(route('tutor.reviews'))
+            ->assertSee('★ 5.0 from 1 review')->assertSee('Explains every step clearly.')->assertSee('Sadia M.');
+        $this->actingAs($this->parent)->get(route('tutor.reviews'))->assertForbidden();
+    }
+
     public function test_no_review_before_a_class_was_held(): void
     {
         $booking = $this->makeBooking(Child::factory()->create(['parent_id' => $this->parent->id]), ClassStatus::StudentAbsent);
