@@ -154,7 +154,8 @@ rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tuto
   Migration 2026_10_25_000003 (is_demo, rating_avg, reviews_count). `DemoTutors`/`DemoSubjects` are now
   only seed sources. Tests use `Tests\Concerns\SeedsDemoContent`. 123 tests green.
   **Deploy needs:** `migrate --force`, `db:seed --class=DemoTutorsSeeder --force`, `npm run build` output.
-- [x] **2c-2 Approved tutor edits the profile** (24 Oct, LOCAL only, committed, not pushed/deployed):
+- [x] **2c-2 Approved tutor edits the profile** (24 Oct, commit 08d376c, DEPLOYED to Hostinger with the
+  owner's OK: migration 000004 run, optimize; public pages checked; NOT pushed to GitHub yet):
   same form at `/dashboard/tutor/application` becomes "Edit your profile" once approved. Headline, bio,
   city, languages, levels, rate, video, availability and removing a subject go live at once (a live
   profile cannot be emptied; at least one approved subject must stay). NEW subjects, education, photo and
