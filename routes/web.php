@@ -15,11 +15,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TutorController;
-use App\Support\DemoTutors;
 use Illuminate\Support\Facades\Route;
 
-// Dummy tutors until the database step; unknown slugs give a 404.
-Route::bind('tutor', fn (string $slug) => DemoTutors::find($slug) ?? abort(404));
+// Note: route bindings live in AppServiceProvider, because this file is not loaded once routes are cached.
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/tutors', [TutorController::class, 'index'])->name('tutors.index');
