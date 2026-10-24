@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         VerifyEmail::toMailUsing(fn (object $user, string $url) => (new MailMessage)
-            ->subject('Verify your email for '.config('app.name'))
+            ->subject('Verify your email | '.config('app.name'))
             ->greeting('Hi '.strtok($user->name, ' ').',')
             ->line('Thanks for joining '.config('app.name').'. Please confirm this is your email address.')
             ->action('Verify email address', $url)
@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
             ->line('If you did not create an account, you can ignore this email.'));
 
         ResetPassword::toMailUsing(fn (object $user, string $token) => (new MailMessage)
-            ->subject('Reset your '.config('app.name').' password')
+            ->subject('Reset your password | '.config('app.name'))
             ->greeting('Hi '.strtok($user->name, ' ').',')
             ->line('We received a request to reset your password.')
             ->action('Set a new password', route('password.reset', ['token' => $token, 'email' => $user->email]))

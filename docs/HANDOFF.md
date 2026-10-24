@@ -85,7 +85,13 @@ Owner asked to explain the plan step by step, no code until approved.
   resend (throttled). Locally `MAIL_MAILER=log` (emails land in `storage/logs/laravel.log`);
   Hostinger SMTP comes via `.env` in 1f. Header still shows Log In/Register when logged in (fixed in 1c/1d).
   `StaticExportTest` guards that exported login forms never send personal data in the URL.
-- [ ] 1c Log in / log out / forgot password
+- [x] **1c Log in / log out / forgot password** (24 Oct): `Auth\LoginController` + `LoginRequest`
+  (email or phone if unique, remember me, 5 wrong tries = 1 min lock, general error),
+  unverified users go to the verify page; logout; header shows "Hi, <name>" + Log out.
+  `Auth\PasswordResetController`: reset by email link only (phone reset needs SMS, later), same
+  message whether or not the email exists. Email subjects: "Verify your email | your tutor",
+  "Reset your password | your tutor". `/verify-phone` remains a design preview.
+  After login everyone lands on Home until 1d adds role dashboards.
 - [ ] 1d Roles: own dashboard per role, admin two-step login
 - [ ] 1e Parent adds children
 - [ ] 1f Run on Hostinger as real Laravel (owner creates MySQL DB + email account, click-by-click)
