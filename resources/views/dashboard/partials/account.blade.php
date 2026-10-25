@@ -1,6 +1,6 @@
 {{-- Expects $account (User). --}}
 <section class="panel">
-    <div class="panel__head"><h2>Your account</h2></div>
+    <div class="panel__head"><h2>Your account</h2><a href="{{ route('profile.edit') }}">Edit profile</a></div>
     <ul class="item-list">
         <li>
             <div class="item-list__main"><strong>Email</strong><span>{{ $account->email }}</span></div>

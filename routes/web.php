@@ -20,6 +20,7 @@ use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DemoBookingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SubjectController;
@@ -83,7 +84,18 @@ Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 
 // Real dashboards: logged in, email verified, own role only (Step 1d).
+// The link in the "confirm your new email" message: signed, and checked against the pending address (works on any device).
+Route::get('/profile/email/{user}/{hash}', [ProfileController::class, 'confirmEmail'])->middleware(['signed', 'throttle:6,1'])->name('profile.email.confirm');
+
 Route::middleware(['auth', 'verified'])->group(function () {
+    // Profile for every role (the admin must have typed the emailed code first).
+    Route::middleware('two-factor')->controller(ProfileController::class)->group(function () {
+        Route::get('/dashboard/profile', 'edit')->name('profile.edit');
+        Route::put('/dashboard/profile/details', 'updateDetails')->middleware('throttle:6,1')->name('profile.details');
+        Route::post('/dashboard/profile/email', 'requestEmail')->middleware('throttle:6,1')->name('profile.email');
+        Route::put('/dashboard/profile/password', 'updatePassword')->middleware('throttle:6,1')->name('profile.password');
+    });
+
     Route::get('/dashboard', [DashboardController::class, 'redirect'])->name('dashboard');
     Route::get('/dashboard/student', [DashboardController::class, 'student'])->middleware('role:student')->name('dashboard.student');
     Route::get('/dashboard/parent', [DashboardController::class, 'parent'])->middleware('role:parent')->name('dashboard.parent');

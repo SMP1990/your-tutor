@@ -390,6 +390,19 @@ mailer is `log`; fix it in the next change. `laravel.log` still holds the debug-
   backups in hPanel. Old manual dumps in `~` (step6, 7a7b, maillog, 7c) can be deleted once the daily ones run.
 - [ ] 7c-3 monitoring (UptimeRobot on `/up`, owner makes the account), 7c-4 rollback notes + keep last 3 release archives.
 
+## 6k. Profile page (25 Oct, owner's request after 7c; local, NOT deployed, NOT pushed)
+`/dashboard/profile` (`ProfileController`, menu "Profile" / "My profile" for student, parent, tutor, admin; "Edit profile"
+link on the dashboard account card; admin must have typed the emailed code). Three separate forms, each asks for the
+CURRENT password (`current_password` rule, 6 tries per minute): (1) name + phone (a changed phone loses
+`phone_verified_at`; a TUTOR's name is read-only because it was checked against the CNIC and is public: the admin
+changes it), (2) email: sets `users.pending_email` (migration 2026_11_02_000001), sends `ConfirmNewEmail` AT ONCE to the
+NEW address (signed link, 60 minutes, works on any device, tied to the pending address so an older link dies when a
+newer request is made; if the address was taken meanwhile nothing changes) and warns the OLD address with the queued
+`EmailChangeRequested`; the email only changes when the link is opened (then it also counts as verified), (3) password
+(8+ letters and numbers, admin 12+, must differ from the old one; all other sessions of that user are deleted from the
+`sessions` table). Mail down = a message, not a 500. 15 tests in `ProfileTest`, 248 tests green. Deploy needs
+`migrate --force` (1 migration). Until real SMTP the confirmation link only appears in `storage/logs/mail-<date>.log`.
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)
