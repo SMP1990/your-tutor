@@ -479,7 +479,7 @@ Tests `HeroPictureTest` (9) incl. wrong files (text as .jpg, SVG, GIF, PDF, PHP,
 inside a JPEG not surviving, transparent PNG, missing files, odd settings. Checked in the browser at 375 px and 1280 px.
 Deploy: `npm run build` (CSS changed) + code, no migration. 272 tests green.
 SECOND VERSION (25 Oct, owner: "too many limits, I got tired of uploading, do it all automatically"; LIVE, backup `~/backup-before-heropicture2-20261025.sql`):
-NO size or pixel limits any more. `AppSupportHeroPictureReader` reads JPG, PNG, WebP, GIF (first frame), BMP, AVIF with GD, and
+NO size or pixel limits any more. `App\Support\HeroPictureReader` reads JPG, PNG, WebP, GIF (first frame), BMP, AVIF with GD, and
 iPhone HEIC / TIFF through Imagick when the server has it (forced reader `HEIC:` / `TIFF:`, after a magic-byte check). Verified ON THE
 SERVER (CLI, nothing saved): jpg png gif bmp webp avif heic tiff all read; SVG, PDF, text and PHP are refused with a plain-words reason
 (`HeroPictureException`, shown as it is). The web PHP might differ from the CLI for Imagick: if an iPhone HEIC upload is refused on the
