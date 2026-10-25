@@ -448,6 +448,20 @@ history, demos, bookings, classes, reviews, complaints, messages) and every dash
 Rule for new tables: use `class="data-table"` with a `<thead>` and `<th scope="col">` (`SmallScreenTest` checks it).
 DEPLOYED 25 Oct (main f11b69c, with the owner's OK; backup `~/backup-before-smallscreen-20261025.sql`, `npm run build` uploaded, `optimize`, no migration). The `/tutors` heading fix went live with it. 263 tests green. The owner checks it on his phone.
 
+## 6n. Home page picture from the admin (25 Oct, owner's request: "the hero picture must be controllable from the dashboard, add and delete"; local, NOT deployed)
+Admin > Site settings > "Home page picture" (`Admin\HeroPictureController`, routes `admin.hero.store|update|destroy`, role:admin + two-factor).
+Upload (JPG/PNG/WebP, max 4 MB, 600x450 .. 6000x6000 px), replace, change the short description (alt text, 120 chars) or delete.
+`App\Support\HeroPicture`: the upload is decoded with GD, rotated by EXIF, cut to 4:3 around the centre and saved again as TWO
+WebP files `storage/app/public/hero/<16 hex>-1200.webp` and `-600.webp` (random names; the original is never kept, so GPS/EXIF and
+any hidden code are gone). Settings keys `hero_image` (base path, validated by regex, so a tampered value shows nothing) and
+`hero_image_alt` (table `settings`). A new upload deletes the old pair only after the new one is saved. Home (`home.blade.php`): with a
+picture the `.hero__art` card becomes `.hero__art--photo` with `<img srcset 600w/1200w sizes fetchpriority=high width/height>` plus a
+preload in `<head>` (LCP); without one, or when the files are missing, the drawn demo card is shown. The 4 numbers were already
+admin-controlled (6d). Uses the existing `public/storage` link (exists on the live server; GD + WebP + EXIF available there).
+Tests `HeroPictureTest` (9) incl. wrong files (text as .jpg, SVG, GIF, PDF, PHP, too small, too many pixels, too big), code hidden
+inside a JPEG not surviving, transparent PNG, missing files, odd settings. Checked in the browser at 375 px and 1280 px.
+Deploy: `npm run build` (CSS changed) + code, no migration. 272 tests green.
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)

@@ -19,6 +19,7 @@ class SettingsController extends Controller
         $stored = SiteSettings::stored();
 
         return view('admin.settings.edit', [
+            'hero' => \App\Support\HeroPicture::current(),
             'whatsapp' => $stored['whatsapp_display'] ?? '',
             'support_email' => $stored['support_email'] ?? '',
             'support_hours' => $stored['support_hours'] ?? '',

@@ -15,6 +15,7 @@ class HomeController extends Controller
                 ->map->toPublicArray()->all(),
             'subjects' => Subject::where('is_active', true)->orderBy('sort_order')->get(),
             'stats' => \App\Support\SiteSettings::homeStats(),
+            'heroPicture' => \App\Support\HeroPicture::current(),
         ]);
     }
 }

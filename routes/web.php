@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ClassesController as AdminClassesController;
 use App\Http\Controllers\Admin\ComplaintController as AdminComplaintController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DemoRequestController as AdminDemoRequestController;
+use App\Http\Controllers\Admin\HeroPictureController;
 use App\Http\Controllers\Admin\ReviewModerationController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\TutorReviewController;
@@ -176,6 +177,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/{message}', 'show')->name('show');
             Route::put('/{message}', 'update')->middleware('throttle:60,1')->name('update');
+        });
+
+        Route::middleware('two-factor')->prefix('/admin/settings/hero')->name('admin.hero.')->controller(HeroPictureController::class)->group(function () {
+            Route::post('/', 'store')->middleware('throttle:10,1')->name('store');
+            Route::put('/', 'update')->middleware('throttle:30,1')->name('update');
+            Route::delete('/', 'destroy')->middleware('throttle:10,1')->name('destroy');
         });
 
         Route::middleware('two-factor')->prefix('/admin/settings')->name('admin.settings.')->controller(AdminSettingsController::class)->group(function () {

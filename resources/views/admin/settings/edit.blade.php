@@ -6,13 +6,61 @@
 <div class="dash-head">
     <div>
         <h1>Site settings</h1>
-        <p>Contact details and the four numbers on the Home page. A box left empty uses the default from the server settings. The brand name ({{ config('app.name') }}) is changed in the server's .env file, not here.</p>
+        <p>The Home page picture, contact details and the four numbers on the Home page. A box left empty uses the default from the server settings. The brand name ({{ config('app.name') }}) is changed in the server's .env file, not here.</p>
     </div>
 </div>
 
 @if ($errors->any())
     <div class="form-alert" role="alert">{{ $errors->first() }}</div>
 @endif
+
+{{-- Home page picture: its own forms (a picture needs a different kind of form than the settings below). --}}
+@php $heroErrors = $errors->getBag('hero'); @endphp
+<section class="panel" id="hero-picture">
+    <div class="panel__head"><h2>Home page picture</h2></div>
+    @if ($heroErrors->any())<div class="form-alert" role="alert">{{ $heroErrors->first() }}</div>@endif
+
+    @if ($hero)
+        <img src="{{ $hero['small'] }}" alt="{{ $hero['alt'] }}" width="300" height="225" class="settings-preview">
+        <p class="muted">This picture is on the Home page, next to the search box.</p>
+
+        <form method="post" action="{{ route('admin.hero.update') }}" class="demo-form" novalidate>
+            @csrf
+            @method('PUT')
+            <div class="field">
+                <label for="hero_alt">Short description <span class="field__optional">(for people who cannot see the picture, and for search engines)</span></label>
+                <input id="hero_alt" name="alt" class="input" maxlength="{{ \App\Support\HeroPicture::ALT_MAX }}" value="{{ old('alt', $hero['alt']) }}" placeholder="e.g. A student learning online with her tutor">
+            </div>
+            <div class="form-actions"><button type="submit" class="btn btn-outline btn-sm">Save description</button></div>
+        </form>
+    @else
+        <p class="muted">No picture yet: the Home page shows its default drawing (a sample tutor card). Add a picture to replace it.</p>
+    @endif
+
+    <form method="post" action="{{ route('admin.hero.store') }}" enctype="multipart/form-data" class="demo-form" novalidate>
+        @csrf
+        <div class="field">
+            <label for="hero_picture">{{ $hero ? 'Replace the picture' : 'Add a picture' }}</label>
+            <input id="hero_picture" name="picture" type="file" accept="image/jpeg,image/png,image/webp" class="input" required>
+            <p class="field__hint">JPG, PNG or WebP, at most {{ \App\Support\HeroPicture::MAX_UPLOAD_KB / 1024 }} MB, at least {{ \App\Support\HeroPicture::MIN_WIDTH }} x {{ \App\Support\HeroPicture::MIN_HEIGHT }} pixels. It is shown 4:3 (landscape): any other shape is cut from the middle, so keep the main thing in the centre.</p>
+        </div>
+        @unless ($hero)
+            <div class="field">
+                <label for="hero_new_alt">Short description <span class="field__optional">(optional)</span></label>
+                <input id="hero_new_alt" name="alt" class="input" maxlength="{{ \App\Support\HeroPicture::ALT_MAX }}" value="{{ old('alt') }}">
+            </div>
+        @endunless
+        <div class="form-actions"><button type="submit" class="btn btn-primary btn-sm">{{ $hero ? 'Upload new picture' : 'Upload picture' }}</button></div>
+    </form>
+
+    @if ($hero)
+        <form method="post" action="{{ route('admin.hero.destroy') }}" data-confirm="Remove the picture? The Home page goes back to its default drawing." class="demo-form">
+            @csrf
+            @method('DELETE')
+            <div class="form-actions"><button type="submit" class="btn btn-outline btn-danger btn-sm">Remove picture</button></div>
+        </form>
+    @endif
+</section>
 
 <form method="post" action="{{ route('admin.settings.update') }}" class="demo-form" novalidate>
     @csrf

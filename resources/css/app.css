@@ -479,6 +479,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background-image: radial-gradient(#B9D8CF 1.2px, transparent 1.2px);
   background-size: 18px 18px;
 }
+/* A picture set by the admin replaces the drawn demo card (Site settings > Home page picture). */
+.hero__art--photo { min-height: 0; padding: 0; background: none; display: block; }
+.hero__photo { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-lg); box-shadow: 0 16px 40px rgba(19, 32, 28, 0.12); }
+.settings-preview { display: block; max-width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--line); }
 .hero__pill {
   position: absolute;
   inset-block-start: 28px;
