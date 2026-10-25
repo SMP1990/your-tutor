@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
 @section('title', 'Online ' . $subject['name'] . ' tutors in Pakistan | ' . config('app.name'))
-@section('description', 'Find a verified online ' . $subject['name'] . ' tutor for ' . $subject['levels'] . '. ' . $subject['intro'] . ' Free demo class.')
+{{-- Google shows about 155 characters: shorten the intro, never the "Free demo class." call to action. --}}
+@php
+    $descStart = 'Find a verified online ' . $subject['name'] . ' tutor for ' . $subject['levels'] . '. ';
+    $descEnd = ' Free demo class.';
+    $descIntro = \Illuminate\Support\Str::limit($subject['intro'], max(20, 155 - strlen($descStart) - strlen($descEnd)), '…', preserveWords: true);
+@endphp
+@section('description', $descStart . $descIntro . $descEnd)
 
 @push('schema')
     @include('partials.schema', ['schema' => \App\Support\Schema::breadcrumbs([

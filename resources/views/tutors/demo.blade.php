@@ -3,6 +3,11 @@
 @section('title', 'Book a free demo with ' . $tutor['name'] . ' | ' . config('app.name'))
 @section('description', 'Book a free online demo class with ' . $tutor['name'] . '. No payment needed.')
 
+{{-- The booking form is for logged-in families, not for search results (the tutor's profile page is). --}}
+@push('styles')
+    <meta name="robots" content="noindex">
+@endpush
+
 @section('content')
 
 <div class="container profile-crumbs">

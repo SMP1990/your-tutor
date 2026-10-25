@@ -21,13 +21,7 @@
     <meta name="theme-color" content="#0E6655">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
-    @if (app()->getLocale() === 'ur')
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap">
-    @endif
-
+    @include('partials.fonts')
     @vite(['resources/css/app.css', 'resources/js/site.js'])
     @stack('styles')
     @stack('schema')

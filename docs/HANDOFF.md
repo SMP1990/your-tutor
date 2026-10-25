@@ -403,6 +403,27 @@ newer request is made; if the address was taken meanwhile nothing changes) and w
 `sessions` table). Mail down = a message, not a 500. 15 tests in `ProfileTest`, 248 tests green. Deploy needs
 `migrate --force` (1 migration). Until real SMTP the confirmation link only appears in `storage/logs/mail-<date>.log`.
 
+## 6l. Step 7d = speed and SEO (25 Oct; local, NOT deployed, NOT pushed)
+Measured on the LIVE home page with Google PageSpeed (web UI; the API had no free quota left), mobile, slow 4G, before
+these changes: Performance 89, Accessibility 100, Best Practices 100, SEO 69 (only "page is blocked from indexing",
+which is on purpose until launch), FCP and LCP 3.0 s, TBT 0, CLS 0.001. Google's main finding: render-blocking requests
+(~2 s), i.e. the Google Fonts stylesheet plus our CSS. Curl showed brotli, 7-day cache, 0.7 KB JS, and a ~1.2 s time to
+first byte that is the same for a plain static file, so it is distance / TLS from the measuring PC, not PHP: do NOT
+tune PHP for it.
+Changes: (1) FONTS SELF-HOSTED: `resources/fonts/*.woff2` (DM Sans 400/500/700, Bricolage Grotesque 600/700, Latin, OFL,
+licences next to them), `@font-face` with `font-display: swap` in `app.css`, 2 preloads via `partials/fonts.blade.php`
+(both layouts), Google removed from the pages and from the CSP (`style-src 'self'`, `font-src 'self'`); the unused Urdu
+font branch was dropped (when an Urdu UI is built, self-host an Urdu font). (2) `public/.htaccess`: fingerprinted
+`/build` files get `max-age=31536000, immutable`. (3) SEO: subject and tutor titles/descriptions are cut to Google's
+length (tutor title max 2 subjects, ~66 chars; description 155, the call to action is kept), tutor demo FORM page is
+`noindex`, and after launch `robots.txt` now blocks the REAL private paths (`/dashboard`, `/admin`, `/two-factor`,
+`/email/`, `/profile/`, `/login`, `/register`, `/forgot-password`, `/reset-password`, `/*/demo`); before it still listed
+the old `/student` `/parent` `/tutor`. Tests: `FontsTest`, `SeoPolishTest` (all 24 sitemap pages: title 10-70, description
+70-160, one h1, canonical, unique titles). 258 tests green.
+STILL TO DO: deploy (needs `npm run build` + the new `public/build`, no migration, plus the profile page migration),
+then measure the live home, `/tutors`, a tutor page and `/contact` again on pagespeed.web.dev and write the new scores here.
+Launch day: `SITE_INDEXABLE=true`, submit `/sitemap.xml` in Search Console (needs the domain).
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)

@@ -1,7 +1,19 @@
 @extends('layouts.app')
 
-@section('title', $tutor['name'] . ' – Online ' . implode(' & ', $tutor['subjects']) . ' tutor | ' . config('app.name'))
-@section('description', $tutor['headline'] . '. ' . $tutor['bio'] . ' Book a free demo class.')
+{{-- Search results show about 60 characters of the title and 155 of the description: use at most two subjects, and
+     shorten the bio rather than the "Book a free demo class." call to action. --}}
+@php
+    $seoSubjects = array_slice($tutor['subjects'], 0, 2);
+    $seoTitle = fn (array $subjects) => $tutor['name'] . ' – Online ' . implode(' & ', $subjects) . ' tutor | ' . config('app.name');
+    if (mb_strlen($seoTitle($seoSubjects)) > 66) {
+        $seoSubjects = array_slice($seoSubjects, 0, 1);
+    }
+    $seoStart = rtrim($tutor['headline'], '. ') . '. ';
+    $seoEnd = ' Book a free demo class.';
+    $seoBio = \Illuminate\Support\Str::limit($tutor['bio'], max(20, 155 - mb_strlen($seoStart) - mb_strlen($seoEnd)), '…', preserveWords: true);
+@endphp
+@section('title', $seoTitle($seoSubjects))
+@section('description', $seoStart . $seoBio . $seoEnd)
 
 @php
     $slots = config('tutors.time_slots');

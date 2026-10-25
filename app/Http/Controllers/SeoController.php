@@ -30,7 +30,8 @@ class SeoController extends Controller
     public function robots()
     {
         $lines = config('site.indexable')
-            ? ['User-agent: *', 'Disallow: /student', 'Disallow: /parent', 'Disallow: /tutor', 'Disallow: /admin', '', 'Sitemap: '.route('sitemap')]
+            ? ['User-agent: *', 'Disallow: /dashboard', 'Disallow: /admin', 'Disallow: /two-factor', 'Disallow: /email/', 'Disallow: /profile/',
+                'Disallow: /login', 'Disallow: /register', 'Disallow: /forgot-password', 'Disallow: /reset-password', 'Disallow: /*/demo', '', 'Sitemap: '.route('sitemap')]
             : ['# Not launched yet (SITE_INDEXABLE=false): keep it out of search engines.', 'User-agent: *', 'Disallow: /'];
 
         return response(implode("\n", $lines)."\n")->header('Content-Type', 'text/plain');
