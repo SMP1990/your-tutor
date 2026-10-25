@@ -41,8 +41,8 @@
         @csrf
         <div class="field">
             <label for="hero_picture">{{ $hero ? 'Replace the picture' : 'Add a picture' }}</label>
-            <input id="hero_picture" name="picture" type="file" accept="image/jpeg,image/png,image/webp" class="input" required>
-            <p class="field__hint">JPG, PNG or WebP, at most {{ \App\Support\HeroPicture::MAX_UPLOAD_KB / 1024 }} MB, at least {{ \App\Support\HeroPicture::MIN_WIDTH }} x {{ \App\Support\HeroPicture::MIN_HEIGHT }} pixels. It is shown 4:3 (landscape): any other shape is cut from the middle, so keep the main thing in the centre.</p>
+            <input id="hero_picture" name="picture" type="file" accept="image/*,.heic,.heif" class="input" required>
+            <p class="field__hint">Any picture works, of any size (photos straight from your phone are fine). The site makes it the right size and converts it to a fast format by itself. It is shown in a wide frame, so if your picture has a different shape its edges are trimmed to fit.</p>
         </div>
         @unless ($hero)
             <div class="field">

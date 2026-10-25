@@ -41,7 +41,8 @@
 {{-- The hero picture is the biggest thing on the page: tell the browser early so it starts loading it at once. --}}
 @if ($heroPicture)
     @push('styles')
-        <link rel="preload" as="image" href="{{ $heroPicture['src'] }}" imagesrcset="{{ $heroPicture['small'] }} 600w, {{ $heroPicture['src'] }} 1200w" imagesizes="(min-width: 900px) 45vw, 100vw" fetchpriority="high">
+        <link rel="preload" as="image" href="{{ $heroPicture['src'] }}"
+              @if ($heroPicture['small_width'] < $heroPicture['width']) imagesrcset="{{ $heroPicture['small'] }} {{ $heroPicture['small_width'] }}w, {{ $heroPicture['src'] }} {{ $heroPicture['width'] }}w" imagesizes="(min-width: 900px) 45vw, 100vw" @endif fetchpriority="high">
     @endpush
 @endif
 
@@ -93,7 +94,8 @@
 
         @if ($heroPicture)
             <div class="hero__art hero__art--photo">
-                <img class="hero__photo" src="{{ $heroPicture['src'] }}" srcset="{{ $heroPicture['small'] }} 600w, {{ $heroPicture['src'] }} 1200w" sizes="(min-width: 900px) 45vw, 100vw"
+                <img class="hero__photo" src="{{ $heroPicture['src'] }}"
+                     @if ($heroPicture['small_width'] < $heroPicture['width']) srcset="{{ $heroPicture['small'] }} {{ $heroPicture['small_width'] }}w, {{ $heroPicture['src'] }} {{ $heroPicture['width'] }}w" sizes="(min-width: 900px) 45vw, 100vw" @endif
                      width="{{ $heroPicture['width'] }}" height="{{ $heroPicture['height'] }}" alt="{{ $heroPicture['alt'] }}" fetchpriority="high" decoding="async">
             </div>
         @else
