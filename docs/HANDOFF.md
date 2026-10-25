@@ -378,7 +378,7 @@ mailer is `log`; fix it in the next change. `laravel.log` still holds the debug-
   Not covered: an external code review (the checklist wants one before payments exist) and a load test (not on the
   shared server: it hosts other people's sites).
 - [x] **7c-2 Backups** (25 Oct, local, NOT deployed, NOT run yet): `bin/backup.sh` (server, daily by cron, DB + uploads,
-  checked, keeps 7), `bin/pull-backup.ps1` + `bin/install-pc-backup.ps1` (copy to `%USERPROFILE%\YourTutorBackups`,
+  checked, keeps 7), `bin/pull-backup.ps1` + `bin/install-pc-backup.ps1` / `.cmd` (copy to `F:\YourTutorBackups`, chosen because C: has little room; the owner double-clicks the `.cmd`; the cron on the server (daily 03:00 UTC, set in hPanel by the owner on 25 Oct) is in place;
   daily scheduled task, 14 kept, private folder). Steps and the restore drill are in `docs/DEPLOY.md` ("Backups").
   STILL TO DO: deploy, run `backup.sh` once, owner adds the hPanel cron, owner runs `install-pc-backup.ps1`, restore
   test into a temporary database, check Hostinger's own backups in hPanel. `BackupScriptTest` guards the scripts.
