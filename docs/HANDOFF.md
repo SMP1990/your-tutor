@@ -446,7 +446,7 @@ history, demos, bookings, classes, reviews, complaints, messages) and every dash
 `avail` (availability grid) and `price-table` keep their own sideways scroll on purpose. Checked in the browser at 375 px and
 1280 px: no element is cut off on /admin, /admin/users, demos, bookings, classes, reviews, complaints, settings, profile.
 Rule for new tables: use `class="data-table"` with a `<thead>` and `<th scope="col">` (`SmallScreenTest` checks it).
-Needs `npm run build` + the new `public/build` on deploy, no migration. 263 tests green.
+DEPLOYED 25 Oct (main f11b69c, with the owner's OK; backup `~/backup-before-smallscreen-20261025.sql`, `npm run build` uploaded, `optimize`, no migration). The `/tutors` heading fix went live with it. 263 tests green. The owner checks it on his phone.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
