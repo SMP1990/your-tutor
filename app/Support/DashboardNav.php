@@ -48,7 +48,8 @@ class DashboardNav
             'Classes' => ['calendar', 'admin.classes.index', 'admin.classes.*'],
             'Reviews' => ['star', 'admin.reviews.index', 'admin.reviews.*'],
             'Users' => ['users', 'admin.users.index', 'admin.users.*'], 'Payments' => ['wallet', null],
-            'Refunds' => ['refund', null], 'Complaints' => ['flag', 'admin.complaints.index', 'admin.complaints.*'], 'Site settings' => ['settings', null],
+            'Refunds' => ['refund', null], 'Complaints' => ['flag', 'admin.complaints.index', 'admin.complaints.*'],
+            'Messages' => ['notes', 'admin.contact.index', 'admin.contact.*'], 'Site settings' => ['settings', null],
         ],
     ];
 

@@ -291,6 +291,14 @@ Home numbers start manual, with an automatic option). Parts: 6a users, 6b compla
   status, private note (never shown to users) and a reply the reporter reads under "My reports". No email (owner
   decision). Tests in `ComplaintTest`. 198 tests green. Next: 6c contact inbox.
 
+- [x] **6c Contact inbox** (25 Oct, local only, NOT deployed, NOT pushed): the Contact form now saves to
+  `contact_messages` (migration 2026_10_31_000001; `ContactMessage`, `ContactStatus` New / Read / Answered; sender's
+  `user_id` kept when logged in). A hidden `website` field is a bot trap (filled = pretend success, save nothing);
+  the 5-per-minute throttle stays. Admin `/admin/messages` (`Admin\ContactMessageController`, menu "Messages",
+  tabs with counts): opening a new message marks it Read; "Reply on WhatsApp" (wa.me from the phone, 03xx/+92xx)
+  and "Reply by email" (mailto) buttons; status + private note. The site sends no email (owner decision).
+  206 tests green. Next: 6d site settings, then push + deploy everything (owner's order).
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)

@@ -28,6 +28,11 @@
 
         <form class="demo-form" method="post" action="{{ route('contact.store') }}" novalidate>
             @csrf
+            {{-- Bot trap: hidden from people; a filled value means a bot (ContactController ignores the message). --}}
+            <div hidden aria-hidden="true">
+                <label for="website">Leave this empty</label>
+                <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
             <div class="form-grid">
                 <div class="field field--wide">
                     <label for="name">Your name</label>
