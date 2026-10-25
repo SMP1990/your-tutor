@@ -490,7 +490,7 @@ limit to 1 GB). Output: biggest 4:3 centre crop, width = min(1200, crop), small 
 The admin page now just says "Any picture works, of any size". Tests: `HeroPictureTest` 15 (formats, small, tiny, tall, huge, refusals,
 hidden code, transparent PNG, replace/delete with different sizes). 278 tests green.
 THIRD VERSION (26 Oct, owner sent his woman-with-laptop picture and a Grapeslab hero as inspiration: "it is cut, no effect, no motion,
-give it a proper modern hero look"; local, NOT deployed yet until he agrees): (1) NOTHING IS CUT any more: the picture keeps its own shape,
+give it a proper modern hero look"; LIVE since 26 Oct 00:3x PKT, main 34ab4c6, backup `~/backup-before-modernhero-20261026.sql`, `npm run build` uploaded, `optimize`, no migration; live checks: pages 200, 3 floating cards, `hero-stage--sample` shown until he uploads a picture, CSS cached 1 year): (1) NOTHING IS CUT any more: the picture keeps its own shape,
 longest side 1200 (big) / 640 (small), never enlarged; settings `hero_image_w/_h/_sw/_sh` + `hero_image_mode` (`cutout` | `photo`).
 (2) AUTO MODE: if >= 2% of the pixels are see-through it is a "cutout" (empty margins trimmed so the person stands tight on the circles),
 else a "photo" (white rounded frame). His file has the chequered pattern painted INTO solid pixels, so it counts as a photo: he needs a
@@ -502,7 +502,7 @@ sway of the figure, a pulsing green "live" dot, the headline word "trusted tutor
 CSS only (no JS, CSP safe); text and the LCP picture are NOT faded in (kept PageSpeed 100); `prefers-reduced-motion` switches all motion off;
 the third card is hidden under 480 px. Without a picture the old sample tutor card sits in the same stage. Dribbble and Awwwards were blocked in
 the browser pane, so the look comes from his Grapeslab picture plus common modern edtech patterns (web search). 281 tests green.
-Needs `npm run build` + code on deploy, no migration.
+Owner next: upload a PNG with a REAL transparent background in /admin/settings and look at Home on his phone.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
