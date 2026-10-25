@@ -66,6 +66,14 @@ class HeroPictureReader
             throw new HeroPictureException('This picture is damaged or could not be read. Please try another one.');
         }
 
+        // GIF and 8-bit PNG keep their colours in a palette: make them ordinary full-colour pictures so that
+        // see-through areas can be told apart from solid ones.
+        if (! imageistruecolor($image)) {
+            imagepalettetotruecolor($image);
+        }
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+
         if ($type === IMAGETYPE_JPEG && function_exists('exif_read_data')) {
             $orientation = @exif_read_data($path)['Orientation'] ?? 1;
             $angle = [3 => 180, 6 => -90, 8 => 90][$orientation] ?? 0;

@@ -3,7 +3,7 @@
 Last updated: 25 Oct 2026, evening, after the Home page picture feature (6n). **Update this file at the end of every step.**
 
 **STATUS NOW (read this first):**
-- Everything (6a-6n) is built, tested (278 tests green), pushed to GitHub and LIVE on Hostinger (temporary domain). Code of
+- Everything (6a-6n) is built, tested (281 tests green), pushed to GitHub and LIVE on Hostinger (temporary domain). Code of
   the last feature = commit `1f71893`; later commits are only HANDOFF text.
 - **6n (admin-controlled Home page picture) went live the same evening** after a spell of unstable SSH (login worked, then
   "Connection reset" / "server not responding"; ssh and scp sometimes hung). Backup first: `~/backup-before-heropicture-20261025.sql`
@@ -489,6 +489,20 @@ limit to 1 GB). Output: biggest 4:3 centre crop, width = min(1200, crop), small 
 (files `<base>-<width>.webp`, widths stored as `hero_image_w` / `hero_image_sw`; Home leaves out `srcset` when both are the same).
 The admin page now just says "Any picture works, of any size". Tests: `HeroPictureTest` 15 (formats, small, tiny, tall, huge, refusals,
 hidden code, transparent PNG, replace/delete with different sizes). 278 tests green.
+THIRD VERSION (26 Oct, owner sent his woman-with-laptop picture and a Grapeslab hero as inspiration: "it is cut, no effect, no motion,
+give it a proper modern hero look"; local, NOT deployed yet until he agrees): (1) NOTHING IS CUT any more: the picture keeps its own shape,
+longest side 1200 (big) / 640 (small), never enlarged; settings `hero_image_w/_h/_sw/_sh` + `hero_image_mode` (`cutout` | `photo`).
+(2) AUTO MODE: if >= 2% of the pixels are see-through it is a "cutout" (empty margins trimmed so the person stands tight on the circles),
+else a "photo" (white rounded frame). His file has the chequered pattern painted INTO solid pixels, so it counts as a photo: he needs a
+PNG with a REAL transparent background (remove.bg, Canva "background remover", Photoshop...). Automatic background removal was NOT built
+(risky: it can eat white clothes); offer it later as an opt-in if he wants. (3) NEW HERO (`home.blade.php`, `app.css` "Hero stage"):
+`.hero-stage` with a pale halo + dark green disc + orange dot + dashed spinning ring + dotted grid behind the picture, three floating glass
+cards ("Verified tutors: ID, test and interview", "Free demo class: no payment needed", "Live 1-to-1 online") that pop in and float, a soft
+sway of the figure, a pulsing green "live" dot, the headline word "trusted tutor" highlighted (`.hero__mark`) and a soft gradient behind the hero.
+CSS only (no JS, CSP safe); text and the LCP picture are NOT faded in (kept PageSpeed 100); `prefers-reduced-motion` switches all motion off;
+the third card is hidden under 480 px. Without a picture the old sample tutor card sits in the same stage. Dribbble and Awwwards were blocked in
+the browser pane, so the look comes from his Grapeslab picture plus common modern edtech patterns (web search). 281 tests green.
+Needs `npm run build` + code on deploy, no migration.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

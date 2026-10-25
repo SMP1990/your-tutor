@@ -53,7 +53,7 @@
     <div class="container hero__inner">
         <div class="hero__text">
             <span class="badge">Free demo class with every tutor</span>
-            <h1>Find a trusted tutor for every subject, online.</h1>
+            <h1>Find a <span class="hero__mark">trusted tutor</span> for every subject, online.</h1>
             <p class="hero__lead">Verified tutors for Grade 1 to A Levels, Matric, FSc and entry tests. Compare profiles, try a free class, then pay per session.</p>
 
             <form class="search-box" action="{{ url('/tutors') }}" method="get">
@@ -92,32 +92,53 @@
             @endif
         </div>
 
-        @if ($heroPicture)
-            <div class="hero__art hero__art--photo">
-                <img class="hero__photo" src="{{ $heroPicture['src'] }}"
-                     @if ($heroPicture['small_width'] < $heroPicture['width']) srcset="{{ $heroPicture['small'] }} {{ $heroPicture['small_width'] }}w, {{ $heroPicture['src'] }} {{ $heroPicture['width'] }}w" sizes="(min-width: 900px) 45vw, 100vw" @endif
-                     width="{{ $heroPicture['width'] }}" height="{{ $heroPicture['height'] }}" alt="{{ $heroPicture['alt'] }}" fetchpriority="high" decoding="async">
-            </div>
-        @else
-        <div class="hero__art" aria-hidden="true">
-            <div class="demo-card">
-                <div class="demo-card__head">
-                    <img src="{{ asset('images/avatars/ayesha.svg') }}" alt="" width="56" height="56">
-                    <div>
-                        <strong>Ayesha R.</strong>
-                        <span>Physics · Mathematics</span>
+        {{-- The stage: coloured shapes behind, the picture (or the sample card) in front, small floating cards around. --}}
+        <div class="hero-stage hero-stage--{{ $heroPicture ? $heroPicture['mode'] : 'sample' }}">
+            <span class="hero-stage__shape hero-stage__shape--halo" aria-hidden="true"></span>
+            <span class="hero-stage__shape hero-stage__shape--disc" aria-hidden="true"></span>
+            <span class="hero-stage__shape hero-stage__shape--dot" aria-hidden="true"></span>
+            <span class="hero-stage__shape hero-stage__shape--ring" aria-hidden="true"></span>
+            <span class="hero-stage__shape hero-stage__shape--grid" aria-hidden="true"></span>
+
+            @if ($heroPicture)
+                <div class="hero-stage__figure">
+                    <img src="{{ $heroPicture['src'] }}"
+                         @if ($heroPicture['small_width'] < $heroPicture['width']) srcset="{{ $heroPicture['small'] }} {{ $heroPicture['small_width'] }}w, {{ $heroPicture['src'] }} {{ $heroPicture['width'] }}w" sizes="(min-width: 900px) 44vw, 90vw" @endif
+                         width="{{ $heroPicture['width'] }}" height="{{ $heroPicture['height'] }}" alt="{{ $heroPicture['alt'] }}" fetchpriority="high" decoding="async">
+                </div>
+            @else
+                <div class="hero-stage__figure" aria-hidden="true">
+                    <div class="demo-card">
+                        <div class="demo-card__head">
+                            <img src="{{ asset('images/avatars/ayesha.svg') }}" alt="" width="56" height="56">
+                            <div>
+                                <strong>Ayesha R.</strong>
+                                <span>Physics · Mathematics</span>
+                            </div>
+                        </div>
+                        <div class="demo-card__tags"><span>FSc</span><span>O Level</span><span>Urdu · English</span></div>
+                        <div class="demo-card__price"><span>4.9 rating</span><strong>PKR 1,800 / hr</strong></div>
+                        <div class="demo-card__booked">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg>
+                            Free demo booked · Tue, 6:00 PM
+                        </div>
                     </div>
                 </div>
-                <div class="demo-card__tags"><span>FSc</span><span>O Level</span><span>Urdu · English</span></div>
-                <div class="demo-card__price"><span>4.9 rating</span><strong>PKR 1,800 / hr</strong></div>
-                <div class="demo-card__booked">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg>
-                    Free demo booked · Tue, 6:00 PM
-                </div>
+            @endif
+
+            <div class="hero-chip hero-chip--verified" aria-hidden="true">
+                <span class="hero-chip__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+                <span>Verified tutors<small>ID, test and interview</small></span>
             </div>
-            <div class="hero__pill">Verified tutor</div>
+            <div class="hero-chip hero-chip--demo" aria-hidden="true">
+                <span class="hero-chip__icon hero-chip__icon--warm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+                <span>Free demo class<small>No payment needed</small></span>
+            </div>
+            <div class="hero-chip hero-chip--live" aria-hidden="true">
+                <span class="hero-chip__live"></span>
+                <span>Live 1-to-1 online</span>
+            </div>
         </div>
-        @endif
     </div>
 </section>
 

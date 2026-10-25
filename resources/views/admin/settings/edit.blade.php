@@ -21,8 +21,8 @@
     @if ($heroErrors->any())<div class="form-alert" role="alert">{{ $heroErrors->first() }}</div>@endif
 
     @if ($hero)
-        <img src="{{ $hero['small'] }}" alt="{{ $hero['alt'] }}" width="300" height="225" class="settings-preview">
-        <p class="muted">This picture is on the Home page, next to the search box.</p>
+        <img src="{{ $hero['small'] }}" alt="{{ $hero['alt'] }}" width="{{ $hero['small_width'] }}" height="{{ $hero['small_height'] }}" class="settings-preview">
+        <p class="muted">This picture is on the Home page, next to the search box. The site found that it is {{ $hero['mode'] === 'cutout' ? 'a cut-out with a transparent background, so it stands on the coloured circles' : 'an ordinary photo, so it is shown in a white frame' }}. (The chequered pattern above only shows transparent areas.)</p>
 
         <form method="post" action="{{ route('admin.hero.update') }}" class="demo-form" novalidate>
             @csrf
@@ -42,7 +42,7 @@
         <div class="field">
             <label for="hero_picture">{{ $hero ? 'Replace the picture' : 'Add a picture' }}</label>
             <input id="hero_picture" name="picture" type="file" accept="image/*,.heic,.heif" class="input" required>
-            <p class="field__hint">Any picture works, of any size (photos straight from your phone are fine). The site makes it the right size and converts it to a fast format by itself. It is shown in a wide frame, so if your picture has a different shape its edges are trimmed to fit.</p>
+            <p class="field__hint">Any picture works, of any size (photos straight from your phone are fine). The site makes it the right size and converts it to a fast format by itself, and it never cuts the picture. For the best look use a person with a transparent background (a PNG with the background removed): she then stands on the coloured circles. A picture that only looks transparent (it has a chequered pattern drawn into it) is treated as an ordinary photo.</p>
         </div>
         @unless ($hero)
             <div class="field">
