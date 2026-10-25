@@ -44,6 +44,9 @@ class BackupScriptTest extends TestCase
         $this->assertStringContainsString("'^(db|files)-\\d{4}-\\d{2}-\\d{2}_\\d{4}\\.(sql|tar)\\.gz$'", $pull);
         $this->assertStringContainsString('.part', $pull, 'a half-copied file must never look like a finished backup');
         $this->assertStringContainsString("{ 1000 } else { 100 }", $pull, 'an empty uploads archive is small but valid; a database dump never is');
+        $this->assertStringContainsString('[string]$Destination', $pull);
+        $this->assertStringContainsString('is not available, nothing copied', $pull, 'an unplugged drive must fail loudly');
+        $this->assertStringContainsString("[string]\$Destination = 'F:\\YourTutorBackups'", $install);
         $this->assertStringContainsString('icacls', $install);
         $this->assertStringContainsString('-StartWhenAvailable', $install);
     }

@@ -1,8 +1,11 @@
 # Copies the newest server backup to this PC (Step 7c-2). Started every day by the scheduled task that
 # install-pc-backup.ps1 creates. Needs the SSH key and ~/.ssh/config.yourtutor that already exist on this PC.
-# Backups go to %USERPROFILE%\YourTutorBackups (only your Windows user can open that folder). The 14 newest are kept.
+# Backups go to the folder given as -Destination (the installer chooses it). The 14 newest are kept.
+param(
+    [string]$Destination = (Join-Path $env:USERPROFILE 'YourTutorBackups')
+)
 $ErrorActionPreference = 'Stop'
-$dest = Join-Path $env:USERPROFILE 'YourTutorBackups'
+$dest = $Destination
 $cfg = Join-Path $env:USERPROFILE '.ssh\config.yourtutor'
 $keep = 14
 $log = Join-Path $dest 'pull.log'
@@ -13,6 +16,9 @@ function Write-Log([string]$text) {
 }
 
 try {
+    # A missing drive (for example an unplugged external disk) must fail loudly, not create a folder on another drive.
+    $root = Split-Path -Qualifier $dest
+    if (-not (Test-Path $root)) { throw "drive $root is not available, nothing copied" }
     New-Item -ItemType Directory -Force -Path $dest | Out-Null
 
     $latest = & ssh -F $cfg yourtutor 'cat backups/latest.txt'

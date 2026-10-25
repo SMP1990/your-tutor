@@ -84,10 +84,12 @@ The result of every run (OK or FAILED and why) is a line in `~/backups/backup.lo
 `bash ~/domains/<site>/app/bin/backup.sh`.
 
 **2. On the owner's PC, every day.** A server backup alone is lost if the server (or the hosting account) is lost.
-`bin/install-pc-backup.ps1` (run once, PowerShell: `powershell -ExecutionPolicy Bypass -File bin\install-pc-backup.ps1`)
-makes the folder `C:\Users\<you>\YourTutorBackups` private to the Windows user and creates the scheduled task
-"YourTutor backup copy" (daily 13:00; if the PC was off it runs when the PC is on again). It uses the same SSH key as
-deploys. The 14 newest copies stay. Look at `YourTutorBackups\pull.log` to see that it works. These files hold ID scans
+Double-click `bin\install-pc-backup.cmd` once. It puts the backups in `F:\YourTutorBackups` (another drive: start it from a
+command window as `install-pc-backup.cmd E:\YourTutorBackups`), makes that folder private to the Windows user and creates
+the scheduled task "YourTutor backup copy" (daily 13:00; if the PC was off it runs when the PC is on again). The small
+program file lives in `%LOCALAPPDATA%\YourTutor`. It uses the same SSH key as deploys. The 14 newest copies stay. Look at
+`<folder>\pull.log` to see that it works. If the drive is unplugged the task FAILS and says so in `pull.log` (it never
+creates the folder somewhere else). Backups from the first version (`C:\Users\<you>\YourTutorBackups`) are moved over. These files hold ID scans
 and children's data: do not share the folder, do not put it in a synced cloud folder, keep the disk encrypted
 (BitLocker) if the PC can be lost or stolen.
 
