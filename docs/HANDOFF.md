@@ -319,7 +319,7 @@ admin code cannot arrive), the new admin pages with real clicks, and sending a C
 
 ## 6i. Step 7 = launch prep (owner agreed the plan 25 Oct: 7a safai + first admin, 7b email, 7c security / backups /
 monitoring, 7d speed + SEO, 7e owner's list + beta; analytics NOT now)
-- [x] **7a Clean-up + first admin** (25 Oct, committed locally, NOT deployed, NOT pushed): new command
+- [x] **7a Clean-up + first admin** (25 Oct, DEPLOYED + pushed with 7b-1): new command
   `admin:create <email> --name= --phone=` (`CreateAdmin`; password asked twice, hidden, 12+ chars letters + numbers;
   admin is created email-verified; never an argument). Removed: sample dashboards `/preview/{role}` and their views
   (`resources/views/dashboards`), preview links on Log In + their CSS, `/verify-phone` page, `site:export`
@@ -330,7 +330,7 @@ monitoring, 7d speed + SEO, 7e owner's list + beta; analytics NOT now)
   Not done by hand yet (needs the owner's OK): delete the `static-site` branch on GitHub, local `website/` and
   `upload-to-hostinger*` folders, server `public_html_static_backup/`.
 
-- [x] **7b-1 Email code** (25 Oct, committed locally, NOT deployed, NOT pushed): emails no longer block pages.
+- [x] **7b-1 Email code** (25 Oct, DEPLOYED + pushed): emails no longer block pages.
   Queued (`QueuedNotification`, 3 tries, retry after 1 and 5 min): tutor application / profile decisions, demo and
   booking answers, and the password-reset email (`QueuedResetPassword` via `User::sendPasswordResetNotification`).
   Sent at once, never queued: admin login code (`TwoFactorCode::send` now returns false on failure and the code is
@@ -345,6 +345,15 @@ monitoring, 7d speed + SEO, 7e owner's list + beta; analytics NOT now)
   code avoids this for verification and the admin code, but the queued emails (reset, decisions) need the hPanel cron
   from `docs/DEPLOY.md` ("Email") before they can ever be sent. `crontab` does not exist over SSH on Hostinger: add the
   cron in hPanel. 7b-2 (real SMTP) waits for the owner's domain. Tests: `MailQueueTest`; 222 tests green.
+
+**7a + 7b-1 DEPLOYED (25 Oct, with the owner's OK; GitHub main = 5f1648b):** database backed up first
+(`~/backup-before-7a7b-20261025.sql` on the server; the Step 6 backup `~/backup-before-step6-20261025.sql` is still
+there too; delete both when not needed), code + new `public/build` uploaded, old preview/export files deleted on the
+server, `migrate --force` (nothing to migrate), `optimize`. Live checks: public pages 200, `/preview/*` and
+`/verify-phone` 404, Log In has no preview links, new CSS 200, admin pages redirect guests, `/.env` 403, no new
+errors in the log. Commands now on the server: `admin:create`, `mail:test`, `demo:remove`. NOT done yet: the first
+admin account (owner runs `admin:create` over SSH, see `docs/DEPLOY.md`), the queue cron in hPanel and real SMTP (7b-2,
+waits for the domain). Until then queued emails (password reset, tutor / demo / booking answers) are NOT delivered.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
