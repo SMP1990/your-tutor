@@ -3,14 +3,15 @@
 Last updated: 25 Oct 2026, evening, after the Home page picture feature (6n). **Update this file at the end of every step.**
 
 **STATUS NOW (read this first):**
-- Everything up to 6m is built, tested (272 tests green), pushed to GitHub (`main` = local = `1f71893`) and LIVE on Hostinger
-  (temporary domain), EXCEPT 6n.
-- **6n (admin-controlled Home page picture, commit `1f71893`) is pushed but NOT deployed.** The deploy was stopped because
-  Hostinger's SSH was unstable (login works, then "Connection reset" / "server not responding"; ssh and scp sometimes hang).
-  The database backup for this deploy IS done on the server (`~/backup-before-heropicture-20261025.sql`, 21 tables). Still to do
-  when SSH is stable: upload `app.tar.gz` (`git archive HEAD`) + `build.tar.gz` (`public/build`), extract into `app/`, `artisan optimize`
-  (no migration), check `/` and `/admin/settings`. Use `timeout` and `ServerAliveInterval` on ssh/scp so nothing hangs, and
-  do NOT extract a half-uploaded archive. Deploy recipe: `docs/DEPLOY.md`.
+- Everything (6a-6n) is built, tested (272 tests green), pushed to GitHub and LIVE on Hostinger (temporary domain). Code of
+  the last feature = commit `1f71893`; later commits are only HANDOFF text.
+- **6n (admin-controlled Home page picture) went live the same evening** after a spell of unstable SSH (login worked, then
+  "Connection reset" / "server not responding"; ssh and scp sometimes hung). Backup first: `~/backup-before-heropicture-20261025.sql`
+  (21 tables). Checked live: `/` 200, `/admin/settings` redirects guests, `POST /admin/settings/hero` reaches the CSRF check (419, so the
+  route exists), CSS has `hero__photo`, server has GD + WebP + EXIF and the `public/storage` link. NOT yet tried by the owner:
+  uploading a real picture in /admin/settings. LESSON for deploys when SSH is shaky: build the archives locally first, take the
+  backup, `scp` and `ssh` each with `timeout` + `ServerAliveInterval=5`, run `gzip -t` on the uploaded archives BEFORE extracting, and
+  never extract a half-uploaded archive. Deploy recipe: `docs/DEPLOY.md`.
 - Live site has: public pages, accounts, roles, tutor approval, free demos (Google Meet), regular classes, attendance, reviews,
   complaints, contact inbox, admin users / settings / profile, backups (server cron 03:00 UTC + copy to the owner's PC at
   `F:\YourTutorBackups`), speed 100 and SEO fixes, phone-friendly menus and tables.
@@ -464,7 +465,7 @@ history, demos, bookings, classes, reviews, complaints, messages) and every dash
 Rule for new tables: use `class="data-table"` with a `<thead>` and `<th scope="col">` (`SmallScreenTest` checks it).
 DEPLOYED 25 Oct (main f11b69c, with the owner's OK; backup `~/backup-before-smallscreen-20261025.sql`, `npm run build` uploaded, `optimize`, no migration). The `/tutors` heading fix went live with it. 263 tests green. The owner checks it on his phone.
 
-## 6n. Home page picture from the admin (25 Oct, owner's request: "the hero picture must be controllable from the dashboard, add and delete"; pushed, NOT deployed yet: SSH problem, see STATUS NOW)
+## 6n. Home page picture from the admin (25 Oct, owner's request: "the hero picture must be controllable from the dashboard, add and delete"; LIVE)
 Admin > Site settings > "Home page picture" (`Admin\HeroPictureController`, routes `admin.hero.store|update|destroy`, role:admin + two-factor).
 Upload (JPG/PNG/WebP, max 4 MB, 600x450 .. 6000x6000 px), replace, change the short description (alt text, 120 chars) or delete.
 `App\Support\HeroPicture`: the upload is decoded with GD, rotated by EXIF, cut to 4:3 around the centre and saved again as TWO
@@ -489,7 +490,7 @@ Deploy: `npm run build` (CSS changed) + code, no migration. 272 tests green.
 
 ## 8. Next steps (owner decides, one at a time)
 Steps 1-6 and most of Step 7 are done (see 6h-6n). The owner decides the order; show the plan first, build after he agrees.
-1. **Finish the deploy of 6n** (see STATUS NOW at the top), then check `/admin/settings` with the owner (he uploads the picture).
+1. **Owner tries 6n:** he uploads a real picture in `/admin/settings` > Home page picture and checks Home on his phone; fix anything he reports.
 2. **Small leftovers (no owner effort):** rollback notes + keep the last 3 release archives on the server (7c-4); check that the
    03:00 UTC backup cron ran (`~/backups/backup.log`) and that the PC copy at 13:00 ran (`F:\YourTutorBackups\pull.log`); `/contact`
    was never measured on PageSpeed; `mail:test` still ends with "Check the inbox" when the mailer is `log`.
