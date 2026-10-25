@@ -21,6 +21,9 @@
                                 {{ in_array($booking->tutor_profile_id.'-'.$booking->child_id, $reviewedPairs ?? [], true) ? 'Edit your review' : 'Rate your tutor' }}
                             </a>
                         @endif
+                        @if ($status === \App\Enums\BookingStatus::Accepted)
+                            <a href="{{ route('complaints.booking', $booking) }}" class="btn btn-outline btn-sm">Report a problem</a>
+                        @endif
                         @if ($status === \App\Enums\BookingStatus::Pending)
                             <form method="post" action="{{ route('bookings.cancel', $booking) }}" data-confirm="Cancel this booking request?">
                                 @csrf

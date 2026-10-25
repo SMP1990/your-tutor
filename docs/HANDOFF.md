@@ -278,7 +278,18 @@ Home numbers start manual, with an automatic option). Parts: 6a users, 6b compla
   shown as "History"). Suspended users: login refused after the right password (`LoginRequest`), logged out on the
   next request (`EnsureNotSuspended` in the web group), their DB sessions deleted, and a suspended tutor drops out of
   every public page (`TutorProfile::approved()` now checks it). Admin can "Mark email as verified" with a reason
-  (needed while live email is off, see 1f-5). 188 tests green. Next: 6b complaints.
+  (needed while live email is off, see 1f-5). 188 tests green. Next: 6b complaints (done, see below).
+
+- [x] **6b Complaints** (25 Oct, local only, NOT deployed, NOT pushed; owner said: push + deploy after ALL of Step 6):
+  Parent, student or tutor reports a problem with a booking or one class ("Report a problem" on upcoming and
+  past classes, on the family's confirmed bookings and on the tutor's confirmed students). Routes
+  `/dashboard/bookings/{booking}/report` and `/dashboard/classes/{session}/report`, list at `/dashboard/reports`
+  (menu "My reports"), `ComplaintController`; only the booking's family or its tutor (else 404); category list
+  in `Complaint::CATEGORIES`, details 10-1000 chars, at most 3 open reports per person per booking. Table
+  `complaints` (migration 2026_10_30_000001, `ComplaintStatus` New / In progress / Closed). Admin: `/admin/complaints`
+  (`Admin\ComplaintController`, menu "Complaints", tabs with counts): detail with family, tutor, booking and class,
+  status, private note (never shown to users) and a reply the reporter reads under "My reports". No email (owner
+  decision). Tests in `ComplaintTest`. 198 tests green. Next: 6c contact inbox.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

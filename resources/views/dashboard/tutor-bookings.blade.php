@@ -68,7 +68,10 @@
                         <strong>{{ $booking->student_name }} · {{ $booking->subject?->name ?? '—' }}</strong>
                         <span>{{ $booking->scheduleLabel() }} · from {{ $booking->starts_on->format('D j M') }} · {{ $booking->weeks }} weeks</span>
                     </div>
-                    <div class="item-list__side"><a href="{{ $booking->meet_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">Google Meet</a></div>
+                    <div class="item-list__side">
+                        <a href="{{ $booking->meet_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">Google Meet</a>
+                        <a href="{{ route('complaints.booking', $booking) }}" class="btn btn-outline btn-sm">Report a problem</a>
+                    </div>
                 </li>
             @endforeach
         </ul>

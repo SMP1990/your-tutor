@@ -59,7 +59,10 @@
                         <span>{{ $isTutor ? $session->booking->student_name : 'With '.($session->booking->tutorProfile?->user?->name ?? 'your tutor').' · for '.$session->booking->student_name }}</span>
                         @if ($session->note)<span>“{{ $session->note }}”</span>@endif
                     </div>
-                    <div class="item-list__side"><span class="status status--{{ $session->status->colour() }}">{{ $session->status->label() }}</span></div>
+                    <div class="item-list__side">
+                        <span class="status status--{{ $session->status->colour() }}">{{ $session->status->label() }}</span>
+                        <a href="{{ route('complaints.session', $session) }}" class="btn btn-outline btn-sm">Report a problem</a>
+                    </div>
                 </li>
             @endforeach
         </ul>

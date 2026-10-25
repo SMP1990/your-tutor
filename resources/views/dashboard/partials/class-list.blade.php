@@ -21,6 +21,7 @@
                         <span class="muted">Join opens {{ \App\Models\ClassSession::JOIN_OPENS_BEFORE }} min before</span>
                     @endif
                     @if ($withActions ?? false)
+                        <a href="{{ route('complaints.session', $session) }}" class="btn btn-outline btn-sm">Report a problem</a>
                         @if ($isTutor)
                             <details class="class-cancel">
                                 <summary class="btn btn-outline btn-sm">Cancel class</summary>

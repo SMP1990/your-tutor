@@ -30,16 +30,16 @@ class DashboardNav
     private const MENUS = [
         'student' => [
             'Overview' => ['home', 'dashboard.student'], 'My classes' => ['calendar', 'classes.index', 'classes.*'], 'Class notes' => ['notes', null],
-            'Payments' => ['wallet', null], 'Reviews' => ['star', null], 'Profile' => ['user', null],
+            'Payments' => ['wallet', null], 'Reviews' => ['star', null], 'My reports' => ['flag', 'complaints.index', 'complaints.*'], 'Profile' => ['user', null],
         ],
         'parent' => [
             'Overview' => ['home', 'dashboard.parent'], 'Children' => ['users', 'children.create', 'children.*'],
-            'Classes' => ['calendar', 'classes.index', 'classes.*'], 'Progress' => ['chart', null], 'Payments' => ['wallet', null], 'Profile' => ['user', null],
+            'Classes' => ['calendar', 'classes.index', 'classes.*'], 'Progress' => ['chart', null], 'Payments' => ['wallet', null], 'My reports' => ['flag', 'complaints.index', 'complaints.*'], 'Profile' => ['user', null],
         ],
         'tutor' => [
             'Overview' => ['home', 'dashboard.tutor'], 'Application' => ['check', 'tutor.application', 'tutor.application*'],
             'Demo requests' => ['calendar', 'tutor.demos', 'tutor.demos*'],
-            'Class bookings' => ['notes', 'tutor.bookings', 'tutor.bookings*'], 'Timetable' => ['clock', 'classes.index', 'classes.*'], 'Earnings' => ['wallet', null], 'Reviews' => ['star', 'tutor.reviews'],
+            'Class bookings' => ['notes', 'tutor.bookings', 'tutor.bookings*'], 'Timetable' => ['clock', 'classes.index', 'classes.*'], 'Earnings' => ['wallet', null], 'Reviews' => ['star', 'tutor.reviews'], 'My reports' => ['flag', 'complaints.index', 'complaints.*'],
         ],
         'admin' => [
             'Overview' => ['home', 'dashboard.admin'], 'Tutor approvals' => ['check', 'admin.tutors.index', 'admin.tutors.*'],
@@ -48,7 +48,7 @@ class DashboardNav
             'Classes' => ['calendar', 'admin.classes.index', 'admin.classes.*'],
             'Reviews' => ['star', 'admin.reviews.index', 'admin.reviews.*'],
             'Users' => ['users', 'admin.users.index', 'admin.users.*'], 'Payments' => ['wallet', null],
-            'Refunds' => ['refund', null], 'Complaints' => ['flag', null], 'Site settings' => ['settings', null],
+            'Refunds' => ['refund', null], 'Complaints' => ['flag', 'admin.complaints.index', 'admin.complaints.*'], 'Site settings' => ['settings', null],
         ],
     ];
 

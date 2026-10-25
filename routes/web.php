@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ClassesController as AdminClassesController;
+use App\Http\Controllers\Admin\ComplaintController as AdminComplaintController;
 use App\Http\Controllers\Admin\DemoRequestController as AdminDemoRequestController;
 use App\Http\Controllers\Admin\ReviewModerationController;
 use App\Http\Controllers\Admin\TutorReviewController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthPreviewController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\ClassBookingController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardPreviewController;
 use App\Http\Controllers\DemoBookingController;
@@ -124,6 +126,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard/bookings/{booking}/review', 'edit')->name('reviews.edit');
         Route::put('/dashboard/bookings/{booking}/review', 'update')->middleware('throttle:10,1')->name('reviews.update');
     });
+    Route::middleware('role:student,parent,tutor')->controller(ComplaintController::class)->group(function () {
+        Route::get('/dashboard/reports', 'index')->name('complaints.index');
+        Route::get('/dashboard/bookings/{booking}/report', 'createForBooking')->name('complaints.booking');
+        Route::post('/dashboard/bookings/{booking}/report', 'storeForBooking')->middleware('throttle:10,1')->name('complaints.booking.store');
+        Route::get('/dashboard/classes/{session}/report', 'createForSession')->name('complaints.session');
+        Route::post('/dashboard/classes/{session}/report', 'storeForSession')->middleware('throttle:10,1')->name('complaints.session.store');
+    });
     Route::get('/dashboard/tutor', [DashboardController::class, 'tutor'])->middleware('role:tutor')->name('dashboard.tutor');
     Route::middleware('role:tutor')->controller(TutorApplicationController::class)->group(function () {
         Route::get('/dashboard/tutor/application', 'edit')->name('tutor.application');
@@ -155,6 +164,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/admin/reviews', [ReviewModerationController::class, 'index'])->middleware('two-factor')->name('admin.reviews.index');
         Route::post('/admin/reviews/{review}/toggle', [ReviewModerationController::class, 'toggle'])
             ->middleware(['two-factor', 'throttle:60,1'])->name('admin.reviews.toggle');
+
+        Route::middleware('two-factor')->prefix('/admin/complaints')->name('admin.complaints.')->controller(AdminComplaintController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/{complaint}', 'show')->name('show');
+            Route::put('/{complaint}', 'update')->middleware('throttle:60,1')->name('update');
+        });
 
         Route::middleware('two-factor')->prefix('/admin/users')->name('admin.users.')->controller(AdminUserController::class)->group(function () {
             Route::get('/', 'index')->name('index');
