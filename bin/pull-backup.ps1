@@ -29,7 +29,13 @@ try {
 
         & scp -F $cfg "yourtutor:backups/$name" "$target.part"
         if ($LASTEXITCODE -ne 0) { throw "copying $name failed" }
-        if ((Get-Item "$target.part").Length -lt 1000) { throw "$name is too small, not keeping it" }
+        # A database dump is never tiny; the uploads archive is only ~200 bytes while nobody has uploaded anything yet.
+        $minimum = if ($name -like 'db-*') { 1000 } else { 100 }
+        $size = (Get-Item "$target.part").Length
+        if ($size -lt $minimum) {
+            Remove-Item -Force "$target.part"
+            throw "$name is too small ($size bytes), not keeping it"
+        }
         Move-Item -Force "$target.part" $target
         Write-Log "copied $name ($([math]::Round((Get-Item $target).Length / 1KB)) KB)"
     }
