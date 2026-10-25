@@ -69,6 +69,42 @@ Check it: `php artisan queue:failed` lists emails that failed 3 times, `php arti
 **Test it:** `php artisan mail:test someone@example.com` sends one email and prints the mailer, host and from address
 (never the password). It warns while `MAIL_MAILER` is still `log` or the from address is a placeholder.
 
+## Backups (Step 7c-2)
+What is saved: the whole MySQL database and the uploaded files (`storage/app/private` = CNIC and degree scans,
+`storage/app/public` = photos). NOT saved: `.env` (it holds the secrets: keep your own copy in a safe place) and the
+code (it is in GitHub).
+
+**1. On the server, every day.** `bin/backup.sh` writes `db-<date>.sql.gz`, `files-<date>.tar.gz` and `latest.txt` into
+`~/backups` (outside the web root), checks that both files are readable, and keeps the newest 7. Add it in hPanel >
+Websites > Manage > Advanced > Cron Jobs > custom, once a day (e.g. `0 3 * * *`):
+```
+/bin/bash /home/<account>/domains/<site>/app/bin/backup.sh >/dev/null 2>&1
+```
+The result of every run (OK or FAILED and why) is a line in `~/backups/backup.log`. Run it once by hand to test:
+`bash ~/domains/<site>/app/bin/backup.sh`.
+
+**2. On the owner's PC, every day.** A server backup alone is lost if the server (or the hosting account) is lost.
+`bin/install-pc-backup.ps1` (run once, PowerShell: `powershell -ExecutionPolicy Bypass -File bin\install-pc-backup.ps1`)
+makes the folder `C:\Users\<you>\YourTutorBackups` private to the Windows user and creates the scheduled task
+"YourTutor backup copy" (daily 13:00; if the PC was off it runs when the PC is on again). It uses the same SSH key as
+deploys. The 14 newest copies stay. Look at `YourTutorBackups\pull.log` to see that it works. These files hold ID scans
+and children's data: do not share the folder, do not put it in a synced cloud folder, keep the disk encrypted
+(BitLocker) if the PC can be lost or stolen.
+
+**3. Restore (never on the live database by guesswork).**
+- Database: `gunzip -c db-<date>.sql.gz | mysql -h <host> -u <user> -p <database>` (this REPLACES the tables).
+- Files: `tar -xzf files-<date>.tar.gz -C ~/domains/<site>/app/storage/app`.
+- Then `php artisan optimize` and look at the site.
+- Hostinger also keeps its own backups: hPanel > Websites > Backups (what is offered depends on the plan; check it).
+
+**4. Practise the restore once** (needed before launch): in hPanel > Databases create an empty test database, load the
+newest `db-*.sql.gz` into it, compare the table list and the row counts of `users` and `tutor_profiles` with the live
+database, then delete the test database. A backup that was never restored is only a hope.
+
+## Logs
+Laravel writes one file per day (`laravel-<date>.log`, `LOG_STACK=daily`, 14 days kept). `mail-<date>.log` (3 days) holds
+emails while `MAIL_MAILER=log`. If the live `.env` still says `LOG_STACK=single`, change it to `daily` and run `php artisan optimize`.
+
 ## Hostinger shared hosting (current setup)
 Server access details are in the owner's private notes, never in this repo.
 

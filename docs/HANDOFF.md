@@ -368,6 +368,22 @@ level, kept 3 days), so reading a code no longer needs `.env` changes (see DEPLO
 mailer is `log`; fix it in the next change. `laravel.log` still holds the debug-time entries of 25 Oct 08:15
 (login code and mail text); the code is single-use and expired.
 
+## 6j. Step 7c = security, backups, monitoring (owner OK 25 Oct: PC copy of backups yes, Sentry NOT now)
+- [x] **7c-1 Security check** (25 Oct, local, NOT deployed): `composer audit` and `npm audit` show 0 problems. All 25
+  admin routes have `role:admin` + `two-factor`; guests reach only public pages and 5 forms, all rate-limited; documents
+  are on the private disk and served to admins only (`document` is whitelisted). Found NO access hole. New
+  `AccessIsolationTest` (7 tests) walks every id-based route as another parent / student / tutor / admin / guest and
+  expects 403/404 and no change; keep it green when adding routes. Logging: code default is now `LOG_STACK=daily`
+  (14 days) but the live `.env` has `LOG_STACK=single`: change it to `daily` when deploying (owner agreed in the plan).
+  Not covered: an external code review (the checklist wants one before payments exist) and a load test (not on the
+  shared server: it hosts other people's sites).
+- [x] **7c-2 Backups** (25 Oct, local, NOT deployed, NOT run yet): `bin/backup.sh` (server, daily by cron, DB + uploads,
+  checked, keeps 7), `bin/pull-backup.ps1` + `bin/install-pc-backup.ps1` (copy to `%USERPROFILE%\YourTutorBackups`,
+  daily scheduled task, 14 kept, private folder). Steps and the restore drill are in `docs/DEPLOY.md` ("Backups").
+  STILL TO DO: deploy, run `backup.sh` once, owner adds the hPanel cron, owner runs `install-pc-backup.ps1`, restore
+  test into a temporary database, check Hostinger's own backups in hPanel. `BackupScriptTest` guards the scripts.
+- [ ] 7c-3 monitoring (UptimeRobot on `/up`, owner makes the account), 7c-4 rollback notes + keep last 3 release archives.
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)
