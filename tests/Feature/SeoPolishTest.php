@@ -71,6 +71,18 @@ class SeoPolishTest extends TestCase
         }
     }
 
+    public function test_the_tutor_list_has_an_h2_above_the_cards_so_headings_never_skip_a_level(): void
+    {
+        $html = $this->get('/tutors')->assertOk()->getContent();
+
+        $h2 = strpos($html, '<h2 class="sr-only">Tutors</h2>');
+        $firstCard = strpos($html, '<h3 class="tutor-card__name">');
+
+        $this->assertNotFalse($h2);
+        $this->assertNotFalse($firstCard);
+        $this->assertLessThan($firstCard, $h2);
+    }
+
     public function test_pages_for_logged_in_families_are_kept_out_of_search(): void
     {
         $slug = \App\Models\TutorProfile::approved()->first()->slug;

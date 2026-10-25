@@ -150,6 +150,8 @@
                 </div>
             </div>
         @else
+            {{-- The Filters heading is hidden on phones, so the cards (h3) need an h2 above them. --}}
+            <h2 class="sr-only">Tutors</h2>
             <div class="grid grid--tutors">
                 @foreach ($tutors as $tutor)
                     <x-tutor-card :tutor="$tutor" />

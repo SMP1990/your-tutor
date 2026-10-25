@@ -420,8 +420,18 @@ length (tutor title max 2 subjects, ~66 chars; description 155, the call to acti
 `/email/`, `/profile/`, `/login`, `/register`, `/forgot-password`, `/reset-password`, `/*/demo`); before it still listed
 the old `/student` `/parent` `/tutor`. Tests: `FontsTest`, `SeoPolishTest` (all 24 sitemap pages: title 10-70, description
 70-160, one h1, canonical, unique titles). 258 tests green.
-STILL TO DO: deploy (needs `npm run build` + the new `public/build`, no migration, plus the profile page migration),
-then measure the live home, `/tutors`, a tutor page and `/contact` again on pagespeed.web.dev and write the new scores here.
+**DEPLOYED 25 Oct (main dc1f207, with the owner's OK; backup `~/backup-before-profile-seo-20261025.sql`, migration
+`pending_email` ran, `public/build` uploaded, `optimize`).** Live checks: 0 Google references, fonts + CSS served with
+`max-age=31536000, immutable`, CSP `'self'` only, subject description 156 chars, profile route redirects guests.
+MEASURED LIVE AFTER (pagespeed.web.dev, mobile, slow 4G): HOME Performance 89 -> **100** (FCP 3.0 -> 1.1 s, LCP 3.0 -> 1.2 s,
+CLS 0, Speed Index 3.0 -> 2.2 s), Accessibility 100, Best Practices 100, SEO 69 (only "blocked from indexing", intended).
+`/tutors`: Performance 100 (FCP/LCP 0.9 s), Accessibility 99 ("heading elements not in descending order": h1 straight to
+h3 because the Filters h2 is hidden on phones). TUTOR PAGE `/tutors/usman-f`: Performance 100 (FCP 1.1, LCP 1.2 s, CLS 0.001),
+Accessibility 100, Best Practices 100, SEO 69. `/contact` was not measured. Left-over Google hints: render-blocking CSS
+~300 ms (our own 54 KB CSS; splitting it is not worth it now) and 2 KiB of short cache lifetimes (images/favicon).
+The `/tutors` heading fix (an `sr-only` h2 "Tutors" above the cards, test in `SeoPolishTest`) is committed but NOT deployed yet.
+`robots.txt` on the temporary `hostingersite.com` domain is NOT ours: Hostinger's CDN answers it (Googlebot disallowed, the
+rest allowed); our pages carry `noindex` anyway, and on the real domain our own route answers.
 Launch day: `SITE_INDEXABLE=true`, submit `/sitemap.xml` in Search Console (needs the domain).
 
 ## 7. Waiting for the owner (ask, do not invent)
