@@ -40,6 +40,13 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+
+        // Said only after the right password, so nobody can probe which accounts exist or are suspended.
+        if ($user->isSuspended()) {
+            Auth::guard('web')->logout();
+
+            throw ValidationException::withMessages(['login' => 'This account has been suspended. Please contact support.']);
+        }
     }
 
     private function findUser(): ?User

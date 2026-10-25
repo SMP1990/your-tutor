@@ -3,7 +3,7 @@
 Last updated: 25 Oct 2026, after Step 5 (reviews). **Update this file at the end of every step.**
 
 **Status in one line:** Steps 1-5 are built, live on Hostinger (temporary domain) and pushed to GitHub;
-179 tests green. Next is Step 6 (admin tools), then Step 7 (launch prep). Details in 6c-6g, next steps in 8.
+179 tests green. Step 6a (admin users) is built locally (188 tests, not deployed). Next 6b-6d, then Step 7 (launch prep). Details in 6c-6h, next steps in 8.
 
 ## 1. What this is
 Online tutoring marketplace for Pakistan (later KSA). Brand: **your tutor** (lowercase, from `APP_NAME`).
@@ -266,6 +266,19 @@ keep their sample ratings until `demo:remove`.
   "Reviews". 179 tests green. No migration.
   **Step 5 is complete.** Next: Step 6 admin tools (users, complaints, site settings incl. brand/stats),
   then Step 7 launch prep.
+
+## 6h. Step 6 = admin tools (owner decisions 25 Oct: user is suspended, never deleted; brand name stays in `.env`;
+no email on complaints for now; tutors may also report; admin overview payments/refunds cards say "Coming soon";
+Home numbers start manual, with an automatic option). Parts: 6a users, 6b complaints, 6c contact inbox, 6d site settings.
+- [x] **6a Users** (25 Oct, committed locally, NOT deployed, NOT pushed): `/admin/users` (`Admin\UserController`,
+  role:admin + two-factor, menu "Users"): list with search (name/email/phone) and role / status filters, detail page
+  (email verified?, phone, children, tutor review link, demo / booking / review counts). Suspend and re-open need a
+  reason (5-500 chars); an admin cannot suspend themselves or any admin. Migration 2026_10_29_000001 adds
+  `users.suspended_at` / `suspended_reason` and the `admin_actions` table (`AdminAction`: who, to whom, what, why;
+  shown as "History"). Suspended users: login refused after the right password (`LoginRequest`), logged out on the
+  next request (`EnsureNotSuspended` in the web group), their DB sessions deleted, and a suspended tutor drops out of
+  every public page (`TutorProfile::approved()` now checks it). Admin can "Mark email as verified" with a reason
+  (needed while live email is off, see 1f-5). 188 tests green. Next: 6b complaints.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

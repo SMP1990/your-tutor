@@ -178,10 +178,11 @@ class TutorProfile extends Model
         ])->save();
     }
 
-    /** Only approved tutors may appear on public pages. */
+    /** Only approved tutors may appear on public pages; a suspended tutor is hidden from them. */
     public function scopeApproved(Builder $query): void
     {
-        $query->where('status', TutorStatus::Approved);
+        $query->where('status', TutorStatus::Approved)
+            ->whereHas('user', fn (Builder $user) => $user->whereNull('suspended_at'));
     }
 
     /** Hourly rate in whole currency units for display, e.g. 1800 for PKR 1,800. */

@@ -31,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'phone_verified_at' => 'datetime',
+            'suspended_at' => 'datetime',
             'password' => 'hashed',
             'role' => Role::class,
             'whatsapp_opt_in' => 'boolean',
@@ -40,6 +41,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasRole(Role $role): bool
     {
         return $this->role === $role;
+    }
+
+    /** Set only by the admin Users page (suspended_at is not fillable). */
+    public function isSuspended(): bool
+    {
+        return $this->suspended_at !== null;
+    }
+
+    /** What admins did to this account, newest first. @return HasMany<AdminAction, $this> */
+    public function adminActions(): HasMany
+    {
+        return $this->hasMany(AdminAction::class)->latest('id');
     }
 
     /** @return HasMany<Child, $this> */

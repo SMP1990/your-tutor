@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ClassesController as AdminClassesController;
 use App\Http\Controllers\Admin\DemoRequestController as AdminDemoRequestController;
 use App\Http\Controllers\Admin\ReviewModerationController;
 use App\Http\Controllers\Admin\TutorReviewController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -154,6 +155,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/admin/reviews', [ReviewModerationController::class, 'index'])->middleware('two-factor')->name('admin.reviews.index');
         Route::post('/admin/reviews/{review}/toggle', [ReviewModerationController::class, 'toggle'])
             ->middleware(['two-factor', 'throttle:60,1'])->name('admin.reviews.toggle');
+
+        Route::middleware('two-factor')->prefix('/admin/users')->name('admin.users.')->controller(AdminUserController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/{account}', 'show')->name('show');
+            Route::post('/{account}/suspend', 'suspend')->middleware('throttle:30,1')->name('suspend');
+            Route::post('/{account}/unsuspend', 'unsuspend')->middleware('throttle:30,1')->name('unsuspend');
+            Route::post('/{account}/verify-email', 'verifyEmail')->middleware('throttle:30,1')->name('verify-email');
+        });
 
         Route::middleware('two-factor')->prefix('/admin/tutors')->name('admin.tutors.')->controller(TutorReviewController::class)->group(function () {
             Route::get('/', 'index')->name('index');

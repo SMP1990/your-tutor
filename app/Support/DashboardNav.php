@@ -47,7 +47,7 @@ class DashboardNav
             'Bookings' => ['notes', 'admin.bookings.index', 'admin.bookings.*'],
             'Classes' => ['calendar', 'admin.classes.index', 'admin.classes.*'],
             'Reviews' => ['star', 'admin.reviews.index', 'admin.reviews.*'],
-            'Users' => ['users', null], 'Payments' => ['wallet', null],
+            'Users' => ['users', 'admin.users.index', 'admin.users.*'], 'Payments' => ['wallet', null],
             'Refunds' => ['refund', null], 'Complaints' => ['flag', null], 'Site settings' => ['settings', null],
         ],
     ];
