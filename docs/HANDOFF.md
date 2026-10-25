@@ -382,6 +382,12 @@ mailer is `log`; fix it in the next change. `laravel.log` still holds the debug-
   daily scheduled task, 14 kept, private folder). Steps and the restore drill are in `docs/DEPLOY.md` ("Backups").
   STILL TO DO: deploy, run `backup.sh` once, owner adds the hPanel cron, owner runs `install-pc-backup.ps1`, restore
   test into a temporary database, check Hostinger's own backups in hPanel. `BackupScriptTest` guards the scripts.
+- **7c-1 + 7c-2 DEPLOYED (25 Oct, main 6c45897; backup `~/backup-before-7c-20261025.sql`):** server `.env` now has
+  `LOG_STACK=daily` (rest of `.env` verified unchanged), `bin/backup.sh` ran once by hand on the server: OK, 21 tables in
+  the dump, `~/backups` is mode 700 and the files 600, no `.env` inside the archives; the files archive is nearly empty
+  because nobody has uploaded a document or photo yet. NOT done yet: the hPanel cron for `backup.sh` (and for the queue),
+  `install-pc-backup.ps1` on the owner's PC, the restore drill into a temporary database, checking Hostinger's own
+  backups in hPanel. Old manual dumps in `~` (step6, 7a7b, maillog, 7c) can be deleted once the daily ones run.
 - [ ] 7c-3 monitoring (UptimeRobot on `/up`, owner makes the account), 7c-4 rollback notes + keep last 3 release archives.
 
 ## 7. Waiting for the owner (ask, do not invent)
