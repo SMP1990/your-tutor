@@ -118,6 +118,28 @@ class MailQueueTest extends TestCase
         $this->assertSame([], $sent->getReplyTo());
     }
 
+    public function test_the_log_mailer_writes_to_its_own_file_whatever_the_log_level_is(): void
+    {
+        $dir = storage_path('framework/testing/mail-log-'.uniqid());
+        config([
+            'mail.default' => 'log',
+            'logging.channels.single.level' => 'warning', // like the live .env
+            'logging.channels.mail.path' => $dir.'/mail.log',
+        ]);
+
+        $this->assertSame('mail', config('mail.mailers.log.channel'));
+        $this->assertSame(3, config('logging.channels.mail.days'));
+
+        Mail::raw('Your login code is 123456', fn ($m) => $m->to('someone@example.test')->subject('Your login code | test'));
+
+        $files = glob($dir.'/mail-*.log');
+        $this->assertCount(1, $files);
+        $this->assertStringContainsString('Subject: Your login code | test', file_get_contents($files[0]));
+
+        array_map('unlink', $files);
+        rmdir($dir);
+    }
+
     public function test_mail_test_command(): void
     {
         $this->artisan('mail:test', ['to' => 'someone@example.test'])

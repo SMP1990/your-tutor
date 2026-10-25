@@ -31,7 +31,7 @@ class MailTest extends Command
         $this->line("From:   {$from}");
 
         if (in_array($mailer, ['log', 'array'], true)) {
-            $this->warn("MAIL_MAILER is \"{$mailer}\": nothing is really sent, the email is only written to the log. Set MAIL_MAILER=smtp in .env.");
+            $this->warn("MAIL_MAILER is \"{$mailer}\": nothing is really sent, the email is only written to a log file (storage/logs/mail-<date>.log). Set MAIL_MAILER=smtp in .env.");
         }
         if (preg_match('/@(example\.(com|org|net)|.*\.test)$/i', $from)) {
             $this->warn('MAIL_FROM_ADDRESS still looks like a placeholder. Use a real mailbox on your domain.');

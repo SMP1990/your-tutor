@@ -361,8 +361,9 @@ chosen). Admin: Adnan Rashid, musfirah.fiverr2020@gmail.com, role admin, verifie
 two-factor code from the server log. CORRECTION to earlier notes: the code is NOT in the log by default because the
 live `.env` has `LOG_LEVEL=warning` and the log mailer writes at debug level; see `docs/DEPLOY.md` ("First admin
 account") for the temporary-debug way. Until real SMTP (7b-2) EVERY admin login (once per session) needs this, so 7b-2 is
-now the main blocker. Idea if the domain is far away: send mail to its own log channel (`MAIL_LOG_CHANNEL` + a `mail`
-channel at debug level) so nobody has to touch `.env`. The log still holds the debug-time entries of 25 Oct 08:15
+now the main blocker. DONE locally 25 Oct: the log mailer now writes to its own `mail` channel (daily file
+`storage/logs/mail-<date>.log`, debug level, kept 3 days), so reading a code no longer needs `.env` changes (see DEPLOY.md;
+needs a deploy + `optimize` to take effect on the live server). `laravel.log` still holds the debug-time entries of 25 Oct 08:15
 (login code and mail text); the code is single-use and expired.
 
 ## 7. Waiting for the owner (ask, do not invent)

@@ -24,11 +24,16 @@ The website can never create an admin, so make the first one on the server (SSH,
 
 It asks for the password twice (hidden; 12+ characters with letters and numbers). Never put the password in the
 command. Admin login also asks for a code that is sent by email. Until live email works (`MAIL_MAILER=smtp`, step
-1f-5) the email is NOT delivered. It is only written to `storage/logs/laravel.log`, and only when `LOG_LEVEL=debug`
-(the log mailer writes at debug level; the live `.env` has `LOG_LEVEL=warning`, so by default nothing is written).
-To read a code (25 Oct, done once with the owner's OK): set `LOG_LEVEL=debug` in the server `.env`, run
-`php artisan optimize`, ask for a new code on the code page, read the 6 digits from the newest "Your login code" entry in
-the log, then set `LOG_LEVEL=warning` again and run `php artisan optimize`. Do it fast, and never leave debug on.
+1f-5) the email is NOT delivered. With `MAIL_MAILER=log` every email is written to its own daily file
+`storage/logs/mail-YYYY-MM-DD.log` (channel `mail` in `config/logging.php`; debug level whatever `LOG_LEVEL` is; files
+are deleted after 3 days because they hold login codes and links in plain text). To read an admin code: ask for a new
+code on the code page, then on the server:
+```
+grep -o -E ">[0-9]{6}<" storage/logs/mail-$(date +%F).log | tail -1
+```
+(the newest entry is the last one; check its `To:` line is the admin's address). Before this channel existed (until the
+deploy of 25 Oct) the log mailer wrote to `laravel.log` at debug level, which `LOG_LEVEL=warning` silenced; the code was
+read once by switching `LOG_LEVEL` to `debug` for a minute and back. That is no longer needed.
 
 ## Email (Step 7b)
 Two kinds of email:

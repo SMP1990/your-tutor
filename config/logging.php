@@ -65,6 +65,17 @@ return [
             'replace_placeholders' => true,
         ],
 
+        // Used by MAIL_MAILER=log (see config/mail.php): emails are written here at debug level whatever LOG_LEVEL
+        // is, so nobody has to edit .env to read a login code. One file per day, deleted after 3 days because
+        // these files hold login codes and links in plain text. Not served by the web server (storage/ is private).
+        'mail' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/mail.log'),
+            'level' => 'debug',
+            'days' => 3,
+            'replace_placeholders' => true,
+        ],
+
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
