@@ -1,10 +1,14 @@
 # HANDOFF: your tutor (read this first in every new chat)
 
-Last updated: 24 Oct 2026, after zip v1.9. **Update this file at the end of every step.**
+Last updated: 25 Oct 2026, after Step 5 (reviews). **Update this file at the end of every step.**
+
+**Status in one line:** Steps 1-5 are built, live on Hostinger (temporary domain) and pushed to GitHub;
+179 tests green. Next is Step 6 (admin tools), then Step 7 (launch prep). Details in 6c-6g, next steps in 8.
 
 ## 1. What this is
 Online tutoring marketplace for Pakistan (later KSA). Brand: **your tutor** (lowercase, from `APP_NAME`).
-Owner is non-technical. Full plan: `docs/PLAN.md`. Rules: `CLAUDE.md`. Go-live gate: `docs/LAUNCH_CHECKLIST.md`.
+Owner is non-technical. Full plan: `docs/PLAN.md`. Rules: `CLAUDE.md` (the copy in this GitHub repo is the
+master copy; if another copy differs, this one wins). Go-live gate: `docs/LAUNCH_CHECKLIST.md`.
 
 ## 2. Where things are
 | What | Where |
@@ -12,20 +16,24 @@ Owner is non-technical. Full plan: `docs/PLAN.md`. Rules: `CLAUDE.md`. Go-live g
 | Laravel app (real code) | `C:\Users\Computer Arena\Downloads\tutoring-marketplace\laravel-app` |
 | GitHub repo | https://github.com/SMP1990/your-tutor |
 | Branch `main` | Laravel app (this folder, git repo) |
-| Branch `static-site` | Exported plain-HTML preview. Local git repo: `...\tutoring-marketplace\website` (local branch is also `static-site`) |
-| Live preview (Hostinger Business, shared) | https://cornflowerblue-tarsier-769699.hostingersite.com/ (temporary domain; was grey-quail-750388 until 24 Oct). Hostinger account is used as a *collaborator*; details in the private notes (see 6c) |
-| Upload zips | `C:\Users\Computer Arena\Downloads\upload-to-hostinger vX.Y (HH-MM AM).zip` |
+| Branch `static-site` | OLD exported plain-HTML preview (no longer live; remove before launch, see `docs/DEPLOY.md`). Local git repo: `...\tutoring-marketplace\website` (local branch is also `static-site`) |
+| Live site (Hostinger Business, shared) | https://cornflowerblue-tarsier-769699.hostingersite.com/ (temporary domain; was grey-quail-750388 until 24 Oct). Runs the real Laravel app on MySQL since 1f-4. Hostinger account is used as a *collaborator*; details in the private notes (see 6c) |
+| Upload zips (old static preview only) | `C:\Users\Computer Arena\Downloads\upload-to-hostinger vX.Y (HH-MM AM).zip` (last was v1.9; not used since the Laravel app went live) |
 | Original handoff files | `F:\Onine tutoring website-Adnan rashid sb\` (plan PDF, cost PDF) |
 
 ## 3. How the owner wants to work (important)
 - Reply in **Roman Urdu**, simple words, no jargon. Click-by-click for anything on Hostinger/GitHub.
 - **One step at a time.** Finish, summarise honestly (what was and was NOT checked), ask before the next step.
-- **Pages/structure first with dummy data. Database only when the owner asks.**
+- **Pages/structure first with dummy data. Database only when the owner asks.** (Done: pages were built
+  first; the owner then asked for the database build, which is Steps 1-5 below.)
 - Must not break when the **domain or host changes**: no hard-coded domains; `route()`/`url()`/`asset()` in Blade; relative links in the static export.
 - Every change must stay **light, SEO-friendly, responsive on all devices, secure.**
 - **Push to GitHub only when the owner says so.** Never force-push (it is blocked anyway).
-- After each change, make a **new zip** (never overwrite): next is **v1.10**. Build zips with `tar.exe`, **not** PowerShell `Compress-Archive` (it writes `\` paths that break extraction on Hostinger).
-- GitHub-to-Hostinger auto deploy: postponed by the owner. Upload is by hand (File Manager → empty `public_html` → upload zip → Extract).
+- **Deploy to Hostinger only with the owner's OK**, using the steps in `docs/DEPLOY.md` ("Hostinger shared
+  hosting": `git archive` + build files, migrate, optimize). The old static-preview zips (v1.x) are no longer used.
+  If a zip is ever needed again: never overwrite (next would be v1.10), build with `tar.exe`, **not**
+  PowerShell `Compress-Archive` (it writes `\` paths that break extraction on Hostinger).
+- GitHub-to-Hostinger auto deploy: postponed by the owner. Deploys are done by hand.
 
 ## 4. Tools on this PC
 - PHP 8.4: `C:\Users\Computer Arena\AppData\Local\Microsoft\WinGet\Packages\PHP.PHP.8.4_Microsoft.Winget.Source_8wekyb3d8bbwe\php.exe` (not on PATH in tool shells; use full path)
@@ -37,6 +45,11 @@ Owner is non-technical. Full plan: `docs/PLAN.md`. Rules: `CLAUDE.md`. Go-live g
 php artisan test                          # must be green before every commit
 npm run build                             # CSS/JS into public/build
 php artisan serve --port=8001             # local preview
+```
+Deploy to the live site: see `docs/DEPLOY.md` ("Hostinger shared hosting").
+
+Old static preview only (not live any more; kept for reference until `site:export` is removed):
+```
 php artisan site:export --url=https://cornflowerblue-tarsier-769699.hostingersite.com
 ```
 Make the zip (PowerShell), from `...\tutoring-marketplace`:
@@ -45,17 +58,18 @@ Make the zip (PowerShell), from `...\tutoring-marketplace`:
 3. Check: no entry contains `\`; `unzip` gives the same tree.
 Update `static-site`: replace files in `website\` with `upload-to-hostinger\` (keep README.md), commit, `git push origin static-site:static-site`.
 
-## 6. Done so far (all design/dummy data, 44 tests green)
-- Home, Find a Tutor, Tutor Profile (8 dummy tutors), Book Free Demo (+ sent page)
+## 6. Public pages and design (built first with dummy data; most now read the database, see 6c-6g)
+- Home, Find a Tutor, Tutor Profile (8 sample tutors, now database rows: see 2c-1), Book Free Demo
 - How it works, Pricing (figures in `config/pricing.php`), Become a Tutor
 - About, Contact (+ sent), FAQs, Terms / Privacy / Refund (marked DRAFT), 404 / 500
 - Subjects list + 12 subject pages
-- Login designs: Log In, Register (parent/student/tutor), Verify phone, Forgot password (nothing is saved)
-- Dashboards (sample data): `/student`, `/parent`, `/tutor`, `/admin`; temporary links on the Log In page
+- Login pages: Log In, Register, Forgot password now work for real (1b-1c); Verify phone is still a design preview
+- Sample-data dashboards moved to `/preview/{role}` (temporary links on the Log In page); real ones are under `/dashboard` (1d)
 - SEO: unique titles/descriptions, canonical, Open Graph + `public/images/og-image.png`, schema, `/sitemap.xml`, `/robots.txt`
 - Security: `SecurityHeaders` middleware (CSP, no inline JS: all JS in `resources/js/site.js`), forms with CSRF + validation + rate limits; export `.htaccess` with HTTPS + headers
 - Site is **noindex on purpose** until launch (`SITE_INDEXABLE=true` then). See `docs/DEPLOY.md`.
-- Dummy data lives in `app/Support/DemoTutors.php`, `DemoSubjects.php`, `config/pricing.php`, `config/site.php`.
+- Still dummy: `config/pricing.php`, `config/site.php` (contact details, Home stats). `app/Support/DemoTutors.php` and
+  `DemoSubjects.php` are now only seed sources (2c-1).
 
 ## 6b. Owner decisions for the functional build (24 Oct 2026)
 1. **No payment module (step 5) for now.** Build so gateways can be added later (amounts in minor units + currency, payment status on bookings, a gateway interface).
@@ -77,7 +91,7 @@ Owner asked to explain the plan step by step, no code until approved.
   `role` and tutor `status` are NOT mass-assignable (forms cannot make admins or approve themselves).
   Seeders: `SubjectSeeder` (real list, safe anywhere), `DemoAccountsSeeder` (never in production):
   `student|parent|tutor|admin@example.test` + 8 tutors `<slug>@example.test`, password = `DEMO_PASSWORD` (default `password`).
-  Local DB is SQLite (`database/database.sqlite`); Hostinger will use MySQL via `.env` only. Not yet run on MySQL.
+  Local DB is SQLite (`database/database.sqlite`); Hostinger uses MySQL via `.env` only (running since 1f-3).
 - [x] **1b Register + email verification** (24 Oct): `Auth\RegisterController` + `RegisterRequest`
   (role only parent/student/tutor, PK phone, unique lowercase email, password 8+ letters+numbers, terms),
   logs the user in, sends the verification email (`VerifyEmail` text in `AppServiceProvider`).
@@ -103,14 +117,14 @@ Owner asked to explain the plan step by step, no code until approved.
   `/dashboard/parent/children`, role:parent), `ChildRequest` (first name max 40 + grade from `App\Support\Grades`),
   `ChildPolicy` (own children only, max 10). Remove asks "Remove <name>?" (`data-confirm` in `site.js`).
   Dashboard layout now loads `site.js` and shows `session('notice')`.
-- [ ] 1f Run on Hostinger as real Laravel (owner creates MySQL DB + email account, click-by-click)
+- [x] 1f Run on Hostinger as real Laravel (done 24 Oct, LIVE; only email is postponed, see 1f-5)
   - **Server access details are private:** `C:\Users\Computer Arena\Downloads\tutoring-marketplace\PRIVATE-server-notes.md`
     (not in git; this repo is public). Never write IPs, usernames, emails or passwords into the repo.
   - 1f-1 done (24 Oct): site PHP 8.4; SSH by key works (`ssh -F ~/.ssh/config.yourtutor yourtutor`).
     Use `/opt/alt/php84/usr/bin/php` for composer/artisan (default CLI php is 8.3; the lock file needs 8.4).
     **The hosting account also runs other people's live sites: touch ONLY this site's folder.**
   - 1f-2 done (24 Oct): MySQL database + user `<account>_tutoring` created by the owner in hPanel.
-  - 1f-3 in progress: app uploaded to `<site>/app` (outside the web root) via `git archive` + `public/build`,
+  - 1f-3 done (24 Oct): app uploaded to `<site>/app` (outside the web root) via `git archive` + `public/build`,
     `composer install --no-dev`, production `.env` written (APP_DEBUG=false, MAIL_MAILER=log for now),
     APP_KEY generated. Owner pasted the DB password into `.env` (24 Oct). On MySQL: all migrations ran,
     12 subjects seeded, 0 users (demo accounts correctly skipped in production), `artisan optimize` done,
@@ -125,9 +139,9 @@ Owner asked to explain the plan step by step, no code until approved.
     (owner pastes the mailbox password). Until then `MAIL_MAILER=log`: on the live site registration works, but
     verification, password-reset and admin login-code emails are only written to `storage/logs/laravel.log`,
     so nobody can finish sign-up or log in as admin on the live site yet. Build and test new modules locally.
-  - Email decision: temporary domain, so no Hostinger mailbox; use a free SMTP service (e.g. Brevo) the
-    owner signs up for. Owner pastes secrets (DB password, SMTP key) into the server `.env` themselves.
-Public pages still use `DemoTutors`/`DemoSubjects` until Step 3.
+  - (Older idea, replaced by 1f-5: a free SMTP service such as Brevo. The owner chose to wait for the real
+    domain instead.) Owner pastes secrets (DB password, SMTP key) into the server `.env` themselves.
+(Since 2c-1, public pages read the database; `DemoTutors`/`DemoSubjects` are only seed sources.)
 
 ## 6d. Step 2 = tutor application + admin approval (owner decisions 24 Oct: subject test AND interview,
 admin records results by hand for now; CNIC required; after approval, new subjects/documents need re-review,
@@ -144,7 +158,7 @@ rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tuto
   reject / documents needed (message required). `TutorApplicationUpdated` emails the tutor. New review
   columns (migration 2026_10_25_000002). `DashboardNav` now links built pages and marks others "soon".
 - [x] **2c-1 Public pages from the database** (24 Oct, committed c2d57a3, DEPLOYED to Hostinger with the
-  owner's OK: migration run, DemoTutorsSeeder seeded 8 demo tutors, optimize; live checks OK; NOT pushed to GitHub yet):
+  owner's OK: migration run, DemoTutorsSeeder seeded 8 demo tutors, optimize; live checks OK; pushed to GitHub later):
   Find a Tutor (`TutorSearch`: subject[], level, min/max PKR, rating, q, sort, 12 per page, removable
   filter chips, "Sort by" auto-submits via `data-autosubmit` in site.js, no inline JS), tutor profile,
   demo form, subject pages, home, sitemap and `site:export` all read approved `TutorProfile`s via
@@ -155,7 +169,7 @@ rate/bio/availability go live directly; rate PKR 500-10,000; all in `config/tuto
   only seed sources. Tests use `Tests\Concerns\SeedsDemoContent`. 123 tests green.
   **Deploy needs:** `migrate --force`, `db:seed --class=DemoTutorsSeeder --force`, `npm run build` output.
 - [x] **2c-2 Approved tutor edits the profile** (24 Oct, commit 08d376c, DEPLOYED to Hostinger with the
-  owner's OK: migration 000004 run, optimize; public pages checked; NOT pushed to GitHub yet):
+  owner's OK: migration 000004 run, optimize; public pages checked; pushed to GitHub later):
   same form at `/dashboard/tutor/application` becomes "Edit your profile" once approved. Headline, bio,
   city, languages, levels, rate, video, availability and removing a subject go live at once (a live
   profile cannot be emptied; at least one approved subject must stay). NEW subjects, education, photo and
@@ -256,15 +270,22 @@ keep their sample ratings until `demo:remove`.
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)
-- Real stats for the Home page (now dummy: 10K+, 100+, 95+, 4.8) and real reviews
+- Real stats for the Home page (now dummy: 10K+, 100+, 95+, 4.8). (Tutor reviews are real since Step 5;
+  the 8 sample tutors keep sample ratings until `demo:remove`.)
 - Lawyer review of Terms / Privacy / Refund
-- Domain name; when to buy the Hostinger VPS (needed before payments/reminders)
+- Domain name (also needed before emails can be sent, see 1f-5); when to buy the Hostinger VPS (needed before payments/reminders)
 - Accounts to apply for early: JazzCash / Easypaisa / PayFast or Safepay, Meta WhatsApp Business API, Daily, SMS OTP provider
 
-## 8. Next steps (owner decides)
-1. Owner uploads v1.9 and checks the live site; then run PageSpeed and check headers on the live site.
-2. Database step (only when asked): plan the tables first, show the plan, then build Phase 1 in the `CLAUDE.md` build order (auth + OTP + roles first).
-3. Remove the temporary items listed in `docs/DEPLOY.md` when real login is built.
+## 8. Next steps (owner decides, one at a time)
+Build order agreed with the owner (it differs from the original `CLAUDE.md` list because payments,
+WhatsApp and Daily were postponed, see 6b): Steps 1-5 done; then:
+1. **Step 6 admin tools** (users, complaints, site settings incl. brand/Home stats). Show the plan in parts
+   (6a, 6b, ...) first; build only after the owner approves each part.
+2. **Step 7 launch prep**: `docs/LAUNCH_CHECKLIST.md`, real domain, email (1f-5), `demo:remove`, remove the
+   temporary preview items listed in `docs/DEPLOY.md`, `SITE_INDEXABLE=true`, PageSpeed, `composer audit`.
+3. Later (owner decides when): payments, WhatsApp, SMS OTP, Daily, VPS. All behind the interfaces in 6b.
+Small cleanups to do when convenient: the top part of `docs/DEPLOY.md` ("To be filled in...", "Current
+state") still describes the old static preview; the "Hostinger shared hosting" section below it is current.
 
 ## 9. Ignore
 - Old copies in `...\tutoring-marketplace\resources`, `public`, `preview`, `tools` (first prototype, not used).
