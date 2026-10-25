@@ -14,6 +14,7 @@ class HomeController extends Controller
                 ->orderByDesc('rating_avg')->orderByDesc('reviews_count')->limit(3)->get()
                 ->map->toPublicArray()->all(),
             'subjects' => Subject::where('is_active', true)->orderBy('sort_order')->get(),
+            'stats' => \App\Support\SiteSettings::homeStats(),
         ]);
     }
 }

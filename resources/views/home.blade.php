@@ -32,10 +32,6 @@
         ['title' => 'Easy scheduling', 'body' => 'See tutor availability in your time zone and book in a tap.', 'icon' => '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
         ['title' => 'Progress reports', 'body' => 'Parents get session notes and progress after every class.', 'icon' => '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'],
     ];
-
-    $stats = [
-        ['10K+', 'Students taught'], ['100+', 'Verified tutors'], ['95+', 'Subjects'], ['4.8', 'Average rating'],
-    ];
 @endphp
 
 @push('schema')
@@ -75,15 +71,17 @@
                 </button>
             </form>
 
-            <dl class="stats">
-                @foreach ($stats as [$value, $label])
-                    <div>
-                        <dt class="sr-only">{{ $label }}</dt>
-                        <dd class="stats__value">{{ $value }}</dd>
-                        <dd class="stats__label" aria-hidden="true">{{ $label }}</dd>
-                    </div>
-                @endforeach
-            </dl>
+            @if ($stats)
+                <dl class="stats">
+                    @foreach ($stats as [$value, $label])
+                        <div>
+                            <dt class="sr-only">{{ $label }}</dt>
+                            <dd class="stats__value">{{ $value }}</dd>
+                            <dd class="stats__label" aria-hidden="true">{{ $label }}</dd>
+                        </div>
+                    @endforeach
+                </dl>
+            @endif
         </div>
 
         <div class="hero__art" aria-hidden="true">

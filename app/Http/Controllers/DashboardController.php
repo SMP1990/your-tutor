@@ -86,6 +86,10 @@ class DashboardController extends Controller
             ],
             'reviewCounts' => collect(\App\Http\Controllers\Admin\ReviewModerationController::TABS)
                 ->map(fn ($label, $tab) => \App\Http\Controllers\Admin\ReviewModerationController::tab($tab)->count()),
+            'complaintCounts' => collect(\App\Http\Controllers\Admin\ComplaintController::TABS)
+                ->map(fn ($label, $tab) => \App\Http\Controllers\Admin\ComplaintController::tab($tab)->count()),
+            'messageCounts' => collect(\App\Http\Controllers\Admin\ContactMessageController::TABS)
+                ->map(fn ($label, $tab) => \App\Http\Controllers\Admin\ContactMessageController::tab($tab)->count()),
             'latestUsers' => User::latest()->limit(8)->get(['id', 'name', 'email', 'role', 'email_verified_at', 'created_at']),
         ]);
     }

@@ -299,6 +299,23 @@ Home numbers start manual, with an automatic option). Parts: 6a users, 6b compla
   and "Reply by email" (mailto) buttons; status + private note. The site sends no email (owner decision).
   206 tests green. Next: 6d site settings, then push + deploy everything (owner's order).
 
+- [x] **6d Site settings** (25 Oct, local only, NOT deployed, NOT pushed): `/admin/settings`
+  (`Admin\SettingsController`, menu "Site settings"). Table `settings` (migration 2026_11_01_000001, key/value);
+  `App\Support\SiteSettings` + middleware `ApplySiteSettings` (web group) put saved WhatsApp number / display,
+  support email and hours over `config('site.*')`; an empty box means the `.env` / `config/site.php` default.
+  WhatsApp is typed once (+92 / 03xx accepted) and stored as digits for wa.me plus the text as typed.
+  Home page numbers (`config('site.stats')` are the old placeholders 10K+/100+/95+/4.8): each is "Type my own"
+  (default) or "Count automatically" (students = learners with a held class, tutors = approved non-demo tutors,
+  subjects = active subjects, rating = visible reviews); a number that counts as zero is hidden, and so is the
+  whole block when all are empty. The settings page shows what automatic would show now. Brand name stays in `.env`.
+  Admin overview (`dashboard/admin.blade.php`) got Complaints and Contact messages cards and a "Payments and
+  refunds: Coming soon" card. CORRECTION: that real page never had made-up figures; the sample figures
+  (1,240 students, PKR 2.4M ...) live only in `dashboards/admin.blade.php`, the labelled sample page at
+  `/preview/admin` used by the static export. It was left as it is.
+  213 tests green. **Step 6 is complete locally (6a-6d).** Per the owner: push to GitHub and deploy to Hostinger
+  now (needs `migrate --force` for 4 migrations: 2026_10_29_000001, 2026_10_30_000001, 2026_10_31_000001,
+  2026_11_01_000001, then `optimize`; build files are unchanged because no CSS/JS was added).
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)

@@ -10,6 +10,9 @@ return [
     'support_hours' => 'Monday to Saturday, 10 am to 8 pm (PKT)',
     'legal_updated' => '24 October 2026',
 
+    // Home page numbers used while the admin has not typed their own (placeholders, not real figures).
+    'stats' => ['students' => '10K+', 'tutors' => '100+', 'subjects' => '95+', 'rating' => '4.8'],
+
     // Times people type and read (class times). The database stays in UTC (config app.timezone).
     'timezone' => env('SITE_TIMEZONE', 'Asia/Karachi'),
     'timezone_label' => env('SITE_TIMEZONE_LABEL', 'Pakistan time'),

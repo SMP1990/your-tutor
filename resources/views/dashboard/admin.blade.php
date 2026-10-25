@@ -90,6 +90,39 @@
             @endforeach
         </ul>
     </section>
+
+    <section class="panel">
+        <div class="panel__head"><h2>Complaints</h2>
+            @if ($complaintCounts['new'])<span class="status status--red">{{ $complaintCounts['new'] }} new</span>@endif
+        </div>
+        <ul class="item-list">
+            @foreach (\App\Http\Controllers\Admin\ComplaintController::TABS as $key => $label)
+                <li>
+                    <div class="item-list__main"><a href="{{ route('admin.complaints.index', ['tab' => $key]) }}">{{ $label }}</a></div>
+                    <div class="item-list__side"><strong>{{ $complaintCounts[$key] }}</strong></div>
+                </li>
+            @endforeach
+        </ul>
+    </section>
+
+    <section class="panel">
+        <div class="panel__head"><h2>Contact messages</h2>
+            @if ($messageCounts['new'])<span class="status status--red">{{ $messageCounts['new'] }} new</span>@endif
+        </div>
+        <ul class="item-list">
+            @foreach (\App\Http\Controllers\Admin\ContactMessageController::TABS as $key => $label)
+                <li>
+                    <div class="item-list__main"><a href="{{ route('admin.contact.index', ['tab' => $key]) }}">{{ $label }}</a></div>
+                    <div class="item-list__side"><strong>{{ $messageCounts[$key] }}</strong></div>
+                </li>
+            @endforeach
+        </ul>
+    </section>
+
+    <section class="panel">
+        <div class="panel__head"><h2>Payments and refunds</h2><span class="status status--grey">Coming soon</span></div>
+        <p class="muted">Payments are not built yet, so there are no figures here. They will appear once the payment step is done.</p>
+    </section>
 </div>
 
 <section class="panel">
