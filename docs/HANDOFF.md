@@ -355,6 +355,16 @@ errors in the log. Commands now on the server: `admin:create`, `mail:test`, `dem
 admin account (owner runs `admin:create` over SSH, see `docs/DEPLOY.md`), the queue cron in hPanel and real SMTP (7b-2,
 waits for the domain). Until then queued emails (password reset, tutor / demo / booking answers) are NOT delivered.
 
+**First admin created and logged in (25 Oct):** `admin:create` was run by the owner from the Claude app's Terminal
+panel (PowerShell + `ssh -t ...`; a typed password that echoed in a wrong MSYS2 window was thrown away and a new one
+chosen). Admin: Adnan Rashid, musfirah.fiverr2020@gmail.com, role admin, verified. Login worked after reading the
+two-factor code from the server log. CORRECTION to earlier notes: the code is NOT in the log by default because the
+live `.env` has `LOG_LEVEL=warning` and the log mailer writes at debug level; see `docs/DEPLOY.md` ("First admin
+account") for the temporary-debug way. Until real SMTP (7b-2) EVERY admin login (once per session) needs this, so 7b-2 is
+now the main blocker. Idea if the domain is far away: send mail to its own log channel (`MAIL_LOG_CHANNEL` + a `mail`
+channel at debug level) so nobody has to touch `.env`. The log still holds the debug-time entries of 25 Oct 08:15
+(login code and mail text); the code is single-use and expired.
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)

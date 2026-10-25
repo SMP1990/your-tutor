@@ -23,8 +23,12 @@ The website can never create an admin, so make the first one on the server (SSH,
 ```
 
 It asks for the password twice (hidden; 12+ characters with letters and numbers). Never put the password in the
-command. Admin login also asks for a code that is sent by email: until live email works (`MAIL_MAILER=smtp`, step
-1f-5) the code only lands in `storage/logs/laravel.log` on the server.
+command. Admin login also asks for a code that is sent by email. Until live email works (`MAIL_MAILER=smtp`, step
+1f-5) the email is NOT delivered. It is only written to `storage/logs/laravel.log`, and only when `LOG_LEVEL=debug`
+(the log mailer writes at debug level; the live `.env` has `LOG_LEVEL=warning`, so by default nothing is written).
+To read a code (25 Oct, done once with the owner's OK): set `LOG_LEVEL=debug` in the server `.env`, run
+`php artisan optimize`, ask for a new code on the code page, read the 6 digits from the newest "Your login code" entry in
+the log, then set `LOG_LEVEL=warning` again and run `php artisan optimize`. Do it fast, and never leave debug on.
 
 ## Email (Step 7b)
 Two kinds of email:
