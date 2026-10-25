@@ -3,7 +3,7 @@
 Last updated: 25 Oct 2026, evening, after the Home page picture feature (6n). **Update this file at the end of every step.**
 
 **STATUS NOW (read this first):**
-- Everything (6a-6n) is built, tested (272 tests green), pushed to GitHub and LIVE on Hostinger (temporary domain). Code of
+- Everything (6a-6n) is built, tested (278 tests green), pushed to GitHub and LIVE on Hostinger (temporary domain). Code of
   the last feature = commit `1f71893`; later commits are only HANDOFF text.
 - **6n (admin-controlled Home page picture) went live the same evening** after a spell of unstable SSH (login worked, then
   "Connection reset" / "server not responding"; ssh and scp sometimes hung). Backup first: `~/backup-before-heropicture-20261025.sql`
@@ -467,7 +467,7 @@ DEPLOYED 25 Oct (main f11b69c, with the owner's OK; backup `~/backup-before-smal
 
 ## 6n. Home page picture from the admin (25 Oct, owner's request: "the hero picture must be controllable from the dashboard, add and delete"; LIVE)
 Admin > Site settings > "Home page picture" (`Admin\HeroPictureController`, routes `admin.hero.store|update|destroy`, role:admin + two-factor).
-Upload (JPG/PNG/WebP, max 4 MB, 600x450 .. 6000x6000 px), replace, change the short description (alt text, 120 chars) or delete.
+Upload (first version had limits; see "SECOND VERSION" below), replace, change the short description (alt text, 120 chars) or delete.
 `App\Support\HeroPicture`: the upload is decoded with GD, rotated by EXIF, cut to 4:3 around the centre and saved again as TWO
 WebP files `storage/app/public/hero/<16 hex>-1200.webp` and `-600.webp` (random names; the original is never kept, so GPS/EXIF and
 any hidden code are gone). Settings keys `hero_image` (base path, validated by regex, so a tampered value shows nothing) and
@@ -478,6 +478,17 @@ admin-controlled (6d). Uses the existing `public/storage` link (exists on the li
 Tests `HeroPictureTest` (9) incl. wrong files (text as .jpg, SVG, GIF, PDF, PHP, too small, too many pixels, too big), code hidden
 inside a JPEG not surviving, transparent PNG, missing files, odd settings. Checked in the browser at 375 px and 1280 px.
 Deploy: `npm run build` (CSS changed) + code, no migration. 272 tests green.
+SECOND VERSION (25 Oct, owner: "too many limits, I got tired of uploading, do it all automatically"; LIVE, backup `~/backup-before-heropicture2-20261025.sql`):
+NO size or pixel limits any more. `AppSupportHeroPictureReader` reads JPG, PNG, WebP, GIF (first frame), BMP, AVIF with GD, and
+iPhone HEIC / TIFF through Imagick when the server has it (forced reader `HEIC:` / `TIFF:`, after a magic-byte check). Verified ON THE
+SERVER (CLI, nothing saved): jpg png gif bmp webp avif heic tiff all read; SVG, PDF, text and PHP are refused with a plain-words reason
+(`HeroPictureException`, shown as it is). The web PHP might differ from the CLI for Imagick: if an iPhone HEIC upload is refused on the
+live site, that is why (the message then says to save it as JPG/PNG). File limit is only a safety net: 50 MB (`MAX_UPLOAD_KB`); a picture
+that would not fit in the PHP memory (about 90+ megapixels on the live 512 MB) is refused with a clear message (the code also tries to raise the
+limit to 1 GB). Output: biggest 4:3 centre crop, width = min(1200, crop), small = min(600, crop): a small source is NOT enlarged
+(files `<base>-<width>.webp`, widths stored as `hero_image_w` / `hero_image_sw`; Home leaves out `srcset` when both are the same).
+The admin page now just says "Any picture works, of any size". Tests: `HeroPictureTest` 15 (formats, small, tiny, tall, huge, refusals,
+hidden code, transparent PNG, replace/delete with different sizes). 278 tests green.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
