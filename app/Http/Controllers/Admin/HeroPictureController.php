@@ -20,6 +20,7 @@ class HeroPictureController extends Controller
         $data = $request->validateWithBag('hero', [
             'picture' => ['required', 'file', 'max:'.HeroPicture::MAX_UPLOAD_KB],
             'alt' => ['nullable', 'string', 'max:'.HeroPicture::ALT_MAX],
+            'background' => ['nullable', 'in:auto,keep,remove'],
         ], [
             'picture.required' => 'Choose a picture first.',
             'picture.file' => 'The picture could not be uploaded. Please try again.',
@@ -28,7 +29,7 @@ class HeroPictureController extends Controller
         ]);
 
         try {
-            HeroPicture::store($request->file('picture'), $data['alt'] ?? null);
+            $outcome = HeroPicture::store($request->file('picture'), $data['alt'] ?? null, $data['background'] ?? 'auto');
         } catch (HeroPictureException $e) {
             return redirect()->route('admin.settings.edit')->withErrors(['picture' => $e->getMessage()], 'hero');
         } catch (Throwable $e) {
@@ -37,7 +38,11 @@ class HeroPictureController extends Controller
             return redirect()->route('admin.settings.edit')->withErrors(['picture' => 'That picture could not be used. Please try another one.'], 'hero');
         }
 
-        return redirect()->route('admin.settings.edit')->with('notice', 'The Home page picture is saved.');
+        return redirect()->route('admin.settings.edit')->with('notice', match ($outcome) {
+            'removed' => 'The Home page picture is saved. Its plain background was taken away automatically, so the person now stands on the coloured circles.',
+            'too_busy' => 'The Home page picture is saved, but its background is too busy to take away automatically, so it is used as it is. For the best look upload a picture with a plain or transparent background.',
+            default => 'The Home page picture is saved.',
+        });
     }
 
     /** Only the description (alt text) of the picture that is already there. */

@@ -3,7 +3,7 @@
 Last updated: 25 Oct 2026, evening, after the Home page picture feature (6n). **Update this file at the end of every step.**
 
 **STATUS NOW (read this first):**
-- Everything (6a-6n) is built, tested (281 tests green), pushed to GitHub and LIVE on Hostinger (temporary domain). Code of
+- Everything (6a-6n) is built, tested (293 tests green), pushed to GitHub and LIVE on Hostinger (temporary domain). Code of
   the last feature = commit `1f71893`; later commits are only HANDOFF text.
 - **6n (admin-controlled Home page picture) went live the same evening** after a spell of unstable SSH (login worked, then
   "Connection reset" / "server not responding"; ssh and scp sometimes hung). Backup first: `~/backup-before-heropicture-20261025.sql`
@@ -503,6 +503,17 @@ CSS only (no JS, CSP safe); text and the LCP picture are NOT faded in (kept Page
 the third card is hidden under 480 px. Without a picture the old sample tutor card sits in the same stage. Dribbble and Awwwards were blocked in
 the browser pane, so the look comes from his Grapeslab picture plus common modern edtech patterns (web search). 281 tests green.
 Owner next: upload a PNG with a REAL transparent background in /admin/settings and look at Home on his phone.
+FOURTH VERSION (26 Oct, owner saw the live hero: size, effects and motion are good; "remove the picture background so the circles are
+directly behind the person"; local, NOT deployed until he agrees): AUTOMATIC BACKGROUND REMOVAL. `App\Support\BackgroundRemover`
+(GD, no external service, no AI): learns the 1-4 flat colours of the picture's border (must cover 85% of it, else "busy" and nothing
+happens), keeps only pixels of those colours that are connected to the border, ignores bridges thinner than 4 px (erode, flood fill,
+dilate), so white clothes inside the person are never removed, and fades the halo along the edge (2 rounds). It refuses if less than 4% or
+more than 92% would go. Works on a copy of at most 1000 px (about 2 s). The admin form has "Background of the picture": Automatic (default; only
+light backgrounds: white, grey, chequered), Keep exactly as it is, Try to remove any plain background (any flat colour);
+`HeroPicture::store(..., $background)` returns `removed` / `kept` / `too_busy` and the controller shows a matching message.
+Limits to tell the owner: hair edges are rougher than a professional tool (remove.bg, Canva); a busy background (room, street) is
+left as it is. `BackgroundRemoverTest` (7, in tests/Unit) + 6 new upload tests; 293 tests green. Checked locally on his picture: removed in 2.2 s,
+woman stands on the green disc on phone and desktop. Needs `npm run build` NOT (no CSS change), code only, no migration.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

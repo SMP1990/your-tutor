@@ -42,7 +42,16 @@
         <div class="field">
             <label for="hero_picture">{{ $hero ? 'Replace the picture' : 'Add a picture' }}</label>
             <input id="hero_picture" name="picture" type="file" accept="image/*,.heic,.heif" class="input" required>
-            <p class="field__hint">Any picture works, of any size (photos straight from your phone are fine). The site makes it the right size and converts it to a fast format by itself, and it never cuts the picture. For the best look use a person with a transparent background (a PNG with the background removed): she then stands on the coloured circles. A picture that only looks transparent (it has a chequered pattern drawn into it) is treated as an ordinary photo.</p>
+            <p class="field__hint">Any picture works, of any size (photos straight from your phone are fine). The site makes it the right size and converts it to a fast format by itself, and it never cuts the picture. A person on a plain background is cut out automatically so she stands on the coloured circles (a PNG that is already transparent works best of all).</p>
+        </div>
+        <div class="field">
+            <label for="hero_background">Background of the picture</label>
+            <select id="hero_background" name="background" class="input">
+                <option value="auto" @selected(old('background', 'auto') === 'auto')>Automatic (recommended): take away a plain white, grey or chequered background</option>
+                <option value="keep" @selected(old('background') === 'keep')>Keep the picture exactly as it is</option>
+                <option value="remove" @selected(old('background') === 'remove')>Try to take away any plain background (any flat colour)</option>
+            </select>
+            <p class="field__hint">When the background is taken away, the person stands on the coloured circles. It works for plain backgrounds; a busy background (a room, a street) is left as it is.</p>
         </div>
         @unless ($hero)
             <div class="field">

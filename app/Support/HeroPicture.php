@@ -35,6 +35,9 @@ class HeroPicture
 
     public const ALT_MAX = 120;
 
+    /** A picture whose background is taken away is worked on at this size (longest side): it is quick and still sharp enough. */
+    public const CUTOUT_SIDE = 1000;
+
     /** GD alpha runs 0 (solid) .. 127 (clear). Above this a pixel counts as "empty background". */
     private const CLEAR_ALPHA = 100;
 
@@ -73,16 +76,41 @@ class HeroPicture
         ];
     }
 
-    /** Replaces the picture. The old files are deleted only after the new ones were saved. */
-    public static function store(UploadedFile $file, ?string $alt): void
+    /**
+     * Replaces the picture. The old files are deleted only after the new ones were saved.
+     *
+     * @param  string  $background  'auto' (remove it when it is plain white / grey / chequered), 'keep' (never touch it) or
+     *                              'remove' (try, also for other flat colours)
+     * @return string 'removed' (the background was taken away), 'kept' (left as it was) or 'too_busy' (the admin asked for
+     *                removal but the background was not plain enough, so the picture is used as it is)
+     */
+    public static function store(UploadedFile $file, ?string $alt, string $background = 'auto'): string
     {
+        @set_time_limit(120);
         $source = HeroPictureReader::read($file);
         $id = bin2hex(random_bytes(8));
         $base = self::DIR.'/'.$id;
         $saved = [];
+        $outcome = 'kept';
 
         try {
             $cutout = self::hasTransparentBackground($source);
+
+            if (! $cutout && $background !== 'keep') {
+                // Work on a smaller copy: removing a background pixel by pixel is slow on a big picture.
+                $work = self::scaled($source, self::CUTOUT_SIDE);
+                $see = BackgroundRemover::remove($work, onlyLight: $background === 'auto');
+                if ($see) {
+                    imagedestroy($source);
+                    imagedestroy($work);
+                    $source = $see;
+                    $cutout = true;
+                    $outcome = 'removed';
+                } else {
+                    imagedestroy($work);
+                    $outcome = $background === 'remove' ? 'too_busy' : 'kept';
+                }
+            }
             if ($cutout) {
                 $source = self::trimEmptyMargins($source);
             }
@@ -118,6 +146,8 @@ class HeroPicture
         $old = self::oldFiles();
         SiteSettings::save($settings);
         Storage::disk(self::DISK)->delete($old);
+
+        return $outcome;
     }
 
     public static function updateAlt(?string $alt): void

@@ -208,20 +208,90 @@ class HeroPictureTest extends TestCase
         $this->assertGreaterThan(0, $corner + 1, 'the file keeps an alpha channel');
     }
 
-    public function test_a_picture_that_only_looks_transparent_is_an_ordinary_photo(): void
+    /** A chequered "transparent" pattern painted into solid pixels (what a screenshot of a cut-out gives), with or without a person. */
+    private function fakeTransparent(bool $withPerson): UploadedFile
     {
-        // A chequered "transparent" pattern painted into solid pixels (what a screenshot of a cut-out gives).
-        $image = imagecreatetruecolor(600, 600);
+        $image = imagecreatetruecolor(420, 420);
         $light = imagecolorallocate($image, 255, 255, 255);
-        $grey = imagecolorallocate($image, 235, 235, 235);
-        for ($y = 0; $y < 600; $y += 40) {
-            for ($x = 0; $x < 600; $x += 40) {
-                imagefilledrectangle($image, $x, $y, $x + 39, $y + 39, (($x + $y) / 40) % 2 ? $grey : $light);
+        $grey = imagecolorallocate($image, 236, 236, 236);
+        for ($y = 0; $y < 420; $y += 30) {
+            for ($x = 0; $x < 420; $x += 30) {
+                imagefilledrectangle($image, $x, $y, $x + 29, $y + 29, (($x + $y) / 30) % 2 ? $grey : $light);
             }
         }
-        $this->upload([], $this->encode($image, 'png', 'fake.png'))->assertSessionHasNoErrors();
+        if ($withPerson) {
+            imagefilledellipse($image, 210, 210, 220, 320, imagecolorallocate($image, 200, 110, 40));
+            imagefilledellipse($image, 210, 250, 100, 130, $light); // a white shirt that must survive
+        }
+
+        return $this->encode($image, 'png', 'fake.png');
+    }
+
+    public function test_a_chequered_background_is_taken_away_automatically_so_the_person_stands_on_the_circles(): void
+    {
+        $this->upload([], $this->fakeTransparent(true))->assertSessionHasNoErrors()
+            ->assertSessionHas('notice', fn ($n) => str_contains($n, 'background was taken away automatically'));
+
+        $this->get('/')->assertSee('hero-stage--cutout', false)->assertDontSee('hero-stage--photo', false);
+
+        // The stored picture really is see-through at the corner and solid on the person (the shirt included).
+        $big = imagecreatefromstring(Storage::disk('public')->get($this->files()[0]));
+        $this->assertSame(127, (imagecolorat($big, 0, 0) >> 24) & 0x7F, 'the corner is see-through');
+        $this->assertSame(0, (imagecolorat($big, intdiv(imagesx($big), 2), intdiv(imagesy($big), 2)) >> 24) & 0x7F, 'the middle is solid');
+        $this->assertLessThan(420, imagesx($big), 'the empty margins were trimmed');
+    }
+
+    public function test_keep_leaves_the_picture_exactly_as_it_is(): void
+    {
+        $this->upload(['background' => 'keep'], $this->fakeTransparent(true))->assertSessionHas('notice', 'The Home page picture is saved.');
 
         $this->get('/')->assertSee('hero-stage--photo', false)->assertDontSee('hero-stage--cutout', false);
+        $this->assertSame([420 => [420, 420]], $this->sizes(), 'not trimmed, not changed');
+    }
+
+    public function test_a_picture_that_is_only_background_is_not_emptied(): void
+    {
+        $this->upload([], $this->fakeTransparent(false))->assertSessionHasNoErrors()->assertSessionHas('notice', 'The Home page picture is saved.');
+
+        $this->get('/')->assertSee('hero-stage--photo', false);
+    }
+
+    public function test_a_coloured_background_is_only_taken_away_when_the_admin_asks(): void
+    {
+        $this->upload([], $this->gd('png', 400, 400))->assertSessionHas('notice', 'The Home page picture is saved.');
+        $this->get('/')->assertSee('hero-stage--photo', false);
+
+        $this->upload(['background' => 'remove'], $this->gd('png', 400, 400))->assertSessionHas('notice', fn ($n) => str_contains($n, 'taken away automatically'));
+        $this->get('/')->assertSee('hero-stage--cutout', false);
+    }
+
+    public function test_a_busy_background_is_left_alone_and_the_admin_is_told_why(): void
+    {
+        mt_srand(11);
+        $image = imagecreatetruecolor(400, 400);
+        for ($y = 0; $y < 400; $y += 4) {
+            for ($x = 0; $x < 400; $x += 4) {
+                imagefilledrectangle($image, $x, $y, $x + 3, $y + 3, imagecolorallocate($image, mt_rand(0, 255), mt_rand(0, 255), mt_rand(0, 255)));
+            }
+        }
+
+        $this->upload(['background' => 'remove'], $this->encode($image, 'png', 'busy.png'))
+            ->assertSessionHas('notice', fn ($n) => str_contains($n, 'too busy'));
+
+        $this->get('/')->assertSee('hero-stage--photo', false);
+        $this->assertNotEmpty($this->files(), 'the picture is still saved, as it is');
+    }
+
+    public function test_the_background_choice_must_be_one_of_the_three(): void
+    {
+        $html = $this->asAdmin()->get('/admin/settings')->getContent();
+        $this->assertStringContainsString('Background of the picture', $html);
+        $this->assertStringContainsString('value="auto" selected', $html, 'automatic is the default');
+        $this->assertStringContainsString('value="keep"', $html);
+        $this->assertStringContainsString('value="remove"', $html);
+
+        $this->upload(['background' => 'delete-everything'])->assertSessionHasErrors('background', errorBag: 'hero');
+        $this->assertSame([], $this->files());
     }
 
     public function test_replacing_deletes_the_old_files_of_any_size_and_removing_brings_the_drawing_back(): void
