@@ -48,15 +48,8 @@ php artisan serve --port=8001             # local preview
 ```
 Deploy to the live site: see `docs/DEPLOY.md` ("Hostinger shared hosting").
 
-Old static preview only (not live any more; kept for reference until `site:export` is removed):
-```
-php artisan site:export --url=https://cornflowerblue-tarsier-769699.hostingersite.com
-```
-Make the zip (PowerShell), from `...\tutoring-marketplace`:
-1. Copy `laravel-app\static-export` to `upload-to-hostinger` (replace).
-2. Inside that folder: `tar.exe -a -c -f "<Downloads>\upload-to-hostinger vX.Y (HH-MM AM).zip" <every item incl. .htaccess>`
-3. Check: no entry contains `\`; `unzip` gives the same tree.
-Update `static-site`: replace files in `website\` with `upload-to-hostinger\` (keep README.md), commit, `git push origin static-site:static-site`.
+The old static-preview export (`site:export`, zips, `static-site` branch) was removed in Step 7a.
+First admin on a server: `php artisan admin:create <email> --name="..."` (see `docs/DEPLOY.md`).
 
 ## 6. Public pages and design (built first with dummy data; most now read the database, see 6c-6g)
 - Home, Find a Tutor, Tutor Profile (8 sample tutors, now database rows: see 2c-1), Book Free Demo
@@ -64,7 +57,7 @@ Update `static-site`: replace files in `website\` with `upload-to-hostinger\` (k
 - About, Contact (+ sent), FAQs, Terms / Privacy / Refund (marked DRAFT), 404 / 500
 - Subjects list + 12 subject pages
 - Login pages: Log In, Register, Forgot password now work for real (1b-1c); Verify phone is still a design preview
-- Sample-data dashboards moved to `/preview/{role}` (temporary links on the Log In page); real ones are under `/dashboard` (1d)
+- (The sample-data dashboards under /preview were removed in 7a; real dashboards are under `/dashboard`, 1d.)
 - SEO: unique titles/descriptions, canonical, Open Graph + `public/images/og-image.png`, schema, `/sitemap.xml`, `/robots.txt`
 - Security: `SecurityHeaders` middleware (CSP, no inline JS: all JS in `resources/js/site.js`), forms with CSRF + validation + rate limits; export `.htaccess` with HTTPS + headers
 - Site is **noindex on purpose** until launch (`SITE_INDEXABLE=true` then). See `docs/DEPLOY.md`.
@@ -323,6 +316,19 @@ admin / report pages redirect guests to /login, `/.env` 403, security headers pr
 placeholder numbers (settings default). NOT tested live: logging in as admin (live email is off, see 1f-5, so the
 admin code cannot arrive), the new admin pages with real clicks, and sending a Contact message (would write to the live DB).
 **Step 6 is complete.** Next: Step 7 launch prep (see `docs/LAUNCH_CHECKLIST.md`).
+
+## 6i. Step 7 = launch prep (owner agreed the plan 25 Oct: 7a safai + first admin, 7b email, 7c security / backups /
+monitoring, 7d speed + SEO, 7e owner's list + beta; analytics NOT now)
+- [x] **7a Clean-up + first admin** (25 Oct, committed locally, NOT deployed, NOT pushed): new command
+  `admin:create <email> --name= --phone=` (`CreateAdmin`; password asked twice, hidden, 12+ chars letters + numbers;
+  admin is created email-verified; never an argument). Removed: sample dashboards `/preview/{role}` and their views
+  (`resources/views/dashboards`), preview links on Log In + their CSS, `/verify-phone` page, `site:export`
+  (`ExportStaticSite`), `StaticExportTest`, `DashboardPagesTest`; `DashboardNav::for()` lost its `$live` flag.
+  CSS changed, so the next deploy needs `npm run build` and the new `public/build` files. 213 tests green.
+  Still open for 7e (owner): placeholders `[WhatsApp number]` / `[support email]` (set in /admin/settings),
+  `MAIL_FROM_ADDRESS` default `hello@example.com` (set in server `.env` with real mail), "DRAFT" banner on the legal pages.
+  Not done by hand yet (needs the owner's OK): delete the `static-site` branch on GitHub, local `website/` and
+  `upload-to-hostinger*` folders, server `public_html_static_backup/`.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)

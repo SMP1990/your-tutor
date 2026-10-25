@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Browser security headers for every page. Keep in sync with the static preview's .htaccess
- * (App\Console\Commands\ExportStaticSite::HEADERS).
+ * Browser security headers for every page.
  */
 class SecurityHeaders
 {

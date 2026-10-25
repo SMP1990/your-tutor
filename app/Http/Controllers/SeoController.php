@@ -31,7 +31,7 @@ class SeoController extends Controller
     {
         $lines = config('site.indexable')
             ? ['User-agent: *', 'Disallow: /student', 'Disallow: /parent', 'Disallow: /tutor', 'Disallow: /admin', '', 'Sitemap: '.route('sitemap')]
-            : ['# Preview site with sample data: keep it out of search engines until launch.', 'User-agent: *', 'Disallow: /'];
+            : ['# Not launched yet (SITE_INDEXABLE=false): keep it out of search engines.', 'User-agent: *', 'Disallow: /'];
 
         return response(implode("\n", $lines)."\n")->header('Content-Type', 'text/plain');
     }

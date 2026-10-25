@@ -1,6 +1,6 @@
 <!doctype html>
 {{--
-    DESIGN ONLY dashboard frame with sample data. Child views set:
+    Dashboard frame (sidebar + top bar). Child views set:
     $nav  = [['label' => ..., 'icon' => svg paths, 'active' => bool], ...]
     $user = ['name' => ..., 'role' => ...]
 --}}
@@ -27,20 +27,12 @@
         <div class="dash-top__user">
             <span class="avatar" aria-hidden="true">{{ collect(explode(' ', $user['name']))->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->implode('') }}</span>
             <span class="dash-top__name">{{ $user['name'] }}</span>
-            @if ($preview ?? false)
-                <a href="{{ route('home') }}" class="dash-top__logout">Log out</a>
-            @else
-                <form method="post" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="dash-top__logout link-button">Log out</button>
-                </form>
-            @endif
+            <form method="post" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="dash-top__logout link-button">Log out</button>
+            </form>
         </div>
     </header>
-
-    @if ($preview ?? false)
-        <div class="dash-preview" role="note">Preview with sample data. Nothing on this page is real yet.</div>
-    @endif
 
     <div class="dash">
         <nav class="dash-nav" aria-label="Dashboard">

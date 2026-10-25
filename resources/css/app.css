@@ -1611,8 +1611,6 @@ textarea.input { min-height: 110px; padding-block: 10px; resize: vertical; }
   font-weight: 700;
 }
 
-.dash-preview { padding: 8px var(--gutter); background: var(--accent-soft); color: #7A4A06; font-size: 14px; font-weight: 500; text-align: center; }
-
 .dash { display: flex; flex-direction: column; }
 .dash-nav { background: var(--surface); border-bottom: 1px solid var(--line); overflow-x: auto; }
 .dash-nav ul { list-style: none; margin: 0; padding: 8px var(--gutter); display: flex; gap: 4px; }
@@ -1761,11 +1759,6 @@ button.btn { font: inherit; font-weight: 700; }
 /* Keep visually hidden labels inside horizontal scroll boxes (they would widen the page). */
 .table-wrap, .table-scroll, .avail-scroll { position: relative; }
 
-/* TEMPORARY: dashboard preview links on the login page (remove with real login) */
-.preview-links { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; background: var(--accent-soft); border: 1px dashed #E3B76B; border-radius: var(--radius); font-size: 14px; color: #7A4A06; }
-.preview-links ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.preview-links a { display: inline-flex; align-items: center; min-height: 36px; padding-inline: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; color: var(--ink); font-weight: 700; text-decoration: none; }
-.preview-links a:hover { border-color: var(--primary); color: var(--primary-dark); }
 .site-header__hello { align-items: center; min-height: 44px; font-weight: 700; white-space: nowrap; }
 .link-button { padding: 0; background: none; border: 0; color: var(--primary); font: inherit; font-size: 14px; font-weight: 700; text-decoration: underline; cursor: pointer; }
 .link-button:hover { color: var(--primary-dark); }

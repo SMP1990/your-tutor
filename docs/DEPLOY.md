@@ -12,18 +12,19 @@ To be filled in when the Laravel app first goes to a server (Hostinger VPS plann
 - Backups (daily, off the server) and how to restore
 
 ## Current state
-The static preview lives on git branch `static-site` and is uploaded by hand as a zip to
-Hostinger shared hosting (`public_html`). Build it with:
+The real Laravel app runs on Hostinger shared hosting (see the next section). The old static preview
+(`site:export`, git branch `static-site`) was removed in Step 7a; the branch only remains on GitHub for reference.
+
+## First admin account
+The website can never create an admin, so make the first one on the server (SSH, inside the site's `app/` folder):
 
 ```
-npm run build
-php artisan site:export --url=https://<current domain>
+/opt/alt/php84/usr/bin/php artisan admin:create admin@your-domain.com --name="Full Name"
 ```
 
-`--url` is only used for the canonical tag, link previews (og:image) and sitemap.xml.
-Links between pages are relative, so the files work on any domain. Export again after a domain change.
-The export writes `.htaccess` with HTTPS redirect, security headers (same as
-`App\Http\Middleware\SecurityHeaders`) and the custom 404 page.
+It asks for the password twice (hidden; 12+ characters with letters and numbers). Never put the password in the
+command. Admin login also asks for a code that is sent by email: until live email works (`MAIL_MAILER=smtp`, step
+1f-5) the code only lands in `storage/logs/laravel.log` on the server.
 
 ## Hostinger shared hosting (current setup)
 Server access details are in the owner's private notes, never in this repo.
@@ -49,11 +50,11 @@ Use PHP 8.4 for every command: `/opt/alt/php84/usr/bin/php` (the default `php` o
 Things that only show up in production (cached config/routes): never call `env()` outside `config/`,
 and never register bindings or other setup in `routes/web.php` (use a service provider).
 
-## Remove before launch (temporary preview helpers)
-- `resources/views/partials/dashboard-preview-links.blade.php`, its `@include` in `auth/login.blade.php`
-  and the `.preview-links` CSS: quick links to the sample dashboards.
-- `DashboardPreviewController` (`/preview/{role}`) and `AuthPreviewController` (`/verify-phone`) with their routes.
-- `site:export` command and the `static-site` branch, once the Laravel app itself is deployed.
+## Temporary preview helpers: removed in Step 7a
+The sample dashboards (`/preview/{role}`), their links on the Log In page, the `/verify-phone` design page and
+the `site:export` command are gone from the code. Still to do by hand, only when the owner says so: delete the
+`static-site` branch on GitHub and the local `website/` and `upload-to-hostinger*` folders next to `laravel-app`.
+The server still has `public_html_static_backup/` (old static site); delete it once rollback to it is never needed.
 
 ## Launch switches
 - `SITE_INDEXABLE=true`: lets search engines index the site (robots.txt allows, noindex tag removed).

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 /**
  * Sidebar menus for the dashboards. An item links to its route once that page exists; until then it
- * shows as "soon". The preview dashboards (sample data) pass $live = false: no links, first item active.
+ * shows as "soon".
  */
 class DashboardNav
 {
@@ -53,7 +53,7 @@ class DashboardNav
         ],
     ];
 
-    public static function for(string $dashboard, bool $live = true): array
+    public static function for(string $dashboard): array
     {
         $items = [];
         foreach (self::MENUS[$dashboard] as $label => $entry) {
@@ -62,9 +62,9 @@ class DashboardNav
             $items[] = [
                 'label' => $label,
                 'icon' => self::ICONS[$icon],
-                'href' => $live && $route ? route($route) : null,
-                'active' => $live ? ($pattern && request()->routeIs($pattern)) : $items === [],
-                'soon' => $live && ! $route,
+                'href' => $route ? route($route) : null,
+                'active' => $pattern && request()->routeIs($pattern),
+                'soon' => ! $route,
             ];
         }
 

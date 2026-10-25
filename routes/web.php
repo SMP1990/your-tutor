@@ -14,12 +14,10 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AuthPreviewController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\ClassBookingController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\DashboardPreviewController;
 use App\Http\Controllers\DemoBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReviewController;
@@ -80,17 +78,6 @@ Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 've
     ->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
 Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
     ->middleware(['auth', 'throttle:3,1'])->name('verification.send');
-
-// Phone code page: design only until an SMS/WhatsApp OTP provider is added (see AuthPreviewController).
-Route::get('/verify-phone', [AuthPreviewController::class, 'verifyPhone'])->name('verify-phone');
-Route::post('/verify-phone', [AuthPreviewController::class, 'notYet'])->middleware('throttle:10,1')->name('verify-phone.check');
-
-// Dashboard previews with sample data (public, for the static site). Remove at launch, see docs/DEPLOY.md.
-foreach (['student', 'parent', 'tutor', 'admin'] as $dashboard) {
-    Route::get("/preview/{$dashboard}", [DashboardPreviewController::class, 'show'])
-        ->defaults('dashboard', $dashboard)
-        ->name("preview.{$dashboard}");
-}
 
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');

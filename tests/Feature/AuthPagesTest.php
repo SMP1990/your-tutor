@@ -14,7 +14,6 @@ class AuthPagesTest extends TestCase
         $pages = [
             '/login' => 'Welcome back',
             '/register' => 'Create your account',
-            '/verify-phone' => 'Enter your code',
             '/forgot-password' => 'Forgot your password?',
         ];
 
@@ -34,12 +33,12 @@ class AuthPagesTest extends TestCase
         $this->get('/register?role=tutor')->assertSee('value="tutor" checked', false);
     }
 
-    public function test_phone_code_page_is_still_a_preview(): void
+    public function test_temporary_preview_pages_are_gone(): void
     {
-        $this->from('/verify-phone')->post('/verify-phone', ['code' => '123456'])
-            ->assertRedirect('/verify-phone')
-            ->assertSessionHas('notice');
+        foreach (['/verify-phone', '/preview/student', '/preview/parent', '/preview/tutor', '/preview/admin'] as $url) {
+            $this->get($url)->assertNotFound();
+        }
 
-        $this->assertGuest();
+        $this->get('/login')->assertDontSee('Preview only');
     }
 }

@@ -25,6 +25,4 @@
 </form>
 
 <p class="auth-switch">New here? <a href="{{ route('register') }}">Create an account</a></p>
-
-@include('partials.dashboard-preview-links')
 @endsection
