@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
+use Throwable;
 
 class EmailVerificationController extends Controller
 {
+    public const NOT_SENT = 'We could not send the email right now. Please wait a minute and press the button again.';
+
     /** "Check your email" page, shown after registering. */
     public function notice(Request $request)
     {
@@ -35,10 +38,24 @@ class EmailVerificationController extends Controller
 
     public function resend(Request $request)
     {
-        if (! $request->user()->hasVerifiedEmail()) {
-            $request->user()->sendEmailVerificationNotification();
+        if (! $request->user()->hasVerifiedEmail() && ! self::sendLink($request->user())) {
+            return back()->with('notice', self::NOT_SENT);
         }
 
         return back()->with('notice', 'We sent a new link. Please check your inbox and spam folder.');
+    }
+
+    /** Sends the verification email at once. False if the mail server failed (the page must not break). */
+    public static function sendLink(User $user): bool
+    {
+        try {
+            $user->sendEmailVerificationNotification();
+        } catch (Throwable $e) {
+            report($e);
+
+            return false;
+        }
+
+        return true;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Role;
+use App\Notifications\QueuedResetPassword;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -41,6 +42,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasRole(Role $role): bool
     {
         return $this->role === $role;
+    }
+
+    /** The reset email goes on the queue so the "Forgot password" page never waits for the mail server. */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new QueuedResetPassword($token));
     }
 
     /** Set only by the admin Users page (suspended_at is not fillable). */

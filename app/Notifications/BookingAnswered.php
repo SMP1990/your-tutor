@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 /** Email to the family after the tutor confirmed or declined their regular-classes booking. */
-class BookingAnswered extends Notification
+class BookingAnswered extends QueuedNotification
 {
     public function __construct(public readonly ClassBooking $booking) {}
 

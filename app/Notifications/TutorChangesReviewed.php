@@ -6,7 +6,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 /** Email to an approved tutor after the admin approved or rejected their profile changes. */
-class TutorChangesReviewed extends Notification
+class TutorChangesReviewed extends QueuedNotification
 {
     public function __construct(public readonly bool $approved, public readonly ?string $note = null) {}
 

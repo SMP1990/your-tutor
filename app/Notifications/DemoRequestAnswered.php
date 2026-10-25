@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 /** Email to the parent or student after the tutor accepted or declined their free demo request. */
-class DemoRequestAnswered extends Notification
+class DemoRequestAnswered extends QueuedNotification
 {
     public function __construct(public readonly DemoRequest $demo) {}
 

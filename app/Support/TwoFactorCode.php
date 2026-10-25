@@ -7,6 +7,7 @@ use App\Notifications\TwoFactorCodeNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Throwable;
 
 /**
  * 6-digit login code sent by email (free). Stored hashed in the cache for 10 minutes,
@@ -20,12 +21,22 @@ class TwoFactorCode
 
     private const SESSION_KEY = 'two_factor_passed';
 
-    public static function send(User $user): void
+    /** Sends the code at once (not queued). False if the mail server failed; the code is then thrown away. */
+    public static function send(User $user): bool
     {
         $code = (string) random_int(100000, 999999);
         Cache::put(self::key($user), ['hash' => Hash::make($code), 'tries' => 0], now()->addMinutes(self::MINUTES));
 
-        $user->notify(new TwoFactorCodeNotification($code));
+        try {
+            $user->notifyNow(new TwoFactorCodeNotification($code));
+        } catch (Throwable $e) {
+            report($e);
+            Cache::forget(self::key($user));
+
+            return false;
+        }
+
+        return true;
     }
 
     public static function hasActiveCode(User $user): bool

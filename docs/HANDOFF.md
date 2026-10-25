@@ -330,6 +330,22 @@ monitoring, 7d speed + SEO, 7e owner's list + beta; analytics NOT now)
   Not done by hand yet (needs the owner's OK): delete the `static-site` branch on GitHub, local `website/` and
   `upload-to-hostinger*` folders, server `public_html_static_backup/`.
 
+- [x] **7b-1 Email code** (25 Oct, committed locally, NOT deployed, NOT pushed): emails no longer block pages.
+  Queued (`QueuedNotification`, 3 tries, retry after 1 and 5 min): tutor application / profile decisions, demo and
+  booking answers, and the password-reset email (`QueuedResetPassword` via `User::sendPasswordResetNotification`).
+  Sent at once, never queued: admin login code (`TwoFactorCode::send` now returns false on failure and the code is
+  dropped) and the verification link (`EmailVerificationController::sendLink`; `RegisterController` no longer fires
+  the `Registered` event because its default listener is queued). If the mail server is down the person sees "We could
+  not send the email right now" instead of a 500. Every email gets Reply-To = support email (listener in
+  `AppServiceProvider`, applies the saved Site settings so it also works in the queue worker and console).
+  New command `mail:test <email>` (prints mailer / host / from, never the password; warns on log mailer and
+  placeholder from-address). "Pakistan time" in the interview email now uses `config('site.timezone_label')`.
+  **FOUND on the live server (read-only check): `QUEUE_CONNECTION=database`, `MAIL_MAILER=log`, 0 jobs, 0 failed.**
+  So with the current live code, a verification email after registering would just sit in `jobs` (no worker). The new
+  code avoids this for verification and the admin code, but the queued emails (reset, decisions) need the hPanel cron
+  from `docs/DEPLOY.md` ("Email") before they can ever be sent. `crontab` does not exist over SSH on Hostinger: add the
+  cron in hPanel. 7b-2 (real SMTP) waits for the owner's domain. Tests: `MailQueueTest`; 222 tests green.
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)

@@ -6,7 +6,6 @@ use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
@@ -30,11 +29,12 @@ class RegisterController extends Controller
         $user->role = Role::from($data['role']); // set explicitly, never mass-assigned
         $user->save();
 
-        event(new Registered($user)); // sends the verification email
+        // Sent at once, not through the Registered event (its listener is queued and would wait for a cron worker).
+        $sent = EmailVerificationController::sendLink($user);
 
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('verification.notice');
+        return redirect()->route('verification.notice')->with($sent ? [] : ['notice' => EmailVerificationController::NOT_SENT]);
     }
 }

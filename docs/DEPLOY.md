@@ -26,6 +26,40 @@ It asks for the password twice (hidden; 12+ characters with letters and numbers)
 command. Admin login also asks for a code that is sent by email: until live email works (`MAIL_MAILER=smtp`, step
 1f-5) the code only lands in `storage/logs/laravel.log` on the server.
 
+## Email (Step 7b)
+Two kinds of email:
+- **At once** (never queued): the admin login code and the email-verification link. If the mail server fails the
+  page still opens and says "We could not send the email right now"; the person presses the button again.
+- **Queued** (job table `jobs`, needs a worker): password reset, tutor application / profile decisions, demo and booking
+  answers. Each is tried up to 3 times (after 1 and 5 minutes). Without the cron below these emails WAIT and never arrive.
+
+Every email gets `Reply-To` = the support email from Site settings. The links inside emails are built from `APP_URL`
+(also in queued emails), so `APP_URL` in the server `.env` must be the real address of the site.
+
+`.env` on the server (the owner pastes the password himself; never write it in chat or in git):
+```
+QUEUE_CONNECTION=database
+MAIL_MAILER=smtp
+MAIL_HOST=<from the mail provider>
+MAIL_PORT=<from the mail provider>
+MAIL_SCHEME=<smtps for port 465, null for 587>
+MAIL_USERNAME=<mailbox or SMTP login>
+MAIL_PASSWORD=<paste here>
+MAIL_FROM_ADDRESS="noreply@<your domain>"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+After changing `.env` run `php artisan optimize` again (config is cached).
+
+**Cron for the queue (Hostinger hPanel, not `crontab`):** hPanel > Websites > Manage > Advanced > Cron Jobs >
+custom, every minute (`* * * * *`):
+```
+/opt/alt/php84/usr/bin/php /home/<account>/domains/<site>/app/artisan queue:work --stop-when-empty --max-time=55 >/dev/null 2>&1
+```
+Check it: `php artisan queue:failed` lists emails that failed 3 times, `php artisan queue:retry all` tries them again.
+
+**Test it:** `php artisan mail:test someone@example.com` sends one email and prints the mailer, host and from address
+(never the password). It warns while `MAIL_MAILER` is still `log` or the from address is a placeholder.
+
 ## Hostinger shared hosting (current setup)
 Server access details are in the owner's private notes, never in this repo.
 

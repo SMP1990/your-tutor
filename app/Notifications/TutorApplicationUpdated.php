@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 /** Email to the tutor when their application status changes or an interview is scheduled. */
-class TutorApplicationUpdated extends Notification
+class TutorApplicationUpdated extends QueuedNotification
 {
     public function __construct(public readonly TutorProfile $profile) {}
 
@@ -34,7 +34,7 @@ class TutorApplicationUpdated extends Notification
                 ->line($p->decision_note)
                 ->action('Update your application', route('tutor.application')),
             TutorStatus::InterviewScheduled => $mail->subject('Your interview | '.config('app.name'))
-                ->line('Your interview is on '.$p->interview_at?->format('l j F Y, g:i A').' (Pakistan time).')
+                ->line('Your interview is on '.$p->interview_at?->format('l j F Y, g:i A').' ('.config('site.timezone_label').').')
                 ->action('Join the interview', $p->interview_link ?: route('dashboard'))
                 ->line('Please join from a quiet place with your camera on.'),
             default => $mail->subject('Your tutor application | '.config('app.name'))

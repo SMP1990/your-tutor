@@ -9,17 +9,21 @@ use Illuminate\Validation\ValidationException;
 
 class TwoFactorController extends Controller
 {
+    private const NOT_SENT = 'We could not send the email right now. Please wait a minute and press "Send a new code".';
+
     public function show(Request $request)
     {
         if (TwoFactorCode::passed($request)) {
             return redirect()->route('dashboard');
         }
 
-        if (! TwoFactorCode::hasActiveCode($request->user())) {
-            TwoFactorCode::send($request->user());
+        $view = view('auth.two-factor', ['email' => $request->user()->email]);
+
+        if (! TwoFactorCode::hasActiveCode($request->user()) && ! TwoFactorCode::send($request->user())) {
+            $view->withErrors(['code' => self::NOT_SENT]);
         }
 
-        return view('auth.two-factor', ['email' => $request->user()->email]);
+        return $view;
     }
 
     public function store(Request $request)
@@ -37,7 +41,9 @@ class TwoFactorController extends Controller
 
     public function resend(Request $request)
     {
-        TwoFactorCode::send($request->user());
+        if (! TwoFactorCode::send($request->user())) {
+            return back()->withErrors(['code' => self::NOT_SENT]);
+        }
 
         return back()->with('notice', 'We sent a new code to your email.');
     }

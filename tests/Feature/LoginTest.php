@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Notifications\QueuedResetPassword;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -106,7 +107,7 @@ class LoginTest extends TestCase
         $known = $this->post('/forgot-password', ['email' => 'sadia@example.test']);
         $unknown = $this->post('/forgot-password', ['email' => 'nobody@example.test']);
 
-        Notification::assertSentTo($user, ResetPassword::class);
+        Notification::assertSentTo($user, QueuedResetPassword::class);
         $this->assertSame($known->getSession()->get('notice'), $unknown->getSession()->get('notice'));
     }
 
