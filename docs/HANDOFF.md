@@ -504,7 +504,7 @@ the third card is hidden under 480 px. Without a picture the old sample tutor ca
 the browser pane, so the look comes from his Grapeslab picture plus common modern edtech patterns (web search). 281 tests green.
 Owner next: upload a PNG with a REAL transparent background in /admin/settings and look at Home on his phone.
 FOURTH VERSION (26 Oct, owner saw the live hero: size, effects and motion are good; "remove the picture background so the circles are
-directly behind the person"; local, NOT deployed until he agrees): AUTOMATIC BACKGROUND REMOVAL. `App\Support\BackgroundRemover`
+directly behind the person"; LIVE since 26 Oct, main 9c06e46, backup `~/backup-before-bgremove-20261026.sql`, code only, no build, no migration; tested on the server with a 1,000,000 pixel chequered picture: removed in 0.86 s, 124 MB peak, white shirt kept): AUTOMATIC BACKGROUND REMOVAL. `App\Support\BackgroundRemover`
 (GD, no external service, no AI): learns the 1-4 flat colours of the picture's border (must cover 85% of it, else "busy" and nothing
 happens), keeps only pixels of those colours that are connected to the border, ignores bridges thinner than 4 px (erode, flood fill,
 dilate), so white clothes inside the person are never removed, and fades the halo along the edge (2 rounds). It refuses if less than 4% or
@@ -513,7 +513,7 @@ light backgrounds: white, grey, chequered), Keep exactly as it is, Try to remove
 `HeroPicture::store(..., $background)` returns `removed` / `kept` / `too_busy` and the controller shows a matching message.
 Limits to tell the owner: hair edges are rougher than a professional tool (remove.bg, Canva); a busy background (room, street) is
 left as it is. `BackgroundRemoverTest` (7, in tests/Unit) + 6 new upload tests; 293 tests green. Checked locally on his picture: removed in 2.2 s,
-woman stands on the green disc on phone and desktop. Needs `npm run build` NOT (no CSS change), code only, no migration.
+woman stands on the green disc on phone and desktop. Owner next: upload his picture again in /admin/settings (Background: Automatic) and look at Home on his phone.
 
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
