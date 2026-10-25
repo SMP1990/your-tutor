@@ -316,6 +316,14 @@ Home numbers start manual, with an automatic option). Parts: 6a users, 6b compla
   now (needs `migrate --force` for 4 migrations: 2026_10_29_000001, 2026_10_30_000001, 2026_10_31_000001,
   2026_11_01_000001, then `optimize`; build files are unchanged because no CSS/JS was added).
 
+**Step 6 DEPLOYED (25 Oct, with the owner's OK) and pushed to GitHub (main = 6abad37):** database backed up first
+(`~/backup-before-step6-20261025.sql` on the server, outside the web root; delete it when no longer needed), code
+extracted into `app/`, 4 migrations run (all ran fine), `artisan optimize`. Live checks: public pages 200, all new
+admin / report pages redirect guests to /login, `/.env` 403, security headers present, Home still shows the
+placeholder numbers (settings default). NOT tested live: logging in as admin (live email is off, see 1f-5, so the
+admin code cannot arrive), the new admin pages with real clicks, and sending a Contact message (would write to the live DB).
+**Step 6 is complete.** Next: Step 7 launch prep (see `docs/LAUNCH_CHECKLIST.md`).
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)
