@@ -1,9 +1,25 @@
 # HANDOFF: your tutor (read this first in every new chat)
 
-Last updated: 25 Oct 2026, after Step 5 (reviews). **Update this file at the end of every step.**
+Last updated: 25 Oct 2026, evening, after the Home page picture feature (6n). **Update this file at the end of every step.**
 
-**Status in one line:** Steps 1-5 are built, live on Hostinger (temporary domain) and pushed to GitHub;
-179 tests green. Step 6a (admin users) is built locally (188 tests, not deployed). Next 6b-6d, then Step 7 (launch prep). Details in 6c-6h, next steps in 8.
+**STATUS NOW (read this first):**
+- Everything up to 6m is built, tested (272 tests green), pushed to GitHub (`main` = local = `1f71893`) and LIVE on Hostinger
+  (temporary domain), EXCEPT 6n.
+- **6n (admin-controlled Home page picture, commit `1f71893`) is pushed but NOT deployed.** The deploy was stopped because
+  Hostinger's SSH was unstable (login works, then "Connection reset" / "server not responding"; ssh and scp sometimes hang).
+  The database backup for this deploy IS done on the server (`~/backup-before-heropicture-20261025.sql`, 21 tables). Still to do
+  when SSH is stable: upload `app.tar.gz` (`git archive HEAD`) + `build.tar.gz` (`public/build`), extract into `app/`, `artisan optimize`
+  (no migration), check `/` and `/admin/settings`. Use `timeout` and `ServerAliveInterval` on ssh/scp so nothing hangs, and
+  do NOT extract a half-uploaded archive. Deploy recipe: `docs/DEPLOY.md`.
+- Live site has: public pages, accounts, roles, tutor approval, free demos (Google Meet), regular classes, attendance, reviews,
+  complaints, contact inbox, admin users / settings / profile, backups (server cron 03:00 UTC + copy to the owner's PC at
+  `F:\YourTutorBackups`), speed 100 and SEO fixes, phone-friendly menus and tables.
+- **Waiting for the owner:** domain, real email (SMTP) + queue cron, WhatsApp number and support email (he can type them in
+  /admin/settings), real tutors, legal review, real Home numbers, the GitHub repo is still PUBLIC (advised: make it private;
+  checked: no secret was ever committed), restore drill (needs a temporary empty database in hPanel), Hostinger backups check.
+- First admin exists (Adnan Rashid). Until real email works, the admin login code is read from the server file
+  `storage/logs/mail-<date>.log` (see `docs/DEPLOY.md`, "First admin account").
+- Details: sections 6c-6n; next steps in section 8.
 
 ## 1. What this is
 Online tutoring marketplace for Pakistan (later KSA). Brand: **your tutor** (lowercase, from `APP_NAME`).
@@ -390,7 +406,7 @@ mailer is `log`; fix it in the next change. `laravel.log` still holds the debug-
   backups in hPanel. Old manual dumps in `~` (step6, 7a7b, maillog, 7c) can be deleted once the daily ones run.
 - [ ] 7c-3 monitoring (UptimeRobot on `/up`, owner makes the account), 7c-4 rollback notes + keep last 3 release archives.
 
-## 6k. Profile page (25 Oct, owner's request after 7c; local, NOT deployed, NOT pushed)
+## 6k. Profile page (25 Oct, owner's request after 7c; LIVE since the speed/SEO deploy)
 `/dashboard/profile` (`ProfileController`, menu "Profile" / "My profile" for student, parent, tutor, admin; "Edit profile"
 link on the dashboard account card; admin must have typed the emailed code). Three separate forms, each asks for the
 CURRENT password (`current_password` rule, 6 tries per minute): (1) name + phone (a changed phone loses
@@ -403,7 +419,7 @@ newer request is made; if the address was taken meanwhile nothing changes) and w
 `sessions` table). Mail down = a message, not a 500. 15 tests in `ProfileTest`, 248 tests green. Deploy needs
 `migrate --force` (1 migration). Until real SMTP the confirmation link only appears in `storage/logs/mail-<date>.log`.
 
-## 6l. Step 7d = speed and SEO (25 Oct; local, NOT deployed, NOT pushed)
+## 6l. Step 7d = speed and SEO (25 Oct; LIVE, measured)
 Measured on the LIVE home page with Google PageSpeed (web UI; the API had no free quota left), mobile, slow 4G, before
 these changes: Performance 89, Accessibility 100, Best Practices 100, SEO 69 (only "page is blocked from indexing",
 which is on purpose until launch), FCP and LCP 3.0 s, TBT 0, CLS 0.001. Google's main finding: render-blocking requests
@@ -434,7 +450,7 @@ The `/tutors` heading fix (an `sr-only` h2 "Tutors" above the cards, test in `Se
 rest allowed); our pages carry `noindex` anyway, and on the real domain our own route answers.
 Launch day: `SITE_INDEXABLE=true`, submit `/sitemap.xml` in Search Console (needs the domain).
 
-## 6m. Small screens (25 Oct, owner: "on a small screen it is cut off"; local, NOT deployed yet)
+## 6m. Small screens (25 Oct, owner: "on a small screen it is cut off"; LIVE)
 Cause, found by logging in to the LOCAL demo admin at 375 px: (1) the dashboard menu was one strip that scrolls sideways
 (14 items for the admin, only 2-3 visible, nothing says "scroll"), (2) every `.data-table` was 560 px+ wide inside a
 sideways scroll box, so on a phone only Name/Role/Email showed and Status / the "Open" button were hidden to the right.
@@ -448,7 +464,7 @@ history, demos, bookings, classes, reviews, complaints, messages) and every dash
 Rule for new tables: use `class="data-table"` with a `<thead>` and `<th scope="col">` (`SmallScreenTest` checks it).
 DEPLOYED 25 Oct (main f11b69c, with the owner's OK; backup `~/backup-before-smallscreen-20261025.sql`, `npm run build` uploaded, `optimize`, no migration). The `/tutors` heading fix went live with it. 263 tests green. The owner checks it on his phone.
 
-## 6n. Home page picture from the admin (25 Oct, owner's request: "the hero picture must be controllable from the dashboard, add and delete"; local, NOT deployed)
+## 6n. Home page picture from the admin (25 Oct, owner's request: "the hero picture must be controllable from the dashboard, add and delete"; pushed, NOT deployed yet: SSH problem, see STATUS NOW)
 Admin > Site settings > "Home page picture" (`Admin\HeroPictureController`, routes `admin.hero.store|update|destroy`, role:admin + two-factor).
 Upload (JPG/PNG/WebP, max 4 MB, 600x450 .. 6000x6000 px), replace, change the short description (alt text, 120 chars) or delete.
 `App\Support\HeroPicture`: the upload is decoded with GD, rotated by EXIF, cut to 4:3 around the centre and saved again as TWO
@@ -472,15 +488,20 @@ Deploy: `npm run build` (CSS changed) + code, no migration. 272 tests green.
 - Accounts to apply for early: JazzCash / Easypaisa / PayFast or Safepay, Meta WhatsApp Business API, Daily, SMS OTP provider
 
 ## 8. Next steps (owner decides, one at a time)
-Build order agreed with the owner (it differs from the original `CLAUDE.md` list because payments,
-WhatsApp and Daily were postponed, see 6b): Steps 1-5 done; then:
-1. **Step 6 admin tools** (users, complaints, site settings incl. brand/Home stats). Show the plan in parts
-   (6a, 6b, ...) first; build only after the owner approves each part.
-2. **Step 7 launch prep**: `docs/LAUNCH_CHECKLIST.md`, real domain, email (1f-5), `demo:remove`, remove the
-   temporary preview items listed in `docs/DEPLOY.md`, `SITE_INDEXABLE=true`, PageSpeed, `composer audit`.
-3. Later (owner decides when): payments, WhatsApp, SMS OTP, Daily, VPS. All behind the interfaces in 6b.
-Small cleanups to do when convenient: the top part of `docs/DEPLOY.md` ("To be filled in...", "Current
-state") still describes the old static preview; the "Hostinger shared hosting" section below it is current.
+Steps 1-6 and most of Step 7 are done (see 6h-6n). The owner decides the order; show the plan first, build after he agrees.
+1. **Finish the deploy of 6n** (see STATUS NOW at the top), then check `/admin/settings` with the owner (he uploads the picture).
+2. **Small leftovers (no owner effort):** rollback notes + keep the last 3 release archives on the server (7c-4); check that the
+   03:00 UTC backup cron ran (`~/backups/backup.log`) and that the PC copy at 13:00 ran (`F:\YourTutorBackups\pull.log`); `/contact`
+   was never measured on PageSpeed; `mail:test` still ends with "Check the inbox" when the mailer is `log`.
+3. **Needs the owner:** restore drill (7c-2), Hostinger's own backups in hPanel, UptimeRobot (he said not now), make the repo private.
+4. **Blocked on the domain / email (7b-2):** mailbox + SMTP in the server `.env`, hPanel cron for `queue:work`, `mail:test`, then
+   real register / verify / reset / admin login test; Cloudflare; `SITE_INDEXABLE=true`; Search Console.
+5. **7e (owner's list):** real tutors then `php artisan demo:remove`, real numbers, legal review, beta with 5-10 tutors.
+6. **Later (owner decides when):** payments, WhatsApp, SMS OTP, Daily, VPS (also the answer to the shared hosting account risk:
+   other sites share the account, so move the CNIC data to its own account or VPS before many real IDs are stored).
+Cleanups that need the owner's OK: delete the old `static-site` branch, the local `website/` and `upload-to-hostinger*` folders,
+`public_html_static_backup/` and the old manual dumps in the server home folder.
+Small cleanup when convenient: the top part of `docs/DEPLOY.md` ("To be filled in...") is partly old; the sections below it are current.
 
 ## 9. Ignore
 - Old copies in `...\tutoring-marketplace\resources`, `public`, `preview`, `tools` (first prototype, not used).
