@@ -34,6 +34,13 @@
 
     <div class="dash">
         <nav class="dash-nav" aria-label="Dashboard">
+            {{-- Phones and tablets: a "Menu" button (a checkbox, so it also works without JavaScript) opens the whole list. --}}
+            <input type="checkbox" id="dash-menu-open" class="dash-nav__check" aria-label="Show or hide the menu">
+            <label for="dash-menu-open" class="dash-nav__toggle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <span>Menu</span>
+                <strong>{{ collect($nav)->firstWhere('active', true)['label'] ?? '' }}</strong>
+            </label>
             <ul>
                 @foreach ($nav as $item)
                     <li>

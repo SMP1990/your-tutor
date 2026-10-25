@@ -68,6 +68,17 @@ reviewSlider();
 filtersSheet();
 registerRoleFromUrl();
 
+// Tables: on phones each row is shown as a card (see .data-table in app.css), so every cell needs its column name.
+// The name is the header text; a header that only holds a screen-reader label (the "Open" column) gets none.
+document.querySelectorAll('table.data-table').forEach((table) => {
+    const names = [...table.querySelectorAll('thead th')].map((th) => (th.querySelector('.sr-only') ? '' : th.textContent.trim()));
+    table.querySelectorAll('tbody tr').forEach((row) => {
+        [...row.children].forEach((cell, i) => {
+            if (names[i] && row.children.length === names.length) cell.dataset.label = names[i];
+        });
+    });
+});
+
 // Forms with data-confirm="Question?" ask before submitting (e.g. removing a child).
 document.querySelectorAll('form[data-confirm]').forEach((form) => {
     form.addEventListener('submit', (e) => {

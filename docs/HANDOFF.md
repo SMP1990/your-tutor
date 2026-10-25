@@ -434,6 +434,20 @@ The `/tutors` heading fix (an `sr-only` h2 "Tutors" above the cards, test in `Se
 rest allowed); our pages carry `noindex` anyway, and on the real domain our own route answers.
 Launch day: `SITE_INDEXABLE=true`, submit `/sitemap.xml` in Search Console (needs the domain).
 
+## 6m. Small screens (25 Oct, owner: "on a small screen it is cut off"; local, NOT deployed yet)
+Cause, found by logging in to the LOCAL demo admin at 375 px: (1) the dashboard menu was one strip that scrolls sideways
+(14 items for the admin, only 2-3 visible, nothing says "scroll"), (2) every `.data-table` was 560 px+ wide inside a
+sideways scroll box, so on a phone only Name/Role/Email showed and Status / the "Open" button were hidden to the right.
+Fix: (1) `layouts/dashboard.blade.php`: a "Menu" button (hidden checkbox + label, works without JS) showing the current
+page; below 1080 px the list opens as a vertical list, from 1080 px the sidebar is unchanged; (2) below 640 px a table row
+is a card (`.data-table` rules in `app.css`) and `site.js` copies each header's text into `data-label` of its cells (a header
+holding only an `.sr-only` label, like "Open", gets none). It covers ALL `.data-table` tables (admin overview, users, user
+history, demos, bookings, classes, reviews, complaints, messages) and every dashboard menu (student, parent, tutor, admin).
+`avail` (availability grid) and `price-table` keep their own sideways scroll on purpose. Checked in the browser at 375 px and
+1280 px: no element is cut off on /admin, /admin/users, demos, bookings, classes, reviews, complaints, settings, profile.
+Rule for new tables: use `class="data-table"` with a `<thead>` and `<th scope="col">` (`SmallScreenTest` checks it).
+Needs `npm run build` + the new `public/build` on deploy, no migration. 263 tests green.
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)
