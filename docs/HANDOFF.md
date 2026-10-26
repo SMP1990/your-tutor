@@ -561,3 +561,11 @@ to 30 more only where the picture looks "wispy": light pixels AND dark strands w
 (`unmix`: pixel = a x person + (1 - a) x background), and gives it the person's colour back. White shirts/jeans are untouched (no dark
 strands around them). Test: `test_a_pale_patch_between_hair_strands...`. Only code changed, no migration. The picture already live must be
 re-uploaded (the original is not kept) for the fix to show. Owner re-uploads the picture.
+
+## 6q. Hair specks + remover speed (26 Oct, NOT deployed yet)
+After 6p the owner still saw a few tiny white specks between hair strands (screenshot of his real upload). `BackgroundRemover::dropPockets`
+now also removes tiny pale islands (up to 0.2 % of the picture, colour within 40 of the background) that sit within 12 px of the removed
+area and have removed background or dark hair around them (at least 30 % of their rim). Eye whites, teeth and white shirts are safe (too far
+from the edge / too big / not surrounded by hair): checked on the owner's picture and with two unit tests. Also made the whole remover about
+3x faster than 6p (distance map computed once, window sampled every 2nd pixel, refused band pixels cached): about 7 s for a 1000 x 1138
+picture on a slow PC. Only code changed, no migration. The owner has to upload the picture again after deploy.

@@ -174,4 +174,22 @@ class BackgroundRemoverTest extends TestCase
         $this->assertSame(0, $this->alphaAt($result, 240, 250), 'the white shirt stays solid');
         $this->assertSame(0, $this->alphaAt($result, 220, 150), 'the person stays solid');
     }
+
+    public function test_a_tiny_white_speck_in_a_gap_of_the_hair_goes_but_an_eye_white_inside_the_face_stays(): void
+    {
+        $image = imagecreatetruecolor(self::SIZE, self::SIZE);
+        imagefill($image, 0, 0, imagecolorallocate($image, 255, 255, 255));
+        imagefilledellipse($image, 200, 180, 200, 280, imagecolorallocate($image, 40, 25, 20)); // dark hair mass
+        imagefilledellipse($image, 200, 200, 90, 120, imagecolorallocate($image, 205, 140, 100)); // face
+        imagefilledellipse($image, 190, 190, 14, 8, imagecolorallocate($image, 255, 255, 255)); // eye white
+        imagefilledrectangle($image, 112, 150, 118, 156, imagecolorallocate($image, 250, 244, 236)); // speck in the hair edge
+        imagefilledrectangle($image, 119, 100, 121, 220, imagecolorallocate($image, 40, 25, 20)); // a strand closing it off
+
+        $result = BackgroundRemover::remove($image, onlyLight: true);
+
+        $this->assertInstanceOf(GdImage::class, $result);
+        $this->assertGreaterThan(60, $this->alphaAt($result, 115, 153), 'the speck is see-through now');
+        $this->assertSame(0, $this->alphaAt($result, 190, 190), 'the eye white stays solid');
+        $this->assertSame(0, $this->alphaAt($result, 200, 200), 'the face stays solid');
+    }
 }

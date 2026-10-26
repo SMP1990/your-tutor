@@ -30,6 +30,20 @@ class BackgroundRemover
     /** Bridges thinner than 2 x this many pixels are not crossed. */
     private const ERODE = 2;
 
+    /** A background-coloured speck up to this share of the picture, within POCKET_REACH pixels of the removed area, is a gap in the hair. */
+    private const POCKET_SPECK = 0.002;
+
+    private const POCKET_REACH = 12;
+
+    /** At least this share of the pixels around a speck must be removed background or dark hair. */
+    private const POCKET_RIM = 0.3;
+
+    /** Pale, half-mixed colours still count as "background" inside such a gap (the plain tolerance is stricter). */
+    private const POCKET_TOLERANCE = 40;
+
+    /** Brightness (0-255) below which a pixel counts as hair. */
+    private const HAIR_LUMA = 125;
+
     private const MIN_REMOVED = 0.04;
 
     private const MAX_REMOVED = 0.92;
@@ -87,6 +101,7 @@ class BackgroundRemover
             return null;
         }
         $removed = self::dilate($removed, $match, $w, $h, self::ERODE);
+        $removed = self::dropPockets($pixels, $removed, $model, $w, $h);
 
         $share = array_sum($removed) / ($w * $h);
         if ($share < self::MIN_REMOVED || $share > self::MAX_REMOVED) {
@@ -94,6 +109,91 @@ class BackgroundRemover
         }
 
         return self::cutOut($image, $pixels, $removed, $model, $w, $h);
+    }
+
+    /**
+     * Tiny specks of background colour that hair strands have cut off from the rest of the background (the gaps
+     * between flyaway hairs) are background too. Only specks right next to the removed area, with hair or removed
+     * background around them, count, so eye whites, teeth and a white shirt are never taken.
+     *
+     * @return array<int, int>
+     */
+    private static function dropPockets(array $pixels, array $removed, array $model, int $w, int $h): array
+    {
+        $match = [];
+        foreach ($pixels as $i => $colour) {
+            $match[$i] = self::distance($colour, $model) <= self::POCKET_TOLERANCE ? 1 : 0;
+        }
+        $limit = (int) (self::POCKET_SPECK * $w * $h);
+        $seen = [];
+        for ($start = 0, $n = $w * $h; $start < $n; $start++) {
+            if (! $match[$start] || $removed[$start] || isset($seen[$start])) {
+                continue;
+            }
+            $cells = [];
+            $stack = [$start];
+            $seen[$start] = 1;
+            while ($stack && count($cells) <= $limit) {
+                $i = array_pop($stack);
+                $cells[] = $i;
+                $x = $i % $w;
+                foreach ([$x > 0 ? $i - 1 : null, $x < $w - 1 ? $i + 1 : null, $i >= $w ? $i - $w : null, $i < ($h - 1) * $w ? $i + $w : null] as $j) {
+                    if ($j !== null && $match[$j] && ! $removed[$j] && ! isset($seen[$j])) {
+                        $seen[$j] = 1;
+                        $stack[] = $j;
+                    }
+                }
+            }
+            if ($stack || count($cells) > $limit) {
+                continue; // too big: part of the person
+            }
+            if (self::darkRim($cells, $pixels, $removed, self::POCKET_RIM, $w, $h) && self::nearRemoved($cells, $removed, $w, $h)) {
+                foreach ($cells as $i) {
+                    $removed[$i] = 1;
+                }
+            }
+        }
+
+        return $removed;
+    }
+
+    /** True when at least $share of the pixels around an island are removed background or dark hair, not skin, cloth or a laptop. */
+    private static function darkRim(array $cells, array $pixels, array $removed, float $share, int $w, int $h): bool
+    {
+        $inside = array_flip($cells);
+        $dark = 0;
+        $rim = 0;
+        foreach ($cells as $i) {
+            $x = $i % $w;
+            foreach ([$x > 0 ? $i - 1 : null, $x < $w - 1 ? $i + 1 : null, $i >= $w ? $i - $w : null, $i < ($h - 1) * $w ? $i + $w : null] as $j) {
+                if ($j === null || isset($inside[$j])) {
+                    continue;
+                }
+                $c = $pixels[$j];
+                $rim++;
+                $luma = 0.3 * (($c >> 16) & 255) + 0.59 * (($c >> 8) & 255) + 0.11 * ($c & 255);
+                $dark += ($removed[$j] || $luma < self::HAIR_LUMA) ? 1 : 0;
+            }
+        }
+
+        return $rim > 0 && $dark / $rim >= $share;
+    }
+    private static function nearRemoved(array $cells, array $removed, int $w, int $h): bool
+    {
+        $r = self::POCKET_REACH;
+        foreach ($cells as $i) {
+            $x = $i % $w;
+            $y = intdiv($i, $w);
+            for ($yy = max(0, $y - $r); $yy <= min($h - 1, $y + $r); $yy += 2) {
+                for ($xx = max(0, $x - $r); $xx <= min($w - 1, $x + $r); $xx += 2) {
+                    if ($removed[$yy * $w + $xx]) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /** @return list<array{0: int, 1: int, 2: int}>|null the flat colours of the border, or null if it is busy */
@@ -258,11 +358,15 @@ class BackgroundRemover
         // Hair wisps and other thin edges are a mix of person and background. Along a band next to the removed area
         // work out how much of each pixel is really person (its see-through level) and give it the person's own
         // colour back, so no white or grey outline is left behind.
-        $band = self::band($pixels, $removed, $model, $w, $h);
+        $dist = [];
+        foreach ($pixels as $i => $colour) {
+            $dist[$i] = $removed[$i] ? 0 : self::distance($colour, $model);
+        }
+        $band = self::band($dist, $removed, $w, $h);
         foreach (array_keys($band) as $i) {
             $x = $i % $w;
             $y = intdiv($i, $w);
-            $fore = self::nearbyPerson($pixels, $removed, $model, $x, $y, $w, $h);
+            $fore = self::nearbyPerson($pixels, $removed, $dist, $x, $y, $w, $h);
             [$alpha, $colour] = $fore === null
                 ? self::plainFringe($pixels[$i], $model)
                 : self::unmix($pixels[$i], $fore, $model);
@@ -275,9 +379,10 @@ class BackgroundRemover
         return $out;
     }
     /** @return array<int, int> kept pixels next to the removed area (BAND steps, then EXTRA more through wispy places), index => 1 */
-    private static function band(array $pixels, array $removed, array $model, int $w, int $h): array
+    private static function band(array $dist, array $removed, int $w, int $h): array
     {
         $band = [];
+        $refused = [];
         $front = [];
         foreach ($removed as $i => $gone) {
             if ($gone) {
@@ -289,9 +394,14 @@ class BackgroundRemover
             foreach ($front as $i) {
                 $x = $i % $w;
                 foreach ([$x > 0 ? $i - 1 : null, $x < $w - 1 ? $i + 1 : null, $i >= $w ? $i - $w : null, $i < ($h - 1) * $w ? $i + $w : null] as $j) {
-                    if ($j !== null && ! $removed[$j] && ! isset($band[$j]) && ($round < self::BAND || self::wispy($pixels, $model, $j % $w, intdiv($j, $w), $w, $h))) {
+                    if ($j === null || $removed[$j] || isset($band[$j]) || isset($refused[$j])) {
+                        continue;
+                    }
+                    if ($round < self::BAND || self::wispy($dist, $j % $w, intdiv($j, $w), $w, $h)) {
                         $band[$j] = 1;
                         $next[] = $j;
+                    } else {
+                        $refused[$j] = 1; // looked at once, not looked at again
                     }
                 }
             }
@@ -305,13 +415,13 @@ class BackgroundRemover
      * True where the picture looks like thin strands over the background: in the 9 x 9 square around a pixel there are
      * some light (background-like) pixels and a good share of dark ones. A plain white shirt has no such mix.
      */
-    private static function wispy(array $pixels, array $model, int $x, int $y, int $w, int $h): bool
+    private static function wispy(array $dist, int $x, int $y, int $w, int $h): bool
     {
         $dark = 0;
         $light = 0;
         for ($yy = max(0, $y - 4); $yy <= min($h - 1, $y + 4); $yy++) {
             for ($xx = max(0, $x - 4); $xx <= min($w - 1, $x + 4); $xx++) {
-                $d = self::distance($pixels[$yy * $w + $xx], $model);
+                $d = $dist[$yy * $w + $xx];
                 $dark += $d >= self::DARK_STRAND ? 1 : 0;
                 $light += $d < self::SURE_PERSON ? 1 : 0;
             }
@@ -321,14 +431,14 @@ class BackgroundRemover
     }
 
     /** @return array{0: int, 1: int, 2: int}|null the average colour of the clearly-person pixels around a spot */
-    private static function nearbyPerson(array $pixels, array $removed, array $model, int $x, int $y, int $w, int $h): ?array
+    private static function nearbyPerson(array $pixels, array $removed, array $dist, int $x, int $y, int $w, int $h): ?array
     {
         $sum = [0, 0, 0];
         $n = 0;
-        for ($yy = max(0, $y - self::WINDOW); $yy <= min($h - 1, $y + self::WINDOW); $yy++) {
-            for ($xx = max(0, $x - self::WINDOW); $xx <= min($w - 1, $x + self::WINDOW); $xx++) {
+        for ($yy = max(0, $y - self::WINDOW); $yy <= min($h - 1, $y + self::WINDOW); $yy += 2) {
+            for ($xx = max(0, $x - self::WINDOW); $xx <= min($w - 1, $x + self::WINDOW); $xx += 2) {
                 $j = $yy * $w + $xx;
-                if ($removed[$j] || self::distance($pixels[$j], $model) < self::SURE_PERSON) {
+                if ($removed[$j] || $dist[$j] < self::SURE_PERSON) {
                     continue;
                 }
                 $sum[0] += ($pixels[$j] >> 16) & 255;
@@ -338,7 +448,7 @@ class BackgroundRemover
             }
         }
 
-        return $n >= 6 ? [intdiv($sum[0], $n), intdiv($sum[1], $n), intdiv($sum[2], $n)] : null;
+        return $n >= 3 ? [intdiv($sum[0], $n), intdiv($sum[1], $n), intdiv($sum[2], $n)] : null;
     }
 
     /** The old rule, when there is no person colour nearby to compare with: fade by distance from the background. */
