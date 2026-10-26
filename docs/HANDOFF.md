@@ -570,7 +570,7 @@ from the edge / too big / not surrounded by hair): checked on the owner's pictur
 3x faster than 6p (distance map computed once, window sampled every 2nd pixel, refused band pixels cached): about 7 s for a 1000 x 1138
 picture on a slow PC. Only code changed, no migration. The owner has to upload the picture again after deploy.
 
-## 6r. Editable Home heading + capitals + heading effect (26 Oct, NOT deployed yet)
+## 6r. Editable Home heading + capitals + heading effect (26 Oct, LIVE; backup ~/backup-before-heroheading-20261026.sql)
 Owner: the big Home heading must be editable by the admin, shown in CAPITALS, with a modern (not AI-looking) effect, responsive.
 Settings keys `hero_title` (max 90) and `hero_mark` (the highlighted part, must be inside the title, max 50); empty = original wording
 (`App\Support\HeroHeading`: `stored()`, `current()`, `parts()` -> [before, mark, after]). Admin: Site settings > "Home page heading" (same
