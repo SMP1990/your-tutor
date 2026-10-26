@@ -30,7 +30,7 @@ master copy; if another copy differs, this one wins). Go-live gate: `docs/LAUNCH
 ## 2. Where things are
 | What | Where |
 |---|---|
-| Laravel app (real code) | `C:\Users\Computer Arena\Downloads\tutoring-marketplace\laravel-app` |
+| Laravel app (real code) | `F:\your-tutor\laravel-app` |
 | GitHub repo | https://github.com/SMP1990/your-tutor |
 | Branch `main` | Laravel app (this folder, git repo) |
 | Branch `static-site` | OLD exported plain-HTML preview (no longer live; remove before launch, see `docs/DEPLOY.md`). Local git repo: `...\tutoring-marketplace\website` (local branch is also `static-site`) |
@@ -128,7 +128,7 @@ Owner asked to explain the plan step by step, no code until approved.
   `ChildPolicy` (own children only, max 10). Remove asks "Remove <name>?" (`data-confirm` in `site.js`).
   Dashboard layout now loads `site.js` and shows `session('notice')`.
 - [x] 1f Run on Hostinger as real Laravel (done 24 Oct, LIVE; only email is postponed, see 1f-5)
-  - **Server access details are private:** `C:\Users\Computer Arena\Downloads\tutoring-marketplace\PRIVATE-server-notes.md`
+  - **Server access details are private:** `F:\your-tutor\PRIVATE-server-notes.md`
     (not in git; this repo is public). Never write IPs, usernames, emails or passwords into the repo.
   - 1f-1 done (24 Oct): site PHP 8.4; SSH by key works (`ssh -F ~/.ssh/config.yourtutor yourtutor`).
     Use `/opt/alt/php84/usr/bin/php` for composer/artisan (default CLI php is 8.3; the lock file needs 8.4).
