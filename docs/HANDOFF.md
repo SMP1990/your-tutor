@@ -569,3 +569,13 @@ area and have removed background or dark hair around them (at least 30 % of thei
 from the edge / too big / not surrounded by hair): checked on the owner's picture and with two unit tests. Also made the whole remover about
 3x faster than 6p (distance map computed once, window sampled every 2nd pixel, refused band pixels cached): about 7 s for a 1000 x 1138
 picture on a slow PC. Only code changed, no migration. The owner has to upload the picture again after deploy.
+
+## 6r. Editable Home heading + capitals + heading effect (26 Oct, NOT deployed yet)
+Owner: the big Home heading must be editable by the admin, shown in CAPITALS, with a modern (not AI-looking) effect, responsive.
+Settings keys `hero_title` (max 90) and `hero_mark` (the highlighted part, must be inside the title, max 50); empty = original wording
+(`App\Support\HeroHeading`: `stored()`, `current()`, `parts()` -> [before, mark, after]). Admin: Site settings > "Home page heading" (same
+form/route as contact details, validated in `Admin\SettingsController`). `home.blade.php` prints the parts escaped; page `<title>` and meta
+description are NOT changed by it. CSS (`.hero__text h1`): `text-transform: uppercase` (the DB keeps normal case), `clamp(27px, 4.3vw, 52px)`,
+rises out of an invisible line (`hero-title-in`, clip-path) and the highlight is drawn as a sweeping underline (`hero-mark-line`, background-size,
+works over wrapped lines); both off under `prefers-reduced-motion`. Checked at 320 / 375 / 1100 px: no sideways scroll, 3 lines on phones.
+Tests: `HeroHeadingTest` (6). Needs `npm run build` + code on deploy, no migration (table `settings` exists).

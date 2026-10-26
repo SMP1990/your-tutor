@@ -4,6 +4,8 @@
 @section('description', 'Find verified online tutors in Pakistan for Grade 1 to A Levels, Matric, FSc, MDCAT and ECAT. Compare tutors, book a free demo class, pay per session.')
 
 @php
+    $heading = \App\Support\HeroHeading::parts();
+
     // Static sample data. Replace with real data later.
     $steps = [
         ['n' => '1', 'time' => '1 minute', 'title' => 'Tell us what you need', 'body' => 'Pick the subject, grade and the days that suit you.'],
@@ -53,7 +55,7 @@
     <div class="container hero__inner">
         <div class="hero__text">
             <span class="badge">Free demo class with every tutor</span>
-            <h1>Find a <span class="hero__mark">trusted tutor</span> for every subject, online.</h1>
+            <h1>{{ $heading[0] }}@if ($heading[1] !== '')<span class="hero__mark">{{ $heading[1] }}</span>@endif{{ $heading[2] }}</h1>
             <p class="hero__lead">Verified tutors for Grade 1 to A Levels, Matric, FSc and entry tests. Compare profiles, try a free class, then pay per session.</p>
 
             <form class="search-box" action="{{ url('/tutors') }}" method="get">

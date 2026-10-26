@@ -75,6 +75,23 @@
     @csrf
     @method('PUT')
 
+    <section class="panel" id="hero-heading">
+        <div class="panel__head"><h2>Home page heading</h2></div>
+        <p class="muted">The big heading at the top of the Home page. Type it normally: the site shows it in capital letters. Leave both boxes empty to use the original wording.</p>
+        <div class="field">
+            <label for="hero_title">Heading</label>
+            <input id="hero_title" name="hero_title" class="input @error('hero_title') is-invalid @enderror" maxlength="{{ \App\Support\HeroHeading::TITLE_MAX }}" value="{{ old('hero_title', $heroHeading['title']) }}" placeholder="{{ \App\Support\HeroHeading::DEFAULT_TITLE }}">
+            @error('hero_title') <p class="field__error">{{ $message }}</p> @enderror
+            <p class="field__hint">Up to {{ \App\Support\HeroHeading::TITLE_MAX }} letters. Shorter headings look best on a phone.</p>
+        </div>
+        <div class="field">
+            <label for="hero_mark">Highlighted words <span class="field__optional">(optional)</span></label>
+            <input id="hero_mark" name="hero_mark" class="input @error('hero_mark') is-invalid @enderror" maxlength="{{ \App\Support\HeroHeading::MARK_MAX }}" value="{{ old('hero_mark', $heroHeading['mark']) }}" placeholder="{{ \App\Support\HeroHeading::DEFAULT_MARK }}">
+            @error('hero_mark') <p class="field__error">{{ $message }}</p> @enderror
+            <p class="field__hint">Words from the heading that get the green colour and the yellow underline. Type them exactly as they are in the heading.</p>
+        </div>
+    </section>
+
     <section class="panel">
         <div class="panel__head"><h2>Contact details</h2></div>
         <div class="field">

@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Support\DashboardNav;
+use App\Support\HeroHeading;
 use App\Support\SiteSettings;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 /**
  * Step 6d: the admin edits the WhatsApp number, support email and hours, and the four numbers on the Home
- * page (typed by hand, or counted automatically). The brand name stays in .env (owner decision).
+ * page (typed by hand, or counted automatically), and the big heading with its highlighted words. The brand name stays in .env (owner decision).
  */
 class SettingsController extends Controller
 {
@@ -20,6 +21,7 @@ class SettingsController extends Controller
 
         return view('admin.settings.edit', [
             'hero' => \App\Support\HeroPicture::current(),
+            'heroHeading' => HeroHeading::stored(),
             'whatsapp' => $stored['whatsapp_display'] ?? '',
             'support_email' => $stored['support_email'] ?? '',
             'support_hours' => $stored['support_hours'] ?? '',
@@ -37,6 +39,13 @@ class SettingsController extends Controller
     public function update(Request $request)
     {
         $rules = [
+            'hero_title' => ['nullable', 'string', 'max:'.HeroHeading::TITLE_MAX],
+            'hero_mark' => ['nullable', 'string', 'max:'.HeroHeading::MARK_MAX, function (string $attribute, mixed $value, \Closure $fail) use ($request) {
+                $title = trim((string) $request->input('hero_title'));
+                if (filled($value) && ($title === '' || mb_stripos($title, trim($value)) === false)) {
+                    $fail('The highlighted words must be part of the heading. Type them exactly as they are in the heading.');
+                }
+            }],
             'whatsapp' => ['nullable', 'string', 'max:25', function (string $attribute, mixed $value, \Closure $fail) {
                 if (! preg_match('/^\d{10,15}$/', self::digits($value))) {
                     $fail('Enter the WhatsApp number with its country code, e.g. +92 300 1234567.');
@@ -60,6 +69,8 @@ class SettingsController extends Controller
         ]);
 
         $values = [
+            'hero_title' => filled($data['hero_title'] ?? null) ? trim(preg_replace('/\s+/', ' ', $data['hero_title'])) : null,
+            'hero_mark' => filled($data['hero_mark'] ?? null) ? trim($data['hero_mark']) : null,
             'whatsapp_number' => filled($data['whatsapp'] ?? null) ? self::digits($data['whatsapp']) : null,
             'whatsapp_display' => filled($data['whatsapp'] ?? null) ? trim($data['whatsapp']) : null,
             'support_email' => filled($data['support_email'] ?? null) ? mb_strtolower(trim($data['support_email'])) : null,
