@@ -515,7 +515,7 @@ Limits to tell the owner: hair edges are rougher than a professional tool (remov
 left as it is. `BackgroundRemoverTest` (7, in tests/Unit) + 6 new upload tests; 293 tests green. Checked locally on his picture: removed in 2.2 s,
 woman stands on the green disc on phone and desktop. Owner next: upload his picture again in /admin/settings (Background: Automatic) and look at Home on his phone.
 
-## 6o. Site font = Roboto (26 Oct, owner: "only fonts and layout feel AI-made; make the font Roboto everywhere and touch nothing else")
+## 6o. Site font = Roboto (26 Oct, LIVE on Hostinger 26 Oct, backup `~/backup-before-roboto-20261026.sql`; owner: "only fonts and layout feel AI-made; make the font Roboto everywhere and touch nothing else")
 Only the font was changed. DM Sans + Bricolage Grotesque were replaced by **Roboto** (self-hosted, Latin, OFL, 400 / 500 / 700 in
 `resources/fonts/roboto-latin-*-normal.woff2` + `LICENSE-Roboto.txt`): `@font-face` and the two CSS variables `--font-body` /
 `--font-heading` in `resources/css/app.css`, preloads of 400 and 700 in `partials/fonts.blade.php`, `FontsTest`. Every `font-family`
