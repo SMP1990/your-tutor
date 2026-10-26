@@ -515,6 +515,16 @@ Limits to tell the owner: hair edges are rougher than a professional tool (remov
 left as it is. `BackgroundRemoverTest` (7, in tests/Unit) + 6 new upload tests; 293 tests green. Checked locally on his picture: removed in 2.2 s,
 woman stands on the green disc on phone and desktop. Owner next: upload his picture again in /admin/settings (Background: Automatic) and look at Home on his phone.
 
+## 6o. Site font = Roboto (26 Oct, owner: "only fonts and layout feel AI-made; make the font Roboto everywhere and touch nothing else")
+Only the font was changed. DM Sans + Bricolage Grotesque were replaced by **Roboto** (self-hosted, Latin, OFL, 400 / 500 / 700 in
+`resources/fonts/roboto-latin-*-normal.woff2` + `LICENSE-Roboto.txt`): `@font-face` and the two CSS variables `--font-body` /
+`--font-heading` in `resources/css/app.css`, preloads of 400 and 700 in `partials/fonts.blade.php`, `FontsTest`. Every `font-family`
+in the CSS goes through those two variables, so the public site, dashboards and admin all changed together. The one old `font-weight: 600`
+now renders as 700 (Roboto has no 600). Layout, copy, colours and the hero were NOT touched. Checked in the browser: Home, tutors,
+pricing, contact at 375 px (no sideways overflow) and Home at 1000 px, 0 Google requests, 0 old fonts loaded. 293 tests green.
+If the owner also wants the LAYOUT changed (he said it "feels AI-made"), ask for a reference site and plan it first. Needs `npm run build`
+and the code on deploy, no migration.
+
 ## 7. Waiting for the owner (ask, do not invent)
 - WhatsApp number and support email (placeholders in `config/site.php` / `.env`)
 - Real prices, discounts, platform fee, payout rules; refund rules (current text is invented and marked draft)
