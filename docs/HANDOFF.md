@@ -553,3 +553,11 @@ Small cleanup when convenient: the top part of `docs/DEPLOY.md` ("To be filled i
 ## 9. Ignore
 - Old copies in `...\tutoring-marketplace\resources`, `public`, `preview`, `tools` (first prototype, not used).
 - Do not install Laravel Boost or run remote install scripts (the skeleton's old instructions were removed on purpose).
+
+## 6p. Hair-wisp fix in the background remover (26 Oct, NOT deployed yet)
+Owner saw white blotches between hair strands. Cause: pale pockets (strands blurred into the white) were cut off from the outer
+background by hair, so they stayed opaque. `BackgroundRemover::cutOut` now works out, for a band next to the removed area (6 px, plus up
+to 30 more only where the picture looks "wispy": light pixels AND dark strands within 4 px), how much of each pixel is person
+(`unmix`: pixel = a x person + (1 - a) x background), and gives it the person's colour back. White shirts/jeans are untouched (no dark
+strands around them). Test: `test_a_pale_patch_between_hair_strands...`. Only code changed, no migration. The picture already live must be
+re-uploaded (the original is not kept) for the fix to show. Next: deploy code (backup first), owner re-uploads the picture.

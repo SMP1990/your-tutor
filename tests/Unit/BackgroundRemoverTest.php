@@ -150,4 +150,28 @@ class BackgroundRemoverTest extends TestCase
         $this->assertGreaterThan(60, $this->alphaAt($result, 180, 180 - 142), 'and so is the next one');
         $this->assertSame(0, $this->alphaAt($result, 180, 180 - 120), 'the person herself is solid');
     }
+
+    public function test_a_pale_patch_between_hair_strands_goes_but_a_white_shirt_next_to_it_stays(): void
+    {
+        $image = imagecreatetruecolor(self::SIZE, self::SIZE);
+        imagefill($image, 0, 0, imagecolorallocate($image, 255, 255, 255));
+        $hair = imagecolorallocate($image, 40, 25, 20);
+        $pale = imagecolorallocate($image, 215, 200, 196); // hair strands blurred into the white behind them
+        imagefilledellipse($image, 220, 200, 200, 280, imagecolorallocate($image, 200, 110, 40));
+        imagefilledellipse($image, 240, 250, 90, 120, imagecolorallocate($image, 255, 255, 255));
+        // a pale patch between strands, cut off from the outer background by strands around it
+        imagefilledrectangle($image, 40, 100, 90, 160, $pale);
+        for ($x = 40; $x <= 90; $x += 10) {
+            imagefilledrectangle($image, $x, 100, $x + 2, 160, $hair);
+        }
+        imagefilledrectangle($image, 38, 98, 92, 101, $hair);
+        imagefilledrectangle($image, 38, 158, 92, 161, $hair);
+
+        $result = BackgroundRemover::remove($image, onlyLight: true);
+
+        $this->assertInstanceOf(GdImage::class, $result);
+        $this->assertGreaterThan(60, $this->alphaAt($result, 55, 130), 'the pale patch no longer stands out as a white blotch');
+        $this->assertSame(0, $this->alphaAt($result, 240, 250), 'the white shirt stays solid');
+        $this->assertSame(0, $this->alphaAt($result, 220, 150), 'the person stays solid');
+    }
 }
